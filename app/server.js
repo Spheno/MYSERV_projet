@@ -45,10 +45,15 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Hello World
+app.get('/hello', function(req, res) {
+  res.json("Hello World");
+})
+
 //Définition du routeur
 const router = express.Router();
 app.use("/user", router);
-require(__dirname + "/controllers/userController.js")(router);
+require(__dirname + "/controllers/userController")(router);
 
 //Définition et mise en place du port d'écoute
 const port = 8800;
