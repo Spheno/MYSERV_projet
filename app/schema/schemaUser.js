@@ -6,16 +6,31 @@
 /*  - getToken() : génère un jeton d'accès à partir du modèle et de notre chaine de caractères secrète (/config)
 /****************************************************************************************************************/
 
-import { Schema, model } from "mongoose";
-import { verify } from "password-hash";
-import { encode } from "jwt-simple";
-import { secret } from "../config/config";
+const mongoose = require("mongoose");
+const passwordHash = require("password-hash");
+const jwt = require("jwt-simple");
+const config = require("../config/config");
 
-const userSchema = Schema(
+const userSchema = mongoose.Schema(
   {
+    firstname: {
+      type: String,
+      required: true
+    },
+    lastname: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+      required: true
+    },
     phone: {
       type: String,
-      validate: {   
+      validate: {
         validator: function(v) {
           return /\d{3}-\d{3}-\d{4}/.test(v);
         },
@@ -33,11 +48,11 @@ const userSchema = Schema(
 
 userSchema.methods = {
   authenticate: function(password) {
-    return verify(password, this.password);
+    return passwordHash.verify(password, this.password);
   },
   getToken: function() {
-    return encode(this, secret);
+    return jwt.encode(this, config.secret);
   }
 };
 
-export default model("User", userSchema);
+module.exports = mongoose.model("User", userSchema);

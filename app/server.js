@@ -4,13 +4,13 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 //Connexion à la base de donnée
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
+mongoose.set("useUnifiedTopology", true);
 
 mongoose
-  .connect("mongodb://localhost/db", {useNewUrlParser: true })
+  .connect("mongodb://localhost/db", { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to mongoDB");
   })
