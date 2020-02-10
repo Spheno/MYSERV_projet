@@ -3,6 +3,6 @@
 /* de nos tokens JWT et permet d’instaurer une sécurité
 /* dans nos jetons d’authentifications.
 /*****************************************************/
-export default {
-    "secret" : "AppCreation"
+module.exports = {
+    "secret" : "MyServApp"
 }

@@ -10,7 +10,7 @@ mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
 mongoose
-  .connect("mongodb://localhost/db", { useNewUrlParser: true })
+  .connect("mongodb://localhost/db")
   .then(() => {
     console.log("Connected to mongoDB");
   })
@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 //Définition du routeur
 const router = express.Router();
 app.use("/user", router);
-require(__dirname + "/controllers/userController")(router);
+require(__dirname + "/controllers/userController.js")(router);
 
 //Définition et mise en place du port d'écoute
 const port = 8800;
