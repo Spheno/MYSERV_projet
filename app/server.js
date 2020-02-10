@@ -1,17 +1,17 @@
 //Définition des modules
-const express = require("express"); 
-const mongoose = require("mongoose"); 
-const bodyParser = require('body-parser');
+import express from "express"; 
+import mongoose from "mongoose"; 
+import { urlencoded, json } from 'body-parser';
 
 //On définit notre objet express nommé app
 const app = express();
 
 //Body Parser
-const urlencodedParser = bodyParser.urlencoded({
+const urlencodedParser = urlencoded({
     extended: true
 });
 app.use(urlencodedParser);
-app.use(bodyParser.json());
+app.use(json());
 
 //Définition des CORS
 app.use(function (req, res, next) {
