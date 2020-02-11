@@ -11,6 +11,9 @@
     "express": "^4.16.2",
     "jwt-simple": "^0.5.1",
     "mongoose": "^5.0.7",
+    "mongoose-intl-phone-number": "^1.1.1",
+    "mongoose-type-email": "^1.0.12",
+    "mongoose-unique-validator": "^2.0.3",
     "password-hash": "^1.2.2"
   }
 }

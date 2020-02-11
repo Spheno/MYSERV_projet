@@ -11,31 +11,38 @@ const passwordHash = require("password-hash");
 const jwt = require("jwt-simple");
 const config = require("../config/config");
 
+/* Validation du numéro de téléphone avec le plugin libphonenumber (Google) */
+var mongooseIntlPhoneNumber = require("mongoose-intl-phone-number");
+/* Validation de l'email */
+require('mongoose-type-email');
+mongoose.SchemaTypes.Email.defaults.message = "L'adresse email est invalide.";
+
+var uniqueValidator = require('mongoose-unique-validator');
+
 const userSchema = mongoose.Schema(
   {
     firstname: {
       type: String,
-      required: true
+      trim: true,
+      required: true,
+      match: [/^[a-zA-Z]+$/, "must be only letters"]
     },
     lastname: {
       type: String,
-      required: true
+      trim: true,
+      required: true,
+      match: [/^[a-zA-Z]+$/, "must be only letters"]
     },
     email: {
-      type: String,
+      type: mongoose.SchemaTypes.Email,
       lowercase: true,
       trim: true,
       unique: true,
       required: true
     },
-    phone: {
+    phoneNumber: {
       type: String,
-      validate: {
-        validator: function(v) {
-          return /\d{3}-\d{3}-\d{4}/.test(v);
-        },
-        message: props => `${props.value} is not a valid phone number!`
-      },
+      unique: true,
       required: true
     },
     password: {
@@ -43,8 +50,19 @@ const userSchema = mongoose.Schema(
       required: true
     }
   },
-  { timestamps: { createdAt: "created_at" } }
+  { timestamps: true } /* createdAt & updatedAt */
 );
+
+userSchema.plugin(mongooseIntlPhoneNumber, {
+  hook: "validate",
+  phoneNumberField: "phoneNumber",
+  nationalFormatField: "nationalFormat",
+  internationalFormat: "internationalFormat",
+  countryCodeField: "countryCode"
+});
+
+/* adds pre-save validation for UNIQUE fields within a Mongoose schema. (email, phoneNumber in our case) */
+userSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 userSchema.methods = {
   authenticate: function(password) {
