@@ -77,7 +77,7 @@ async function login(req, res) {
     return res.status(400).json({
       text: "Un des paramètres est manquant !"
     });
-  } 
+  }
   try {
     // On check si l'utilisateur existe en base
     const findUser = await User.findOne({ phoneNumber });
