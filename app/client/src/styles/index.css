@@ -1,0 +1,18 @@
+/* where we would be importing tailwind’s base styles and configurations */
+
+/* @tailwind is a tailwind directive that is used to inject default base styles, 
+   components, utilities and custom configurations.
+*/
+
+/* combination of Normalize.css and additional base styles */
+@tailwind base;
+
+/* injects any component (small reusable styles like buttons and form elements, etc) classes
+   registered by plugins defined in your tailwind config file.
+*/
+@tailwind components;
+
+/* injects all of Tailwind’s utility classes (including the default and your own utilities)
+   they are generated based on your config file.
+*/
+@tailwind utilities;
