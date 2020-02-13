@@ -44,7 +44,7 @@ async function signup(req, res) {
   } catch (error) {
     return res.status(500).json({
       text: "Erreur lors du check de la base de données.",
-      error
+      error: error.message
     });
   }
 
@@ -65,7 +65,7 @@ async function signup(req, res) {
   } catch (error) {
     return res.status(500).json({
       text: "Erreur interne lors de la sauvegarde de l'utilisateur en base.",
-      error
+      error: error.message
     });
   }
 }

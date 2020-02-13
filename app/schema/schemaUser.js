@@ -53,6 +53,8 @@ const userSchema = mongoose.Schema(
   { timestamps: true } /* createdAt & updatedAt */
 );
 
+/* For validation of real and valid phone numbers (unpleasant when testing the API...) */
+/*
 userSchema.plugin(mongooseIntlPhoneNumber, {
   hook: "validate",
   phoneNumberField: "phoneNumber",
@@ -60,6 +62,7 @@ userSchema.plugin(mongooseIntlPhoneNumber, {
   internationalFormat: "internationalFormat",
   countryCodeField: "countryCode"
 });
+*/
 
 /* adds pre-save validation for UNIQUE fields within a Mongoose schema. (email, phoneNumber in our case) */
 userSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });

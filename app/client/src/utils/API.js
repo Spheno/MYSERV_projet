@@ -1,6 +1,6 @@
 import axios from "axios";
-const headers = {
-  "Content-Type": "application/json"
+const options = {
+  "content-type": "application/json;charset=utf-8",
 };
 const url = "http://localhost:8800";
 
@@ -13,12 +13,12 @@ export default {
         password
       },
       {
-        headers: headers
+        headers: options
       }
     );
   },
   signup: function(send) {
-    return axios.post(`${url}/user/signup`, send, { headers: headers });
+    return axios.post(`${url}/user/signup`, send, { headers: options });
   },
 
   isAuth: function() {
