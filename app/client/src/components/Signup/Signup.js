@@ -153,7 +153,7 @@ class Signup extends React.Component {
             Already have an account?{" "}
             <a
               className="no-underline border-b border-blue-700 text-blue-700"
-              href="#"
+              href="/"
             >
               Log in
             </a>{" "}

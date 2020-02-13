@@ -56,7 +56,7 @@ class Login extends React.Component {
                     Contact
                   </a>
                   <a
-                    href="#"
+                    href="/signup"
                     className="bg-purple-200 hover:bg-purple-300 rounded-full uppercase text-purple-700 py-3 px-6"
                   >
                     Join us!
