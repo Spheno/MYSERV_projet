@@ -2,8 +2,8 @@ import React from "react";
 import API from "../../utils/API";
 
 import PhoneInput, {
-  isPossiblePhoneNumber /* only checks for input length (for testing purpose in our case) */,
-  isValidPhoneNumber /* checks the validity of the number (for later on) */
+  isPossiblePhoneNumber, /* only checks for input length (for testing purpose in our case) */
+  isValidPhoneNumber, /* checks the validity of the number (for later on) */
 } from "react-phone-number-input";
 
 class Signup extends React.Component {
@@ -11,24 +11,25 @@ class Signup extends React.Component {
     super(props);
 
     this.state = {
-      firstname: "",
-      lastname: "",
-      email: "",
-      phoneNumber: "",
-      password: ""
+      firstname: "Test",
+      lastname: "Test",
+      email: "test@test.fr",
+      phoneNumber: "+21612345678",
+      password: "test"
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleOnChangePhoneNumber = this.handleOnChangePhoneNumber.bind(this);
   }
 
   send = async () => {
     const { firstname, lastname, email, phoneNumber, password } = this.state;
-    alert(JSON.stringify(this.state));
     if (!firstname || firstname.length === 0) return;
-    if (!lastname || !lastname.length === 0) return;
+    if (!lastname || lastname.length === 0) return;
     if (!email || email.length === 0) return;
     if (!password || password.length === 0) return;
     try {
+      // alert(JSON.stringify(this.state));
       const { data } = await API.signup({
         firstname,
         lastname,

@@ -4,5 +4,5 @@
 /* dans nos jetons d’authentifications.
 /*****************************************************/
 module.exports = {
-    "secret" : "MyServApp"
+    "secret" : "ShooFlyApp"
 }

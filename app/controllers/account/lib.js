@@ -20,7 +20,7 @@ async function signup(req, res) {
   }
   if (!phoneNumber) {
     return res.status(400).json({
-      text: "Veuillez renseignez un numéro de téléphone valide."
+      text: "Veuillez renseignez un numéro de téléphone."
     });
   }
 
@@ -37,36 +37,27 @@ async function signup(req, res) {
   try {
     const findUser = await User.findOne({ email, phoneNumber });
     if (findUser) {
-      return res.status(400).json({
+      console.log("Utilisateur existe déjà");
+      return res.status(409).json({
         text: "L'utilisateur existe déjà"
       });
     }
   } catch (error) {
-    return res.status(500).json({
-      text: "Erreur lors du check de la base de données.",
-      error: error.message
-    });
+    console.log("error findOne (lib.js): " + error)
   }
 
   try {
     // Sauvegarde de l'utilisateur en base
     const userData = new User(user);
-    if (!userData) {
-      return res.status(400).json({
-        text: "Le nouvel objet User n'a pas été crée."
-      });
-    }
+    let userObject = await userData.save();
+    console.log("userObject (lib.js): " + userObject);
 
-    const userObject = await userData.save();
     return res.status(200).json({
-      text: "Succès : User saved successfully! :)",
-      token: userObject.getToken()
+      text: "Good job: User saved successfully! :)",
+      token: userData.getToken()
     });
   } catch (error) {
-    return res.status(500).json({
-      text: "Erreur interne lors de la sauvegarde de l'utilisateur en base.",
-      error: error.message
-    });
+    console.log("error user save (lib.js): " + error);
   }
 }
 
@@ -94,9 +85,7 @@ async function login(req, res) {
       text: "Authentification réussie !"
     });
   } catch (error) {
-    return res.status(500).json({
-      error
-    });
+    console.log(error);
   }
 }
 

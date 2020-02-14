@@ -5,7 +5,6 @@
 /*  - authenticate(pwd) : vérifier si le password est bien associé au numéro de l'utilisateur
 /*  - getToken() : génère un jeton d'accès à partir du modèle et de notre chaine de caractères secrète (/config)
 /****************************************************************************************************************/
-
 const mongoose = require("mongoose");
 const passwordHash = require("password-hash");
 const jwt = require("jwt-simple");
@@ -42,6 +41,7 @@ const userSchema = mongoose.Schema(
     },
     phoneNumber: {
       type: String,
+      trim: true,
       unique: true,
       required: true
     },
@@ -50,7 +50,7 @@ const userSchema = mongoose.Schema(
       required: true
     }
   },
-  { timestamps: true } /* createdAt & updatedAt */
+  { timestamps: true, runSettersOnQuery: true }
 );
 
 /* For validation of real and valid phone numbers (unpleasant when testing the API...) */

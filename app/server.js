@@ -4,13 +4,12 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 //Connexion à la base de donnée
-mongoose.set("useNewUrlParser", true);
-mongoose.set("useFindAndModify", false);
-mongoose.set("useCreateIndex", true);
-mongoose.set("useUnifiedTopology", true);
-
 mongoose
-  .connect("mongodb://localhost/db")
+  .connect("mongodb://localhost/shoofly", {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
   .then(() => {
     console.log("Connected to mongoDB");
   })
@@ -46,14 +45,14 @@ app.use(function(req, res, next) {
 });
 
 // Hello World
-app.get('/hello', function(req, res) {
+app.get("/hello", function(req, res) {
   res.json("Hello World");
-})
+});
 
 //Définition du routeur
 const router = express.Router();
-app.use("/user", router);
 require(__dirname + "/controllers/userController")(router);
+app.use("/user", router);
 
 //Définition et mise en place du port d'écoute
 const port = 8800;
