@@ -37,10 +37,12 @@ class Signup extends React.Component {
         phoneNumber,
         password
       });
+      alert(data);
       localStorage.setItem("token", data.token);
       window.location = "/dashboard";
     } catch (error) {
-      console.error(error);
+      console.log("POST axios request failed!");
+      console.log(error);
     }
   };
 
@@ -122,6 +124,7 @@ class Signup extends React.Component {
                 value={this.state.password}
                 onChange={this.handleChange}
                 required
+                autoComplete="true"
               />
 
               <button
@@ -136,14 +139,14 @@ class Signup extends React.Component {
               By signing up, you agree to the{" "}
               <a
                 className="no-underline border-b border-gray-700 text-gray-600"
-                href="#"
+                href="#top"
               >
                 Terms of Service
               </a>{" "}
               and{" "}
               <a
                 className="no-underline border-b border-gray-700 text-gray-600"
-                href="#"
+                href="#top"
               >
                 Privacy Policy
               </a>{" "}

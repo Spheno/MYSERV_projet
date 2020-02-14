@@ -44,13 +44,13 @@ class Login extends React.Component {
                 <h3 className="text-2xl font-bold text-blue-900">ShooFly</h3>
                 <nav className="hidden md:flex text-lg">
                   <a
-                    href="#"
+                    href="#top"
                     className="text-gray-800 hover:text-purple-300 py-3 px-6"
                   >
                     About
                   </a>
                   <a
-                    href="#"
+                    href="#top"
                     className="text-gray-800 hover:text-purple-300 py-3 px-6"
                   >
                     Contact

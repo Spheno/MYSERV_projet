@@ -2,10 +2,12 @@ import React from "react";
 import API from "../../utils/API";
 
 class Dashboard extends React.Component {
+  /*
   constructor(props) {
     super(props);
   }
-
+  */
+ 
   disconnect = () => {
     API.logout();
     window.location = "/";

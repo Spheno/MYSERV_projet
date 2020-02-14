@@ -7,7 +7,7 @@ const url = "http://localhost:8800";
 export default {
   login: function(phoneNumber, password) {
     return axios.post(
-      `${url}/user/login`,
+      url + '/user/login',
       {
         phoneNumber,
         password
@@ -19,7 +19,7 @@ export default {
   },
 
   signup: function(send) {
-    return axios.post(`${url}/user/signup`, send, { headers: headers });
+    return axios.post(url + '/user/signup', send, { headers: headers });
   },
 
   isAuth: function() {
