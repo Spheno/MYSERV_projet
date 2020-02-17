@@ -39,7 +39,7 @@ async function signup(req, res) {
     if (findUser) {
       console.log("Utilisateur existe déjà");
       return res.status(409).json({
-        text: "L'utilisateur existe déjà"
+        text: "L'utilisateur existe déjà. Veuillez vous connectez."
       });
     }
   } catch (error) {

@@ -22,7 +22,8 @@ class Signup extends React.Component {
     this.handleOnChangePhoneNumber = this.handleOnChangePhoneNumber.bind(this);
   }
 
-  send = async () => {
+  send = async (event) => {
+    event.preventDefault();
     const { firstname, lastname, email, phoneNumber, password } = this.state;
     if (!firstname || firstname.length === 0) return;
     if (!lastname || lastname.length === 0) return;
@@ -35,14 +36,19 @@ class Signup extends React.Component {
         lastname,
         email,
         phoneNumber,
-        password
+        password,
       });
-      alert(data);
+      
+      alert("Inscription réussie ! Bienvenue " + firstname)
       localStorage.setItem("token", data.token);
       window.location = "/dashboard";
     } catch (error) {
-      console.log("POST axios request failed!");
-      console.log(error);
+      if(error.response.status === 409) { // conflict : utilisateur déjà inscrit
+        alert(JSON.stringify(error.response.data.text))
+      } else {
+        console.log("POST axios request failed!"); // dev purpose
+        console.log(error); // for dev purpose
+      }
     }
   };
 
