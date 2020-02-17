@@ -11,11 +11,11 @@ class Signup extends React.Component {
     super(props);
 
     this.state = {
-      firstname: "Test",
-      lastname: "Test",
-      email: "test@test.fr",
-      phoneNumber: "+21612345678",
-      password: "test"
+      firstname: "",
+      lastname: "",
+      email: "",
+      phoneNumber: "",
+      password: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -39,14 +39,14 @@ class Signup extends React.Component {
         password,
       });
       
-      alert("Inscription réussie ! Bienvenue " + firstname)
+      alert("Inscription réussie ! Bienvenue " + firstname);
       localStorage.setItem("token", data.token);
       window.location = "/dashboard";
     } catch (error) {
-      if(error.response.status === 409) { // conflict : utilisateur déjà inscrit
-        alert(JSON.stringify(error.response.data.text))
+      if(error.response.status === 409) { // utilisateur déjà inscrit
+        let error_message = JSON.stringify(error.response.data.text);
+        alert(JSON.parse(error_message));
       } else {
-        console.log("POST axios request failed!"); // dev purpose
         console.log(error); // for dev purpose
       }
     }
@@ -77,7 +77,7 @@ class Signup extends React.Component {
     return (
       <div className="bg-gray-300 min-h-screen flex flex-col">
         <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
-          <div className="bg-white px-6 py-6 rounded shadow-md text-black w-full">
+          <div className="bg-white mt-3 px-6 pt-4 pb-6 rounded shadow-md text-black w-full">
             <h1 className="mb-4 text-3xl text-center">Join us!</h1>
             <form method="post" onSubmit={this.send}>
               <input
@@ -105,12 +105,6 @@ class Signup extends React.Component {
                 value={this.state.phoneNumber}
                 onChange={this.handleOnChangePhoneNumber}
                 required
-                error={
-                  /* isValidPhoneNumber(this.state.phoneNumber) */
-                  isPossiblePhoneNumber(this.state.phoneNumber)
-                    ? null
-                    : "Invalid phone number"
-                }
               />
 
               <input
@@ -140,7 +134,7 @@ class Signup extends React.Component {
                 Create Account
               </button>
             </form>
-
+            <hr className="my-4 border-t" />
             <div className="text-center text-sm text-gray-600 mt-4">
               By signing up, you agree to the{" "}
               <a

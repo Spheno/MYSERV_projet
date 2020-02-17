@@ -72,20 +72,26 @@ async function login(req, res) {
   try {
     // On check si l'utilisateur existe en base
     const findUser = await User.findOne({ phoneNumber });
-    if (!findUser)
+    if (!findUser) {
+      console.log("L'utilisateur n'existe pas");
       return res.status(401).json({
         text: "L'utilisateur n'existe pas"
       });
-    if (!findUser.authenticate(password))
+    }
+    if (!findUser.authenticate(password)) {
+      console.log("Mot de passe incorrect");
       return res.status(401).json({
         text: "Mot de passe incorrect"
       });
+    }
+
+    console.log("Connexion réussie !")
     return res.status(200).json({
       token: findUser.getToken(),
       text: "Authentification réussie !"
     });
   } catch (error) {
-    console.log(error);
+    console.log("error login (lib.js): " + error);
   }
 }
 
