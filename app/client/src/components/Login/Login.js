@@ -155,7 +155,7 @@ class Login extends React.Component {
                       <div className="text-center text-gray-600 my-4">
                         No account?{" "}
                         <a
-                          className="no-underline border-b border-blue-700 text-blue-700"
+                          className="no-underline text-blue-600 hover:text-blue-900"
                           href="/signup"
                         >
                           Sign up!
@@ -163,7 +163,7 @@ class Login extends React.Component {
                       </div>
                       <div className="text-center">
                         <a
-                          className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                          className="no-underline text-blue-600 hover:text-blue-900"
                           href="#top"
                         >
                           Forgot your password?

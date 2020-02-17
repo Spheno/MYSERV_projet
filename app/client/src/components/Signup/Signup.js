@@ -138,14 +138,14 @@ class Signup extends React.Component {
             <div className="text-center text-sm text-gray-600 mt-4">
               By signing up, you agree to the{" "}
               <a
-                className="no-underline border-b border-gray-700 text-gray-600"
+                className="no-underline border-b border-gray-700 text-gray-600 hover:text-gray-900"
                 href="#top"
               >
                 Terms of Service
               </a>{" "}
               and{" "}
               <a
-                className="no-underline border-b border-gray-700 text-gray-600"
+                className="no-underline border-b border-gray-700 text-gray-600 hover:text-gray-900"
                 href="#top"
               >
                 Privacy Policy
@@ -156,7 +156,7 @@ class Signup extends React.Component {
           <div className="text-gray-600 my-4">
             Already have an account?{" "}
             <a
-              className="no-underline border-b border-blue-700 text-blue-700"
+              className="no-underline border-b border-blue-700 text-blue-600 hover:text-blue-900"
               href="/"
             >
               Log in
