@@ -1,9 +1,10 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import LoginPage from "./components/Login/Login";
 import RegisterPage from "./components/Signup/Signup";
 import Dashboard from "./components/Dashboard/Dashboard";
+import ErrorPage from "./components/Error/ErrorPage";
 
 class App extends React.Component {
   render() {
@@ -13,7 +14,7 @@ class App extends React.Component {
           <Route exact path="/" component={LoginPage} />
           <Route exact path="/signup" component={RegisterPage} />
           <PrivateRoute path="/dashboard" component={Dashboard} />
-          <Redirect from="*" to="/" />
+          <Route path="*" component={ErrorPage} />
         </Switch>
       </BrowserRouter>
     );
