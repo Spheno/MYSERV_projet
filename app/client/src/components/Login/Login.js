@@ -31,6 +31,7 @@ class Login extends React.Component {
 
       alert("Connexion réussie !");
       localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.username);
       window.location = "/dashboard";
     } catch (error) {
       if (error.response.status === 401) {

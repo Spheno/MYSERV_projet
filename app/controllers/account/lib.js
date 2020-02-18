@@ -87,6 +87,7 @@ async function login(req, res) {
 
     console.log("Connexion réussie !")
     return res.status(200).json({
+      username: findUser.firstname,
       token: findUser.getToken(),
       text: "Authentification réussie !"
     });
@@ -95,6 +96,6 @@ async function login(req, res) {
   }
 }
 
-//On exporte nos deux fonctions
+//On exporte nos fonctions
 exports.login = login;
 exports.signup = signup;

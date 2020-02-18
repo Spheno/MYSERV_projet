@@ -56,7 +56,7 @@ class Dashboard extends React.Component {
             <main className="flex flex-col-reverse sm:flex-row jusitfy-between items-center py-8">
               <div className="sm:w-2/5 flex flex-col items-center sm:items-start text-center sm:text-left">
                 <h1 className="text-6xl text-blue-900 font-bold leading-none tracking-wide mb-2">
-                  Hello {this.props.firstname}
+                  Hello {localStorage.getItem("username")}
                 </h1>
                 <h2 className="text-4xl text-orange-500 text-secondary tracking-widest mb-6">
                   Everything you need.
