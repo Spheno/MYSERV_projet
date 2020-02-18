@@ -12,8 +12,8 @@ class Login extends React.Component {
     super(props);
 
     this.state = {
-      phoneNumber: "",
-      password: ""
+      phoneNumber: "+21612345678",
+      password: "test"
     };
 
     this.handleChange = this.handleChange.bind(this);
