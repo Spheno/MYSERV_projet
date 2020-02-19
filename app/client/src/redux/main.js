@@ -1,4 +1,4 @@
-import store from "../store";
+import store from "./store";
 import { addArticle } from "./actions/actions";
 
 window.store = store;
@@ -10,7 +10,7 @@ const unsubscribe = store.subscribe(() => console.log(store.getState()));
 // Dispatch some action
 store.dispatch(addArticle({
     title: "Playing with Redux",
-    id: 1
+    id: "x"
 }));
 
 // Stop listening to state updates

@@ -6,11 +6,10 @@ const initialState = {
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
-    case "ADD_ARTICLE":
+    case ADD_ARTICLE:
       return Object.assign({}, state, {
         articles: state.articles.concat(action.payload)
       });
-      break
     default:
       return state;
   }
