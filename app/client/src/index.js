@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import store from "./redux/main";
 import * as serviceWorker from "./serviceWorker";
 
 import "./styles/tailwind.css"; /* tailwindCSS stylesheet */

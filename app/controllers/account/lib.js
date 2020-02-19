@@ -54,6 +54,7 @@ async function signup(req, res) {
 
     return res.status(200).json({
       text: "Good job: User saved successfully! :)",
+      username: userData.firstname,
       token: userData.getToken()
     });
   } catch (error) {

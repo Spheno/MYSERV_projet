@@ -50,7 +50,7 @@ class ErrorPage extends React.Component {
             <div className="flex justify-center px-6 mb-12">
               <div className="w-full xl:w-3/4 lg:w-12/12 flex">
                 <div className="w-full h-auto hidden lg:block bg-cover rounded-l-lg">
-                    <img src ="https://source.unsplash.com/K4mSJ7kc0As/600x800" />
+                    <img alt="Error 404" src ="https://source.unsplash.com/K4mSJ7kc0As/600x800" />
                 </div>
               </div>
             </div>
