@@ -8,7 +8,7 @@ export default class Header extends React.Component {
         <h3 className="text-2xl font-bold text-blue-900">ShooFly</h3>
         <nav className="hidden md:flex text-lg">
           <a
-            href="#top"
+            href="/dashboard"
             className="text-gray-800 hover:text-purple-300 py-3 px-6"
           >
             Home
@@ -26,7 +26,7 @@ export default class Header extends React.Component {
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
             </button>
-            <ul className="absolute hidden text-gray-700 pt-1 group-hover:block">
+            <ul className="absolute hidden text-gray-700 pt-1 group-hover:block w-9/12">
               <li className="">
                 <a
                   className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
@@ -52,15 +52,6 @@ export default class Header extends React.Component {
                 >
                   <FontAwesomeIcon icon="heart" className="mr-2" />
                   Favs
-                </a>
-              </li>
-              <li className="">
-                <a
-                  className="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                  href="/settings"
-                >
-                  <FontAwesomeIcon icon="cogs" className="mr-2" />
-                  Settings
                 </a>
               </li>
             </ul>

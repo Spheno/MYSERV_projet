@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 class Profile extends React.Component {
   render() {
@@ -20,9 +21,10 @@ class Profile extends React.Component {
               </div>
               <div className="mb-16 sm:mb-0 mt-8 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
-
-
           </div>
+
+          
+          <Footer />
         </div>
       </div>
     );

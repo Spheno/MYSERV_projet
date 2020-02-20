@@ -10,7 +10,6 @@ import SalesPage from "./components/Account/Sales";
 import ProfilePage from "./components/Account/Profile";
 import CartPage from "./components/Account/Cart";
 import FavsPage from "./components/Account/Favs";
-import SettingsPage from "./components/Account/Settings";
 
 /* Instead of adding all the icons of font awesome, we make our own lib with only what we need */
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -29,7 +28,6 @@ class App extends React.Component {
           <PrivateRoute path="/profile" component={ProfilePage} />
           <PrivateRoute path="/cart" component={CartPage} />
           <PrivateRoute path="/favs" component={FavsPage} />
-          <PrivateRoute path="/settings" component={SettingsPage} />
           
           <Route path="*" component={ErrorPage} />
         </Switch>

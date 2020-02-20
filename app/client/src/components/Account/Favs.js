@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 class Favs extends React.Component {
   render() {
@@ -23,6 +24,8 @@ class Favs extends React.Component {
 
             
           </div>
+
+          <Footer/>
         </div>
       </div>
     );

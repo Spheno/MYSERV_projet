@@ -4,6 +4,7 @@ import API from "../../utils/API";
 import Header from "../Header/Header";
 import Carousel from "../Header/Carousel";
 import ArticlesList from "../Articles/ArticlesList";
+import Footer from "../Footer/Footer";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -50,6 +51,8 @@ class Dashboard extends React.Component {
               <ArticlesList />
             </div>
           </div>
+
+          <Footer />
         </div>
       </div>
     );
