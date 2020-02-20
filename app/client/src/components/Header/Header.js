@@ -14,7 +14,7 @@ export default class Header extends React.Component {
             Home
           </a>
           <a
-            href="#top"
+            href="/sales"
             className="text-gray-800 hover:text-purple-300 py-3 px-6"
           >
             Your sales
@@ -30,7 +30,7 @@ export default class Header extends React.Component {
               <li className="">
                 <a
                   className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                  href="#top"
+                  href="/profile"
                 >
                   <FontAwesomeIcon icon="user" className="mr-2" />
                   Profile
@@ -39,7 +39,7 @@ export default class Header extends React.Component {
               <li className="">
                 <a
                   className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                  href="#top"
+                  href="/cart"
                 >
                   <FontAwesomeIcon icon="shopping-cart" className="mr-2" />
                   Cart
@@ -48,7 +48,7 @@ export default class Header extends React.Component {
               <li className="">
                 <a
                   className="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                  href="#top"
+                  href="/favs"
                 >
                   <FontAwesomeIcon icon="heart" className="mr-2" />
                   Favs
@@ -57,7 +57,7 @@ export default class Header extends React.Component {
               <li className="">
                 <a
                   className="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                  href="#top"
+                  href="/settings"
                 >
                   <FontAwesomeIcon icon="cogs" className="mr-2" />
                   Settings
