@@ -1,8 +1,8 @@
 import React from "react";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import SVGIcon from "../SVG/SVGIcon";
-import favsSVG from "../../images/favs.svg";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
+import SVGIcon from "../../SVG/SVGIcon";
+import favsSVG from "../../../images/favs.svg";
 
 class Favs extends React.Component {
   render() {

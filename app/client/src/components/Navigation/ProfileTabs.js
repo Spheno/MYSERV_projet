@@ -2,7 +2,7 @@ import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 
-export default class NavTabs extends React.Component {
+export default class ProfileTabs extends React.Component {
   render() {
     return (
       <Tabs selectedTabClassName="border border-gray-700 hover:bg-gray-100 shadow" className="mx-auto lg:w-3/6">

@@ -6,10 +6,10 @@ import RegisterPage from "./components/Signup/Signup";
 import Dashboard from "./components/Dashboard/Dashboard";
 import ErrorPage from "./components/Error/ErrorPage";
 
-import SalesPage from "./components/Account/Sales";
-import ProfilePage from "./components/Account/Profile";
-import CartPage from "./components/Account/Cart";
-import FavsPage from "./components/Account/Favs";
+import SalesPage from "./components/Account/Menu/Sales";
+import ProfilePage from "./components/Account/Menu/Profile";
+import CartPage from "./components/Account/Menu/Cart";
+import FavsPage from "./components/Account/Menu/Favs";
 
 /* Instead of adding all the icons of font awesome, we make our own lib with only what we need */
 import { library } from '@fortawesome/fontawesome-svg-core';
