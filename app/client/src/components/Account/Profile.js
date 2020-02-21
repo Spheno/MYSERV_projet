@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import NavTabs from "../Navigation/NavTabs";
+import NavTabsAndPanels from "../Navigation/NavTabsAndPanels";
 import SVGIcon from "../SVG/SVGIcon";
 import profileSVG from "../../images/profile.svg";
 
@@ -27,7 +27,7 @@ class Profile extends React.Component {
             </main>
           </div>
 
-          <NavTabs />
+          <NavTabsAndPanels />
 
           <Footer />
         </div>

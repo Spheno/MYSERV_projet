@@ -1,5 +1,4 @@
 import React from "react";
-import API from "../../utils/API";
 
 import Header from "../Header/Header";
 import SVGIcon from "../SVG/SVGIcon";
@@ -16,14 +15,7 @@ class Dashboard extends React.Component {
     this.state = {
       firstname: ""
     };
-
-    this.disconnect = this.disconnect.bind(this);
   }
-
-  disconnect = () => {
-    API.logout();
-    window.location = "/";
-  };
 
   render() {
     return (

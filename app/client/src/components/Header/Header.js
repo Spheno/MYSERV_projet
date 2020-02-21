@@ -1,7 +1,13 @@
 import React from "react";
+import API from "../../utils/API";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default class Header extends React.Component {
+  disconnect = () => {
+    API.logout();
+    window.location = "/";
+  };
+
   render() {
     return (
       <header className="relative z-10 flex flex-col items-center justify-between py-6 sm:flex-row">
