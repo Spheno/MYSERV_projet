@@ -70,62 +70,62 @@ class Login extends React.Component {
     return (
       <>
         <div className="p-6 bg-purple-700">
-          <div className="bg-white flex flex-col font-sans">
-            <div className="container mx-auto px-8">
-              <header className="flex flex-col sm:flex-row items-center justify-between py-6 relative">
+          <div className="flex flex-col font-sans bg-white">
+            <div className="container px-8 mx-auto">
+              <header className="relative flex flex-col items-center justify-between py-6 sm:flex-row">
                 <h3 className="text-2xl font-bold text-blue-900">ShooFly</h3>
-                <nav className="hidden md:flex text-lg">
+                <nav className="hidden text-lg md:flex">
                   <a
                     href="#top"
-                    className="text-gray-800 hover:text-purple-300 py-3 px-6"
+                    className="px-6 py-3 text-gray-800 hover:text-purple-300"
                   >
                     About
                   </a>
                   <a
                     href="#top"
-                    className="text-gray-800 hover:text-purple-300 py-3 px-6"
+                    className="px-6 py-3 text-gray-800 hover:text-purple-300"
                   >
                     Contact
                   </a>
                   <a
                     href="/signup"
-                    className="bg-purple-200 hover:bg-purple-300 rounded-full uppercase text-purple-700 py-3 px-6"
+                    className="px-6 py-3 text-purple-700 uppercase bg-purple-200 rounded-full hover:bg-purple-300"
                   >
                     Join us!
                   </a>
                 </nav>
-                <button className="flex md:hidden flex-col absolute top-0 right-0 p-4 mt-5">
+                <button className="absolute top-0 right-0 flex flex-col p-4 mt-5 md:hidden">
                   <span className="w-5 h-px mb-1 bg-orange-500"></span>
                   <span className="w-5 h-px mb-1 bg-orange-500"></span>
                   <span className="w-5 h-px mb-1 bg-orange-500"></span>
                 </button>
               </header>
 
-              <main className="flex flex-col-reverse sm:flex-row jusitfy-between items-center py-8">
-                <div className="sm:w-2/5 flex flex-col items-center sm:items-start text-center sm:text-left">
-                  <h1 className="uppercase text-6xl text-blue-900 font-bold leading-none tracking-wide mb-2">
+              <main className="flex flex-col-reverse items-center py-8 sm:flex-row jusitfy-between">
+                <div className="flex flex-col items-center text-center sm:w-2/5 sm:items-start sm:text-left">
+                  <h1 className="mb-2 text-6xl font-bold leading-none tracking-wide text-blue-900 uppercase">
                     Buy, Sell, Go.
                   </h1>
-                  <h2 className="text-4xl text-orange-500 text-secondary tracking-widest mb-6">
+                  <h2 className="mb-6 text-4xl tracking-widest text-orange-500 text-secondary">
                     You will come back.
                   </h2>
                 </div>
-                <div className="mb-16 sm:mb-0 mt-8 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
+                <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
               </main>
 
               <div className="flex justify-center px-6 mb-12">
-                <div className="w-full xl:w-3/4 lg:w-11/12 flex">
-                  <div className="login_side_img w-full h-auto bg-gray-400 hidden lg:block lg:w-1/2 bg-cover rounded-l-lg">
+                <div className="flex w-full border border-purple-400 rounded-lg xl:w-3/4 lg:w-11/12">
+                  <div className="hidden w-full h-auto bg-gray-400 bg-cover rounded-l-lg login_side_img lg:block lg:w-1/2">
                     {/* change bg-img in login.css */}
                   </div>
-                  <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
+                  <div className="w-full p-5 bg-white rounded-lg lg:w-1/2 lg:rounded-l-none">
                     <h3 className="pt-4 text-2xl text-center">Hello you</h3>
                     <form
                       className="px-8 pt-6 pb-8 mb-4 bg-white rounded"
                       onSubmit={this.send}
                     >
                       <PhoneInput
-                        className="border border-grey-light w-full p-3 rounded mb-4"
+                        className="w-full p-3 mb-4 border rounded border-grey-light"
                         placeholder="Phone number"
                         value={this.state.phoneNumber}
                         onChange={this.handleOnChangePhoneNumber}
@@ -134,7 +134,7 @@ class Login extends React.Component {
                       <div className="mb-4">
                         <input
                           type="password"
-                          className="border border-grey-light w-full p-3 rounded mb-4"
+                          className="w-full p-3 mb-4 border rounded border-grey-light"
                           name="password"
                           placeholder="Password"
                           value={this.state.password}
@@ -147,16 +147,16 @@ class Login extends React.Component {
                       <div className="mb-6 text-center">
                         <button
                           type="submit"
-                          className="w-full text-center py-3 rounded bg-green-500 text-white hover:bg-green-700 focus:outline-none my-1"
+                          className="w-full py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
                         >
                           Sign in
                         </button>
                       </div>
                       <hr className="my-4 border-t" />
-                      <div className="text-center text-gray-600 my-4">
+                      <div className="my-4 text-center text-gray-600">
                         No account?{" "}
                         <a
-                          className="no-underline text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 no-underline hover:text-blue-900"
                           href="/signup"
                         >
                           Sign up!
@@ -164,7 +164,7 @@ class Login extends React.Component {
                       </div>
                       <div className="text-center">
                         <a
-                          className="no-underline text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 no-underline hover:text-blue-900"
                           href="#top"
                         >
                           Forgot your password?

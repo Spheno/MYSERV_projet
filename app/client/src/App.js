@@ -13,8 +13,9 @@ import FavsPage from "./components/Account/Menu/Favs";
 
 /* Instead of adding all the icons of font awesome, we make our own lib with only what we need */
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser, faShoppingCart, faHeart, faCogs } from '@fortawesome/free-solid-svg-icons'
-library.add(faUser, faShoppingCart, faHeart, faCogs)
+import { faUser, faShoppingCart, faHeart, faCogs, faUserCircle, faCreditCard} from '@fortawesome/free-solid-svg-icons';
+import { faFacebookSquare, faInstagram } from '@fortawesome/free-brands-svg-icons';
+library.add(faUser, faShoppingCart, faHeart, faCogs, faUserCircle, faCreditCard, faFacebookSquare, faInstagram);
 
 class App extends React.Component {
   render() {
