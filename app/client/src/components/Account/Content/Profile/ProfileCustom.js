@@ -41,7 +41,7 @@ export default class ProfileCustom extends React.Component {
               <textarea
                 className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border rounded appearance-none border-gray-lighter"
                 id="grid-bio"
-                rows="7"
+                rows="9"
                 type="text"
                 placeholder="Your bio..."
               />
@@ -165,19 +165,19 @@ export default class ProfileCustom extends React.Component {
             </div>
           </div>
 
-          <div className="flex justify-around my-6 text-center">
-            <div>
-              <button
-                type="button"
-                className="w-40 py-3 my-1 text-center text-white bg-teal-500 rounded hover:bg-teal-700 focus:outline-none"
+          <div className="flex content-center my-6 text-center">
+            <div className="w-1/2">
+              <a
+                className="px-4 py-3 my-1 text-white bg-teal-500 border border-blue-500 rounded hover:bg-teal-700 focus:outline-none"
+                href="#top"
               >
                 Check your profile
-              </button>
+              </a>
             </div>
-            <div>
+            <div className="w-1/2">
               <button
                 type="submit"
-                className="w-40 py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
+                className="w-40 py-3 -mt-4 text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
               >
                 Save
               </button>
