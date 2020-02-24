@@ -1,10 +1,23 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AvatarProfile from "./AvatarProfile";
 
 export default class ProfileCustom extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      img: null
+    };
+  }
+
+  /* TODO
+  Get img from database and put it in this.state.img
+  */
+
   render() {
     return (
-      <form>
+      <form /*onSubmit={this.send}*/>
         <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-4 bg-white border-gray-300 rounded md:shadow-md md:border">
           <div className="mb-6 -mx-3 md:flex">
             <div className="px-3 mb-6 md:w-1/2 md:mb-0">
@@ -12,21 +25,18 @@ export default class ProfileCustom extends React.Component {
                 className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 htmlFor="grid-first-name"
               >
-                Profile pic
+                Profile pic <FontAwesomeIcon icon="camera" size="1x" />
               </label>
-              <input
-                className="block w-full px-4 py-3 mb-3 text-gray-700 bg-gray-200 border rounded appearance-none"
-                id="grid-first-name"
-                type="text"
-                placeholder="Jane"
-              />
+              <div>
+                <AvatarProfile img={this.state.img} />
+              </div>
             </div>
             <div className="px-3 md:w-1/2">
               <label
                 className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 htmlFor="grid-bio"
               >
-                Bio
+                Bio <FontAwesomeIcon icon="edit" size="1x" />
               </label>
               <textarea
                 className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border rounded appearance-none border-gray-lighter"
@@ -39,7 +49,7 @@ export default class ProfileCustom extends React.Component {
           </div>
 
           <div className="mb-2 -mx-3 md:flex">
-          <div className="px-3 mb-6 md:w-1/2 md:mb-0">
+            <div className="px-3 mb-6 md:w-1/2 md:mb-0">
               <label
                 className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 htmlFor="grid-public-name"
@@ -58,7 +68,8 @@ export default class ProfileCustom extends React.Component {
                 className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 htmlFor="grid-fb-link"
               >
-                Facebook <FontAwesomeIcon icon={['fab', 'facebook-square']} size="1x" />
+                Facebook{" "}
+                <FontAwesomeIcon icon={["fab", "facebook-square"]} size="1x" />
               </label>
               <input
                 className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
@@ -72,7 +83,8 @@ export default class ProfileCustom extends React.Component {
                 className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 htmlFor="grid-insta-link"
               >
-                Instagram <FontAwesomeIcon icon={['fab', 'instagram']} size="1x" />
+                Instagram{" "}
+                <FontAwesomeIcon icon={["fab", "instagram"]} size="1x" />
               </label>
               <input
                 className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
@@ -83,70 +95,93 @@ export default class ProfileCustom extends React.Component {
             </div>
           </div>
 
-          <div className="mb-2 -mx-3 md:flex">
-            <div className="px-3 mb-6 md:w-1/2 md:mb-0">
+          <div className="mt-2">
+            <label
+              className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+              htmlFor="street"
+            >
+              Address <FontAwesomeIcon icon="map-marker-alt" size="1x" />
+            </label>
+            <input
+              className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
+              id="street"
+              name="street"
+              type="text"
+              placeholder="Street"
+              aria-label="Street"
+            />
+          </div>
+          <div className="mt-2">
+            <label
+              className="hidden block text-sm text-gray-600"
+              htmlFor="city"
+            >
+              City
+            </label>
+            <input
+              className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
+              id="city"
+              name="city"
+              type="text"
+              required=""
+              placeholder="City"
+              aria-label="City"
+            />
+          </div>
+          <div className="flex mb-2">
+            <div className="inline-block w-1/2 pr-1 mt-2">
               <label
-                className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
-                htmlFor="grid-city"
+                className="hidden block text-sm text-gray-600"
+                htmlFor="country"
               >
-                City
+                Country
               </label>
               <input
                 className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
-                id="grid-city"
+                id="country"
+                name="country"
                 type="text"
-                placeholder="Albuquerque"
+                required=""
+                placeholder="Country"
+                aria-label="Country"
               />
             </div>
-            <div className="px-3 mb-6 md:w-1/2 md:mb-0">
+            <div className="inline-block w-1/2 pl-1 mt-2 -mx-1">
               <label
-                className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
-                htmlFor="grid-state"
-              >
-                State
-              </label>
-              <div className="relative">
-                <select
-                  className="block w-full px-4 py-3 pr-8 text-gray-500 bg-gray-200 border border-gray-200 rounded appearance-none"
-                  id="grid-state"
-                >
-                  <option>New Mexico</option>
-                  <option>Missouri</option>
-                  <option>Texas</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                  <svg
-                    className="w-4 h-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div className="px-3 md:w-1/2">
-              <label
-                className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
-                htmlFor="grid-zip"
+                className="hidden block text-sm text-gray-600"
+                htmlFor="zipCode"
               >
                 Zip
               </label>
               <input
                 className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
-                id="grid-zip"
+                id="zipCode"
+                name="zipCode"
                 type="text"
-                placeholder="90210"
+                required=""
+                placeholder="Zip"
+                aria-label="Zip code"
               />
             </div>
           </div>
-          <div className="my-6 text-center">
-            <button
-              type="submit"
-              className="w-40 py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
-            >
-              Save
-            </button>
+
+          <div className="flex justify-around my-6 text-center">
+            <div>
+              <button
+                type="button"
+                className="w-40 py-3 my-1 text-center text-white bg-teal-500 rounded hover:bg-teal-700 focus:outline-none"
+              >
+                Check your profile
+              </button>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="w-40 py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </form>
