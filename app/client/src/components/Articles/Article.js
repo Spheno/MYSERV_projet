@@ -26,9 +26,14 @@ class Article extends React.Component {
           </div>
         </div>
 
-        <button type="button" /* onClick={this.addToFav} */ className="absolute top-0 right-0 m-3 text-white hover:text-red-600">
-          <FontAwesomeIcon icon="heart" size="2x" />
-        </button>
+        <div className="absolute top-0 right-0 m-3 text-white text-">
+          <button type="button" className="mr-2 hover:text-teal-600" /* onClick={this.addToCart} */>
+            <FontAwesomeIcon icon="cart-plus" size="2x" />
+          </button>
+          <button type="button" className="hover:text-red-600" /* onClick={this.addToFav} */>
+            <FontAwesomeIcon icon="heart" size="2x" />
+          </button>
+        </div>
       </div>
     );
   }
