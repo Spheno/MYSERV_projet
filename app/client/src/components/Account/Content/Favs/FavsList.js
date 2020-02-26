@@ -1,19 +1,19 @@
 import React from "react";
-import CartArticle from "./CartArticle";
+import FavArticle from "./FavArticle";
 
-export default class CartList extends React.Component {
+export default class FavsList extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      articles: []
+      list: [],
     };
   }
 
   render() {
     return (
       <div className="z-10">
-        <CartArticle />
+        <FavArticle />
       </div>
     );
   }
