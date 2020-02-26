@@ -1,9 +1,10 @@
 import React from "react";
 import ArticleSVG from "./ArticleSVG";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-class Article extends React.Component {
+class Article extends React.Component {  
   render() {
-    return(
+    return (
       <div
         className={
           "flex-shrink-0 m-6 relative overflow-hidden rounded-lg max-w-xs shadow-lg " +
@@ -24,6 +25,10 @@ class Article extends React.Component {
             </span>
           </div>
         </div>
+
+        <button type="button" /* onClick={this.addToFav} */ className="absolute top-0 right-0 m-3 text-white hover:text-red-600">
+          <FontAwesomeIcon icon="heart" size="2x" />
+        </button>
       </div>
     );
   }
