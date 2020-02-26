@@ -3,6 +3,7 @@ import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import SVGIcon from "../../SVG/SVGIcon";
 import cartSVG from "../../../images/cart.svg";
+import CartList from "../Content/Cart/CartList";
 
 class Cart extends React.Component {
   render() {
@@ -12,7 +13,7 @@ class Cart extends React.Component {
           <div className="container px-8 mx-auto">
             <Header />
 
-            <main className="flex flex-col-reverse items-center py-8 sm:flex-row jusitfy-between">
+            <main className="flex flex-col-reverse items-center py-8 my-12 sm:flex-row jusitfy-between">
               <div className="flex flex-col items-center w-full text-center sm:items-start sm:text-left">
                 <h1 className="mb-2 text-6xl font-bold leading-none tracking-wide text-blue-900">
                   Your cart
@@ -21,12 +22,12 @@ class Cart extends React.Component {
                   Validate your orders before purchasing.
                 </h2>
               </div>
-              <SVGIcon src={cartSVG} cls="absolute right-0 z-auto hidden max-w-xs mr-32 lg:flex" />
+              <SVGIcon src={cartSVG} cls="absolute right-0 z-0 hidden max-w-xs mr-32 lg:flex" />
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
-            </main>
+            </main> 
 
-            
-          </div>
+            <CartList />
+          </div> 
 
           <Footer/>
         </div>

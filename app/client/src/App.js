@@ -22,7 +22,8 @@ import {
   faCreditCard,
   faMapMarkerAlt,
   faCamera,
-  faEdit
+  faEdit,
+  faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -39,7 +40,8 @@ library.add(
   faInstagram,
   faMapMarkerAlt,
   faCamera,
-  faEdit
+  faEdit,
+  faTrashAlt
 );
 
 class App extends React.Component {
