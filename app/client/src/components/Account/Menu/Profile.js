@@ -24,7 +24,7 @@ class Profile extends React.Component {
               </div>
               <SVGIcon
                 src={profileSVG}
-                cls="absolute right-0 z-auto hidden max-w-xs mr-32 lg:flex"
+                cls="absolute right-0 z-auto hidden max-w-xs h-64 mr-32 lg:flex"
               />
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>

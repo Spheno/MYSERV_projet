@@ -21,7 +21,7 @@ class Sales extends React.Component {
                   Follow your transactions.
                 </h2>
               </div>
-              <SVGIcon src={salesSVG} cls="absolute right-0 z-auto hidden max-w-xs mr-32 lg:flex" />
+              <SVGIcon src={salesSVG} cls="absolute right-0 z-auto hidden h-64 max-w-xs mr-32 lg:flex" />
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
 
