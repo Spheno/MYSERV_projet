@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className="p-6 bg-purple-700">
-        <div className="flex flex-col font-sans bg-white">
+        <div className="flex flex-col w-full font-sans bg-white">
           <div className="container px-8 mx-auto">
             <Header />
 
@@ -33,19 +33,19 @@ class Dashboard extends React.Component {
                   Everything you need.
                 </h2>
               </div>
-              <SVGIcon src={dashboardSVG} cls="absolute right-0 z-auto hidden h-64 max-w-xs mr-32 lg:flex" />
+              <SVGIcon
+                src={dashboardSVG}
+                cls="absolute right-0 z-auto hidden h-64 max-w-xs mr-32 lg:flex"
+              />
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
+            <Carousel />
 
-            <div>
-              <Carousel />
+            <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
+              Explore & Choose
+            </h1>
 
-              <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
-                Explore & Choose
-              </h1>
-
-              <ArticlesList />
-            </div>
+            <ArticlesList />
           </div>
 
           <Footer />

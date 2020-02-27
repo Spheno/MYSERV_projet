@@ -3,8 +3,9 @@ import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import SVGIcon from "../../SVG/SVGIcon";
 import salesSVG from "../../../images/sales.svg";
+import SalesContent from "../Content/Sales/SalesContent";
 
-class Sales extends React.Component {
+export default class Sales extends React.Component {
   render() {
     return (
       <div className="p-6 bg-purple-700">
@@ -21,18 +22,19 @@ class Sales extends React.Component {
                   Follow your transactions.
                 </h2>
               </div>
-              <SVGIcon src={salesSVG} cls="absolute right-0 z-auto hidden h-64 max-w-xs mr-32 lg:flex" />
+              <SVGIcon
+                src={salesSVG}
+                cls="absolute right-0 z-auto hidden h-64 max-w-xs mr-32 lg:flex"
+              />
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
 
-            
+            <SalesContent />
           </div>
 
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );
   }
 }
-
-export default Sales;

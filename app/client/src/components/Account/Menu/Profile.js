@@ -3,7 +3,11 @@ import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import SVGIcon from "../../SVG/SVGIcon";
 import profileSVG from "../../../images/profile.svg";
-import ProfileTabs from "../../Navigation/ProfileTabs";
+import NavTabs from "../../Navigation/NavTabs";
+
+import PaymentInfo from "../Content/Profile/PaymentInfo";
+import ProfileCustom from "../Content/Profile/ProfileCustom";
+import AccountSettings from "../Content/Profile/AccountSettings";
 
 class Profile extends React.Component {
   render() {
@@ -29,7 +33,14 @@ class Profile extends React.Component {
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
 
-            <ProfileTabs />
+            <NavTabs
+              tabTitle1="Account settings"
+              tabTitle2="Payment options"
+              tabTitle3="Profile customization"
+              content1={< AccountSettings />}
+              content2={< PaymentInfo />}
+              content3={< ProfileCustom />}
+            />
           </div>
 
           <Footer />

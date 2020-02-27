@@ -24,7 +24,10 @@ import {
   faCamera,
   faEdit,
   faTrashAlt,
-  faCartPlus
+  faCartPlus,
+  faSignOutAlt,
+  faHome,
+  faMoneyBillWaveAlt
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -43,7 +46,10 @@ library.add(
   faCamera,
   faEdit,
   faTrashAlt,
-  faCartPlus
+  faCartPlus,
+  faSignOutAlt,
+  faHome,
+  faMoneyBillWaveAlt
 );
 
 class App extends React.Component {

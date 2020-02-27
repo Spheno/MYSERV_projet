@@ -2,34 +2,30 @@ import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 
-import PaymentInfo from "../Account/Content/Profile/PaymentInfo";
-import ProfileCustom from "../Account/Content/Profile/ProfileCustom";
-import AccountSettings from "../Account/Content/Profile/AccountSettings";
-
-export default class ProfileTabs extends React.Component {
+export default class NavTabs extends React.Component {
   render() {
     return (
       <Tabs selectedTabClassName="md:border md:border-gray-700 md:hover:bg-gray-100 md:shadow" className="z-10 mx-auto lg:w-3/6">
         <TabList className="flex justify-between mb-8 text-center">
           <Tab className="inline-block px-4 py-2 font-semibold text-blue-500 bg-white cursor-pointer hover:text-blue-800">
-            Account settings
+            {this.props.tabTitle1}
           </Tab>
           <Tab className="inline-block px-4 py-2 font-semibold text-blue-500 bg-white cursor-pointer hover:text-blue-800">
-            Payment options
+            {this.props.tabTitle2}
           </Tab>
           <Tab className="inline-block px-4 py-2 font-semibold text-blue-500 bg-white cursor-pointer hover:text-blue-800">
-            Profile customization
+            {this.props.tabTitle3}
           </Tab>
         </TabList>
 
         <TabPanel>
-          <AccountSettings />
+          {this.props.content1}
         </TabPanel>
         <TabPanel>
-          <PaymentInfo />
+          {this.props.content2}
         </TabPanel>
         <TabPanel>
-          <ProfileCustom />
+          {this.props.content3}
         </TabPanel>
       </Tabs>
     );

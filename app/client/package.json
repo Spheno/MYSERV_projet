@@ -16,6 +16,7 @@
     "postcss": "^7.0.26",
     "react": "^16.12.0",
     "react-avatar-edit": "^0.8.3",
+    "react-burger-menu": "^2.6.13",
     "react-dom": "^16.12.0",
     "react-inlinesvg": "^1.2.0",
     "react-phone-number-input": "^3.0.17",
