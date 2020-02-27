@@ -18,11 +18,22 @@ export default class Header extends React.Component {
         </h3>
         <nav className="hidden text-lg md:flex">
           <div className="absolute top-0 right-0 justify-between mt-6">
-            <input
-              type="search"
-              className="w-24 p-3 bg-gray-200 border-0 rounded shadow lg:w-48"
-              placeholder="Search item, user..."
-            />
+            <span className="hidden lg:inline">
+              <input
+                type="search"
+                placeholder="Search items, users, ..."
+                className="relative px-2 py-1 pl-10 text-sm leading-normal text-gray-700 transition bg-gray-100 border rounded appearance-none w-60 focus:outline-none focus:border-gray-700"
+              />
+              <div className="absolute top-0 left-0 mt-5 ml-2">
+                <svg
+                  className="w-4 h-4 text-gray-700 pointer-events-none fill-current"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                </svg>
+              </div>
+            </span>
+            
             <a
               href="/dashboard"
               className="px-6 py-3 text-gray-800 hover:text-purple-300"
@@ -35,6 +46,7 @@ export default class Header extends React.Component {
             >
               Your sales
             </a>
+
             <div className="relative z-10 inline-block group">
               <button className="inline-flex items-center px-4 py-3 text-gray-800 hover:text-purple-300">
                 <span className="mr-1">My account</span>

@@ -27,7 +27,9 @@ import {
   faCartPlus,
   faSignOutAlt,
   faHome,
-  faMoneyBillWaveAlt
+  faMoneyBillWaveAlt,
+  faWallet,
+  faListOl
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -49,7 +51,9 @@ library.add(
   faCartPlus,
   faSignOutAlt,
   faHome,
-  faMoneyBillWaveAlt
+  faMoneyBillWaveAlt,
+  faWallet,
+  faListOl
 );
 
 class App extends React.Component {
