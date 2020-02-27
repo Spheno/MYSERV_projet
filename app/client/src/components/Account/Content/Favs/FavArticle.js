@@ -68,9 +68,6 @@ export default class CartArticle extends React.Component {
 
           <div className="flex flex-col justify-between p-4 leading-normal bg-white border-b border-l border-r border-gray-400 rounded-b lg:border-l-0 lg:border-t lg:border-gray-400 lg:rounded-b-none lg:rounded-r">
             <div className="mb-8">
-              <div className="float-right px-2 text-white bg-black border rounded-full">
-                {this.state.product.quantity}
-              </div>
               <div className="mb-2 text-xl font-bold text-gray-900">
                 {this.state.product.title} -{" "}
                 <span className="text-gray-700">

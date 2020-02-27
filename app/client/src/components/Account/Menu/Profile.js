@@ -34,12 +34,16 @@ class Profile extends React.Component {
             </main>
 
             <NavTabs
-              tabTitle1="Account settings"
-              tabTitle2="Payment options"
-              tabTitle3="Profile customization"
-              content1={< AccountSettings />}
-              content2={< PaymentInfo />}
-              content3={< ProfileCustom />}
+              tabtitles={[
+                "Account settings",
+                "Payment options",
+                "Profile customization"
+              ]}
+              contents={[
+                <AccountSettings />,
+                <PaymentInfo />,
+                <ProfileCustom />
+              ]}
             />
           </div>
 

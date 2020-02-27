@@ -3,7 +3,9 @@ import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import SVGIcon from "../../SVG/SVGIcon";
 import salesSVG from "../../../images/sales.svg";
-import SalesContent from "../Content/Sales/SalesContent";
+import NavTabs from "../../Navigation/NavTabs";
+import SalesBuyings from "../Content/Sales/SalesBuyings";
+import SalesSellings from "../Content/Sales/SalesSellings";
 
 export default class Sales extends React.Component {
   render() {
@@ -29,7 +31,10 @@ export default class Sales extends React.Component {
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
 
-            <SalesContent />
+            <NavTabs
+              tabtitles={["Buyings", "Sellings"]}
+              contents={[<SalesBuyings />, <SalesSellings />]}
+            />
           </div>
 
           <Footer />
