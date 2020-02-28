@@ -4,6 +4,8 @@ import "../../../../styles/cartArticle.css";
 import avatar from "../../../../images/avatar/einstein.jpg";
 import article from "../../../../images/articles/playstation5.jpg";
 
+/* TODO: make articles clickable and zoomable (Magnifier.js) */
+
 export default class CartArticle extends React.Component {
   constructor(props) {
     super(props);
@@ -81,7 +83,7 @@ export default class CartArticle extends React.Component {
           {this.state.product.devise}
         </p>
         <div className="w-24 h-1 mx-auto my-6 bg-indigo-700 rounded opacity-75"></div>
-        <div className="w-full max-w-sm lg:max-w-full lg:flex">
+        <div className="w-full lg:flex">
           <div
             className="flex-none h-48 overflow-hidden text-center bg-cover rounded-t lg:h-auto lg:w-48 lg:rounded-t-none lg:rounded-l"
             style={{

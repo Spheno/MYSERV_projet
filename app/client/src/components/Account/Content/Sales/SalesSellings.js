@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SalesTable from "./SalesTable";
+import SalesTable from "./SalesTableSellings";
 
 export default class SalesSellings extends React.Component {
   constructor(props) {
