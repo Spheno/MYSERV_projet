@@ -7,7 +7,7 @@ export default class NavTabs extends React.Component {
     return (
       <Tabs
         selectedTabClassName="md:border md:border-gray-700 md:hover:bg-gray-100 md:shadow"
-        className="z-30 mx-auto lg:w-4/6"
+        className="relative mx-auto bg-transparent lg:w-4/6"
       >
         <TabList className="flex justify-around mb-8 text-center">
           {this.props.tabtitles.map((title, index) => (
