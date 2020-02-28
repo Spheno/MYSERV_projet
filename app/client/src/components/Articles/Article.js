@@ -26,7 +26,10 @@ class Article extends React.Component {
           </div>
         </div>
 
-        <div className="absolute top-0 right-0 m-3 text-white text-">
+        <div className="absolute top-0 right-0 m-3 text-white">
+        <button type="button" className="mr-2 hover:text-blue-600" /* onClick={this.showInfo} */>
+            <FontAwesomeIcon icon="info-circle" size="2x" />
+          </button>
           <button type="button" className="mr-2 hover:text-teal-600" /* onClick={this.addToCart} */>
             <FontAwesomeIcon icon="cart-plus" size="2x" />
           </button>

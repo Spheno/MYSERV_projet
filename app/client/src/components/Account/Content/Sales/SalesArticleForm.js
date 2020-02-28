@@ -56,19 +56,21 @@ export default function SalesArticleForm(props) {
               <input
                 type="number"
                 id="grid-product-price"
+                min="0"
+                defaultValue="0"
                 className="relative flex-1 flex-auto flex-grow flex-shrink w-px h-10 px-3 px-4 py-3 leading-normal bg-gray-200 border border-gray-200 rounded appearance-none"
               />
             </div>
           </div>
           <div className="px-3 mb-6 md:w-1/2 md:mb-0">
             <label
-              className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+              className="block mb-3 text-xs font-bold tracking-wide text-gray-700 uppercase"
               htmlFor="grid-product-category"
             >
               Category <FontAwesomeIcon icon={faStream} size="1x" />
             </label>
             <input
-              className="block w-full px-4 py-3 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
+              className="block w-full px-4 py-2 text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none"
               id="grid-product-category"
               type="text"
               placeholder="High-tech, gaming, ..."
