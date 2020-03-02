@@ -49,10 +49,21 @@ app.get("/hello", function(req, res) {
   res.json("Hello World");
 });
 
+var seeder = require(__dirname + "/seeder/products.js");
+app.use("/seeder", seeder);
+
 //Définition du routeur
-const router = express.Router();
-require(__dirname + "/controllers/userController")(router);
-app.use("/user", router);
+var userRouter = require(__dirname + "/controllers/userController");
+app.use("/user", userRouter);
+
+var cartRouter = require(__dirname + "/controllers/cartController");
+app.use("/cart", cartRouter);
+
+var productController = require(__dirname + "/controllers/productController");
+app.use("/products", productController);
+
+var categoryController = require(__dirname + "/controllers/categoryController");
+app.use("/categories", categoryController);
 
 //Définition et mise en place du port d'écoute
 const port = 8800;
