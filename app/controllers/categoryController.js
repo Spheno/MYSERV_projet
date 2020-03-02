@@ -5,7 +5,7 @@ const Category = require("../schema/schemaCategory");
 const Product = require("../schema/schemaProduct");
 
 router.get("/", function(req, res, next) {
-  Category.find(function(err, categories) {
+  Category.find().distinct("title").exec(function(err, categories) {
     if (err) return console.log(err);
     res.status(200).json(categories);
   });

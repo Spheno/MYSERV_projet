@@ -1,5 +1,5 @@
 import React from "react";
-import API from "../../utils/API";
+import API from "../../utils/userAPI";
 
 import PhoneInput, {
   isPossiblePhoneNumber, /* only checks for input length (for testing purpose in our case) */
@@ -76,14 +76,14 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div className="bg-gray-300 min-h-screen flex flex-col">
-        <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
-          <div className="bg-white mt-3 px-6 pt-4 pb-6 rounded shadow-md text-black w-full">
+      <div className="flex flex-col min-h-screen bg-gray-300">
+        <div className="container flex flex-col items-center justify-center flex-1 max-w-sm px-2 mx-auto">
+          <div className="w-full px-6 pt-4 pb-6 mt-3 text-black bg-white rounded shadow-md">
             <h1 className="mb-4 text-3xl text-center">Join us!</h1>
             <form method="post" onSubmit={this.send}>
               <input
                 type="text"
-                className="block border border-grey-light w-full p-3 rounded mb-4"
+                className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="firstname"
                 placeholder="First name"
                 value={this.state.firstname}
@@ -92,7 +92,7 @@ class Signup extends React.Component {
               />
               <input
                 type="text"
-                className="block border border-grey-light w-full p-3 rounded mb-4"
+                className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="lastname"
                 placeholder="Last name"
                 value={this.state.lastname}
@@ -101,7 +101,7 @@ class Signup extends React.Component {
               />
 
               <PhoneInput
-                className="border border-grey-light w-full p-3 rounded mb-4"
+                className="w-full p-3 mb-4 border rounded border-grey-light"
                 placeholder="Phone number"
                 value={this.state.phoneNumber}
                 onChange={this.handleOnChangePhoneNumber}
@@ -110,7 +110,7 @@ class Signup extends React.Component {
 
               <input
                 type="email"
-                className="block border border-grey-light w-full p-3 rounded mb-4"
+                className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="email"
                 placeholder="Email"
                 value={this.state.email}
@@ -119,7 +119,7 @@ class Signup extends React.Component {
               />
               <input
                 type="password"
-                className="block border border-grey-light w-full p-3 rounded mb-4"
+                className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="password"
                 placeholder="Password"
                 value={this.state.password}
@@ -130,23 +130,23 @@ class Signup extends React.Component {
 
               <button
                 type="submit"
-                className="w-full text-center py-3 rounded bg-green-500 text-white hover:bg-green-700 focus:outline-none my-1"
+                className="w-full py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
               >
                 Create Account
               </button>
             </form>
             <hr className="my-4 border-t" />
-            <div className="text-center text-sm text-gray-600 mt-4">
+            <div className="mt-4 text-sm text-center text-gray-600">
               By signing up, you agree to the{" "}
               <a
-                className="no-underline border-b border-gray-700 text-gray-600 hover:text-gray-900"
+                className="text-gray-600 no-underline border-b border-gray-700 hover:text-gray-900"
                 href="#top"
               >
                 Terms of Service
               </a>{" "}
               and{" "}
               <a
-                className="no-underline border-b border-gray-700 text-gray-600 hover:text-gray-900"
+                className="text-gray-600 no-underline border-b border-gray-700 hover:text-gray-900"
                 href="#top"
               >
                 Privacy Policy
@@ -154,10 +154,10 @@ class Signup extends React.Component {
             </div>
           </div>
 
-          <div className="text-gray-600 my-4">
+          <div className="my-4 text-gray-600">
             Already have an account?{" "}
             <a
-              className="no-underline border-b border-blue-700 text-blue-600 hover:text-blue-900"
+              className="text-blue-600 no-underline border-b border-blue-700 hover:text-blue-900"
               href="/"
             >
               Log in

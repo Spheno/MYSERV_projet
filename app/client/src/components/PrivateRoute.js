@@ -1,5 +1,5 @@
 import React from "react";
-import API from "../utils/API.js";
+import API from "../utils/userAPI.js";
 import { Route, Redirect } from "react-router-dom";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (

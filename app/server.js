@@ -1,11 +1,15 @@
+// Variables d'environnements
+require('dotenv').config();
+
 //Définition des modules
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const session = require('express-session');
 
 //Connexion à la base de donnée
 mongoose
-  .connect("mongodb://localhost/shoofly", {
+  .connect(process.env.REACT_APP_CONNECTION_STRING, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true
@@ -44,15 +48,30 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Cookies pour un user
+app.use(session({
+  //Create a secret for the cookie store it in .env file 
+  secret: process.env.REACT_APP_SESSION_SECRET,
+  //this for resaving the cookie false, if true can cause a memory leak.
+ resave: false,
+ //saveUnitialized best false, unless connect to a database.
+  saveUninitialized: false,
+  cookie: {
+      //The max age of the cookie
+      maxAge: 1000 * 60 * 60 * 24 * 14
+  }
+}));
+
 // Hello World
 app.get("/hello", function(req, res) {
   res.json("Hello World");
 });
 
+// Fakerjs : fausses données temporaires pour remplir la base de données
 var seeder = require(__dirname + "/seeder/products.js");
 app.use("/seeder", seeder);
 
-//Définition du routeur
+//Définition des controllers  et des routes associées
 var userRouter = require(__dirname + "/controllers/userController");
 app.use("/user", userRouter);
 

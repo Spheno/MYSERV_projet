@@ -7,14 +7,28 @@ import ArticlesList from "../Articles/ArticlesList";
 import Footer from "../Footer/Footer";
 
 import dashboardSVG from "../../images/dashboard.svg";
+import ListCategories from "../Categories/ListCategories";
+
+import API from "../../utils/categoriesAPI";
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      firstname: ""
+      firstname: "",
+      categories: []
     };
+  }
+
+  async componentDidMount() {
+    try {
+      const categoriesList = await API.getCategories();
+      this.setState({ categories: categoriesList.data });
+    }
+    catch(error) {
+      console.log(error); // for dev purpose
+    }
   }
 
   render() {
@@ -44,7 +58,7 @@ class Dashboard extends React.Component {
             <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
               Explore & Choose
             </h1>
-
+            <ListCategories categories={this.state.categories} />
             <ArticlesList />
           </div>
 

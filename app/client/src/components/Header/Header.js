@@ -1,5 +1,5 @@
 import React from "react";
-import API from "../../utils/API";
+import API from "../../utils/userAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "./Sidebar";
 import "../../styles/burgerMenu.css";
