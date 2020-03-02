@@ -4,7 +4,7 @@ const router = express.Router();
 const Product = require("../schema/schemaProduct");
 
 router.get("/", function(req, res, next) {
-  let perPage = 3;
+  let perPage = 6;
   let page = parseInt(req.query.page) || 0;
   let pages = 0;
   let nextUrl = "";

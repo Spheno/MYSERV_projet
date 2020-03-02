@@ -1,6 +1,6 @@
 /* C'est ici que l'ensemble des routes et des fonctions associées seront placées pour l'api /cart */
 const express = require("express");
-const cart = require("./cart/libCart.js");
+const Cart = require("../schema/schemaCart");
 var router = express.Router();
 
 /*
