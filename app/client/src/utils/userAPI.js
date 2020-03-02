@@ -29,5 +29,6 @@ export default {
 
   logout: function() {
     localStorage.clear();
+    return axios.get(url + "/logout");
   }
 };

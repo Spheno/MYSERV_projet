@@ -1,11 +1,11 @@
 // Variables d'environnements
-require('dotenv').config();
+require("dotenv").config();
 
 //Définition des modules
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const session = require('express-session');
+const express = require("express"),
+  mongoose = require("mongoose"),
+  bodyParser = require("body-parser"),
+  session = require("express-session");
 
 //Connexion à la base de donnée
 mongoose
@@ -49,18 +49,20 @@ app.use(function(req, res, next) {
 });
 
 // Cookies pour un user
-app.use(session({
-  //Create a secret for the cookie store it in .env file 
-  secret: process.env.REACT_APP_SESSION_SECRET,
-  //this for resaving the cookie false, if true can cause a memory leak.
- resave: false,
- //saveUnitialized best false, unless connect to a database.
-  saveUninitialized: false,
-  cookie: {
+app.use(
+  session({
+    //Create a secret for the cookie store it in .env file
+    secret: process.env.REACT_APP_SESSION_SECRET,
+    //this for resaving the cookie false, if true can cause a memory leak.
+    resave: false,
+    //saveUnitialized best false, unless connect to a database.
+    saveUninitialized: false,
+    cookie: {
       //The max age of the cookie
       maxAge: 1000 * 60 * 60 * 24 * 14
-  }
-}));
+    }
+  })
+);
 
 // Hello World
 app.get("/hello", function(req, res) {
@@ -74,9 +76,6 @@ app.use("/seeder", seeder);
 //Définition des controllers  et des routes associées
 var userRouter = require(__dirname + "/controllers/userController");
 app.use("/user", userRouter);
-
-var cartRouter = require(__dirname + "/controllers/cartController");
-app.use("/cart", cartRouter);
 
 var productController = require(__dirname + "/controllers/productController");
 app.use("/products", productController);

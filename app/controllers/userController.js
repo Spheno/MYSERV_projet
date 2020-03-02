@@ -6,5 +6,8 @@ var router = express.Router();
 router.post("/login", account.login);
 router.post("/signup", account.signup);
 
+router.get("/", account.readUserData);
+router.get("/logout", account.logout);
+
 module.exports = router;
 
