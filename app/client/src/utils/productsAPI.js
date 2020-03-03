@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const url = "http://localhost:8800/categories";
+const url = "http://localhost:8800/products";
 
 export default {
-  getCategories() {
+  getProducts() {
     return axios.get(url + "/");
   },
 
-  getCategory() {
+  getProduct() {
     return axios.get(url + "/:id");
   }
 };

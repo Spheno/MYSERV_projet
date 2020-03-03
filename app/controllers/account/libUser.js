@@ -136,13 +136,10 @@ module.exports = {
   },
 
   updateProduct(req, res) {
-    //Get the id, since we need to update a specific product.
-    //Destruct the id from the request params.
     const { id } = req.params;
-    //Destruct the update data from the req.body,
-    // also add picture to destruct from req.body ;------------------------------
+
     const { picture, title, description, price, category, tags } = req.body;
-    //Find the product, and update it's properties
+
     Product.findById(id).exec((err, product) => {
       if (err) console.log("Updated Product: ", err);
       product.picture = picture;
@@ -158,9 +155,8 @@ module.exports = {
   },
 
   deleteProduct(req, res) {
-    //Destruct the id from the request params, since you have to delete a specific product.
     const { id } = req.params;
-    //Use an object to delete the specified product.
+
     Product.deleteOne({ _id: id }).exec((err, product) => {
       if (err) console.log("Delete One Error: ", err);
       res.status(200).json({ product });

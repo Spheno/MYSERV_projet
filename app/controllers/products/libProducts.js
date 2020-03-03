@@ -7,12 +7,12 @@ const Product = require("../../schema/schemaProduct");
 
 module.exports = {
   getAllProducts(req, res, next) {
-    let perPage = 6;
-    let page = parseInt(req.query.page) || 0;
+    let perPage = 9;
+    let page = parseInt(req.query.page) || 1;
     let pages = 0;
     let nextUrl = "";
     let prevUrl = "";
-    Product.countDocuments().exec(function(err, count) {
+    Product.estimatedDocumentCount().exec(function(err, count) {
       Product.find()
         .limit(perPage)
         .skip(perPage * page)
@@ -20,7 +20,7 @@ module.exports = {
           if (err) console.log("Get Product Mongoose Error: ", err);
 
           pages = Math.floor(count / perPage);
-          if (page === 0) {
+          if (page === 1) {
             res.status(200).json({
               products,
               currentPage: page,
@@ -38,7 +38,7 @@ module.exports = {
               prevUrl: process.env.REACT_APP_PUBLIC_URL + `/products?page=${page - 1}`,
               nextUrl: ``
             });
-          } else if (page > 0 && page < pages) {
+          } else if (page > 1 && page < pages) {
             res.status(200).json({
               products: products,
               currentPage: page,
@@ -55,9 +55,12 @@ module.exports = {
   },
 
   getProduct(req, res, next) {
-    Product.findById(req.params.id, function(err, product) {
-      if (err) return console.log(err);
-      res.status(200).json(product);
+    const { id } = req.params;
+    Product.findById(id).exec((err, product) => {
+      if (err) return console.log("error getProductByID: ", err);
+
+      console.log("success getProductByID!");
+      res.status(200).json({ product });
     });
   }
 };
