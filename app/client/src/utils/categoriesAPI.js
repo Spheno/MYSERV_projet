@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const options = {
-  "content-type": "application/json;charset=utf-8",
-};
-const url = "http://localhost:8800";
+const url = "http://localhost:8800/categories";
 
 export default {
     getCategories() {
-        return axios.get(url + '/categories');
+        return axios.get(url + '/');
+    },
+
+    getCategory() {
+        return axios.get(url + '/:idCategory');
     }
 };

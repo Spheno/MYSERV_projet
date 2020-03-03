@@ -18,7 +18,7 @@ module.exports = {
 
   //display all products in a specific Category
   getCategory(req, res, next) {
-    Category.findOne({ title: req.params.category }, function(err, category) {
+    Category.findOne({ title: req.params.idCategory }, function(err, category) {
       if (err) return console.log(err);
       Product.find({ category: category.title }, function(err, products) {
         if (err) return console.log(err);

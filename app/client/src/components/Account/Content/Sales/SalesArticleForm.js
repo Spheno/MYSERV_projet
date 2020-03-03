@@ -6,11 +6,13 @@ import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 
 export default function SalesArticleForm(props) {
+  /*
   let state = {
     img: null,
     categories: ["Gaming", "High-tech", "Garden", "Kitchen", "House", "Sport"],
     devises: ["€", "$"]
   };
+  */
 
   const [tags, setTags] = React.useState([]);
   const nbTagsMax = 5;

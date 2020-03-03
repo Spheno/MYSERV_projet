@@ -9,29 +9,31 @@ import Footer from "../Footer/Footer";
 import dashboardSVG from "../../images/dashboard.svg";
 import ListCategories from "../Categories/ListCategories";
 
-import API from "../../utils/categoriesAPI";
+import catAPI from "../../utils/categoriesAPI";
+import userAPI from "../../utils/userAPI";
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      firstname: "",
+      user: [],
       categories: []
     };
   }
 
   async componentDidMount() {
     try {
-      const categoriesList = await API.getCategories();
-      this.setState({ categories: categoriesList.data });
+      const categoriesList = await catAPI.getCategories();
+      const userData = JSON.parse(localStorage.getItem('user'));
+      this.setState({ user: userData, categories: categoriesList.data });
     }
     catch(error) {
       console.log(error); // for dev purpose
     }
   }
 
-  render() {
+  render() {   
     return (
       <div className="p-6 bg-purple-700">
         <div className="flex flex-col w-full font-sans bg-white">
@@ -41,7 +43,7 @@ class Dashboard extends React.Component {
             <main className="flex flex-col-reverse items-center py-8 sm:flex-row jusitfy-between">
               <div className="flex flex-col items-center w-full text-center sm:items-start sm:text-left">
                 <h1 className="mb-2 text-6xl font-bold leading-none tracking-wide text-blue-900">
-                  Hello {localStorage.getItem("username")}
+                  Hello {this.state.user.firstname}
                 </h1>
                 <h2 className="mb-6 text-4xl tracking-widest text-orange-500 text-secondary">
                   Everything you need.

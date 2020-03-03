@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import store from "./redux/store";
+
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import store from "./redux/store";
+
 import * as serviceWorker from "./serviceWorker";
 
 import "./styles/tailwind.css"; /* tailwindCSS stylesheet */
@@ -10,7 +13,9 @@ import "react-phone-number-input/style.css"; /* style of phone number input in a
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );

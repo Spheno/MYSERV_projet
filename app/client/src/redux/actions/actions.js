@@ -1,4 +1,4 @@
-import { ADD_ARTICLE } from "../constants/action-types";
+import { ADD_ARTICLE, LOGIN, LOGOUT } from "../constants/action-types";
 
 export function addArticle(payload) {
   return {
@@ -6,3 +6,17 @@ export function addArticle(payload) {
     payload
   };
 }
+
+export function login(userInfo) {
+  return {
+    type: LOGIN,
+    payload: userInfo
+  };
+};
+
+export function logout() {
+  return {
+      type: LOGOUT
+  }
+}
+

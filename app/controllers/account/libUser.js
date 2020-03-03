@@ -3,7 +3,6 @@
       - connexion, de création de compte et de déconnexion,
       - d'ajout/modification/suppression de produit,
       - d'ajout/suppresion d'un produit au panier,
-      - de récupération des données d'un user.
 */
 const User = require("../../schema/schemaUser");
 const Product = require("../../schema/schemaProduct");
@@ -63,8 +62,8 @@ module.exports = {
 
       return res.status(200).json({
         text: "Good job: User saved successfully! :)",
-        username: userData.firstname,
-        token: userData.getToken()
+        token: userData.getToken(),
+        session: JSON.stringify(req.session.user)
       });
     } catch (error) {
       console.log("error user save (lib.js): " + error);
@@ -95,15 +94,15 @@ module.exports = {
         });
       }
 
-      console.log("Connexion réussie !");
       // assigne l'user à la session
       req.session.user = findUser;
       req.session.save();
 
+      console.log("Connexion réussie !");
+
       return res.status(200).json({
-        username: findUser.firstname,
         token: findUser.getToken(),
-        session,
+        session: JSON.stringify(req.session.user),
         text: "Authentification réussie !"
       });
     } catch (error) {
@@ -112,15 +111,8 @@ module.exports = {
   },
 
   logout(req, res) {
-    //Destroy the session, which logout the user, since when the user session is undefined the redux also logout's
-    // the user in the frontend.
     req.session.destroy();
-    //Send a message informing  a user successfully logged out.
     res.status(200).json({ message: "Logout Successfully!" });
-  },
-
-  readUserData(req, res) {
-    res.status(200).json({ user: req.session.user });
   },
 
   addToCart(req, res) {},

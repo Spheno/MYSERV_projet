@@ -5,8 +5,9 @@ var router = express.Router();
 
 router.post("/login", account.login);
 router.post("/signup", account.signup);
+router.post("/addToCart", account.addToCart);
+router.delete("/removeFromCart", account.removeFromCart);
 
-router.get("/", account.readUserData);
 router.get("/logout", account.logout);
 
 module.exports = router;

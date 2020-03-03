@@ -28,7 +28,7 @@ export default class ArticleSVG extends React.Component {
             fill="white"
           />
         </svg>
-        <div className="relative pt-10 px-10 flex items-center justify-center">
+        <div className="relative flex items-center justify-center px-10 pt-10">
           <img
             className="relative w-40"
             src={this.props.source}

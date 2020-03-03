@@ -27,6 +27,10 @@ export default {
     return localStorage.getItem("token") !== null;
   },
 
+  getUserData: function() {
+    return axios.get(url + '/');
+  },
+
   logout: function() {
     localStorage.clear();
     return axios.get(url + "/logout");

@@ -11,13 +11,13 @@ class Article extends React.Component {
           (this.props.bgColor || "")
         }
       >
-        <ArticleSVG source={this.props.src} />
+        <ArticleSVG source={this.props.imagePath} />
 
         <div className="relative px-6 pb-6 mt-6 text-white">
           <span className="block -mb-1 opacity-75">{this.props.category}</span>
           <div className="flex justify-between">
             <span className="block text-xl font-semibold">
-              {this.props.name}
+              {this.props.title}
             </span>
             <span className="flex items-center block px-3 py-2 text-xs font-bold leading-none text-orange-500 bg-white rounded-full">
               {this.props.devise}

@@ -1,15 +1,8 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import PrivateRoute from "./components/PrivateRoute";
-import LoginPage from "./components/Login/Login";
-import RegisterPage from "./components/Signup/Signup";
-import Dashboard from "./components/Dashboard/Dashboard";
-import ErrorPage from "./components/Error/ErrorPage";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
-import SalesPage from "./components/Account/Menu/Sales";
-import ProfilePage from "./components/Account/Menu/Profile";
-import CartPage from "./components/Account/Menu/Cart";
-import FavsPage from "./components/Account/Menu/Favs";
+import routes from "./routes";
 
 /* Instead of adding all the icons of font awesome, we make our own lib with only what we need */
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -61,21 +54,11 @@ library.add(
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={LoginPage} />
-          <Route exact path="/signup" component={RegisterPage} />
-          <PrivateRoute path="/dashboard" component={Dashboard} />
-          <PrivateRoute path="/sales" component={SalesPage} />
-          <PrivateRoute path="/profile" component={ProfilePage} />
-          <PrivateRoute path="/cart" component={CartPage} />
-          <PrivateRoute path="/favs" component={FavsPage} />
-
-          <Route path="*" component={ErrorPage} />
-        </Switch>
-      </BrowserRouter>
+      <div className="App">
+        {routes}
+      </div>
     );
   }
 }
 
-export default App;
+export default withRouter(connect()(App));
