@@ -1,5 +1,6 @@
 import React from "react";
 import API from "../../utils/userAPI";
+
 import "../../styles/login.css";
 
 import PhoneInput, {
@@ -13,15 +14,17 @@ class Login extends React.Component {
 
     this.state = {
       phoneNumber: "+21612345678",
-      password: "test"
+      password: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleOnChangePhoneNumber = this.handleOnChangePhoneNumber.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  send = async event => {
+  handleSubmit = async event => {
     event.preventDefault();
+    
     const { phoneNumber, password } = this.state;
     if (!phoneNumber || phoneNumber.length === 0) return;
     if (!password || password.length === 0) return;
@@ -30,18 +33,22 @@ class Login extends React.Component {
       const { data } = await API.login(phoneNumber, password);
 
       alert("Connexion réussie !");
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", data.session);
       window.location = "/dashboard";
     } catch (error) {
-      if (error.response.status === 401) {
-        // utilisateur n'existe pas ou password incorrect
-        let error_message = JSON.stringify(error.response.data.text);
-        alert(JSON.parse(error_message));
-        this.setState({ password: "" });
+      if (error.response) {
+        console.log(error.response.data);
+        console.log("Status code: ", error.response.status);
+      } else if (error.request) {
+        console.log(error.request);
       } else {
-        console.log(error); // for dev purpose
+        console.log("Error ", error.message);
       }
+
+      alert(error.response.data.text)
+      this.setState({ password: "" });
     }
   };
 
@@ -65,6 +72,13 @@ class Login extends React.Component {
       );
     });
   };
+
+  componentDidMount() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if(user) {
+      this.setState({phoneNumber: user.phoneNumber})
+    }
+  }
 
   render() {
     return (
@@ -122,7 +136,7 @@ class Login extends React.Component {
                     <h3 className="pt-4 text-2xl text-center">Hello you</h3>
                     <form
                       className="px-8 pt-6 pb-8 mb-4 bg-white rounded"
-                      onSubmit={this.send}
+                      onSubmit={this.handleSubmit}
                     >
                       <PhoneInput
                         className="w-full p-3 mb-4 border rounded border-grey-light"

@@ -1,21 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import configureStore from './redux/configureStore'
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./redux/store";
 
 import * as serviceWorker from "./serviceWorker";
 
 import "./styles/tailwind.css"; /* tailwindCSS stylesheet */
 import "react-phone-number-input/style.css"; /* style of phone number input in all pages */
 
+const store = configureStore();
+
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Router>
+      <Route path="/" component={App} />
+    </Router>
   </Provider>,
   document.getElementById("root")
 );

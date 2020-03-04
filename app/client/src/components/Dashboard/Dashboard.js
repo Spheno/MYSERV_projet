@@ -9,13 +9,16 @@ import Footer from "../Footer/Footer";
 import dashboardSVG from "../../images/dashboard.svg";
 import ListCategories from "../Categories/ListCategories";
 
-import catAPI from "../../utils/categoriesAPI";
 import prodAPI from "../../utils/productsAPI";
 import Loader from "../Loader/LoaderScreen";
 import PaginationComp from "../Pagination/PaginationComp";
 
+import { connect } from "react-redux";
+import { getCategories } from "../../redux/actions/category_actions";
+import { getProducts } from "../../redux/actions/product_actions";
+
 const ARTCILES_PER_PAGE = 1;
-  
+
 /* 0, 1 or 2 ;
    2 => all numbers are shown side by side ; 
    1 => one number on each side of the current page number ;
@@ -41,15 +44,21 @@ class Dashboard extends React.Component {
 
   async componentDidMount() {
     try {
-      const categoriesList = await catAPI.getCategories();
-      const productsList = await prodAPI.getProducts();
+      this.props.dispatch(getCategories());
+      this.props.dispatch(getProducts());
+
+      // const categoriesList = await catAPI.getCategories();
+       const productsList = await prodAPI.getProducts();
+      //const productsList = this.props.products;
       const userData = JSON.parse(localStorage.getItem("user"));
       this.setState({
         loading: false,
         user: userData,
-        categories: categoriesList.data,
+        categories: this.props.categories,
         productsInfo: productsList.data,
         totalProducts: productsList.data.products.length
+        //productsInfo: productsList,
+        //totalProducts: productsList.products.length
       });
     } catch (error) {
       console.log(error); // for dev purpose
@@ -150,4 +159,11 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  categories: state.categories.categories,
+  errorCategories: state.categories.error,
+  products: state.products.products,
+  errorProducts: state.products.error
+});
+
+export default connect(mapStateToProps)(Dashboard);

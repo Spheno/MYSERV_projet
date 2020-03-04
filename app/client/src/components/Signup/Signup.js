@@ -2,8 +2,8 @@ import React from "react";
 import API from "../../utils/userAPI";
 
 import PhoneInput, {
-  isPossiblePhoneNumber, /* only checks for input length (for testing purpose in our case) */
-  isValidPhoneNumber, /* checks the validity of the number (for later on) */
+  isPossiblePhoneNumber /* only checks for input length (for testing purpose in our case) */,
+  isValidPhoneNumber /* checks the validity of the number (for later on) */
 } from "react-phone-number-input";
 
 class Signup extends React.Component {
@@ -20,15 +20,18 @@ class Signup extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleOnChangePhoneNumber = this.handleOnChangePhoneNumber.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  send = async (event) => {
+  handleSubmit = async event => {
     event.preventDefault();
+
     const { firstname, lastname, email, phoneNumber, password } = this.state;
     if (!firstname || firstname.length === 0) return;
     if (!lastname || lastname.length === 0) return;
     if (!email || email.length === 0) return;
     if (!password || password.length === 0) return;
+
     try {
       // alert(JSON.stringify(this.state));
       const { data } = await API.signup({
@@ -36,20 +39,24 @@ class Signup extends React.Component {
         lastname,
         email,
         phoneNumber,
-        password,
+        password
       });
-      
+
       alert("Inscription réussie ! Bienvenue " + firstname);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", data.session);
-      window.location = "/dashboard";
+      window.location = "/";
     } catch (error) {
-      if(error.response.status === 409) { // utilisateur déjà inscrit
-        let error_message = JSON.stringify(error.response.data.text);
-        alert(JSON.parse(error_message));
+      if (error.response) {
+        console.log(error.response.data);
+        console.log("Status code: ", error.response.status);
+      } else if (error.request) {
+        console.log(error.request);
       } else {
-        console.log(error); // for dev purpose
+        console.log("Error ", error.message);
       }
+
+      alert(error.response.data.text);
     }
   };
 
@@ -80,7 +87,7 @@ class Signup extends React.Component {
         <div className="container flex flex-col items-center justify-center flex-1 max-w-sm px-2 mx-auto">
           <div className="w-full px-6 pt-4 pb-6 mt-3 text-black bg-white rounded shadow-md">
             <h1 className="mb-4 text-3xl text-center">Join us!</h1>
-            <form method="post" onSubmit={this.send}>
+            <form method="post" onSubmit={this.handleSubmit}>
               <input
                 type="text"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"

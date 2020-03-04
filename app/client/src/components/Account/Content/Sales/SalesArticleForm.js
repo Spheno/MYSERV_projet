@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
@@ -10,17 +10,10 @@ import SalesImageUploader from "./SalesImageUploader";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 
-export default function SalesArticleForm(props) {
-  /*
-  let state = {
-    img: null,
-    categories: ["Gaming", "High-tech", "Garden", "Kitchen", "House", "Sport"],
-    devises: ["€", "$"]
-  };
-  */
+const NB_TAGS_MAX = 5;
 
-  const [tags, setTags] = React.useState([]);
-  const nbTagsMax = 5;
+export default function SalesArticleForm(props) {
+  const [tags, setTags] = useState([]);
 
   return (
     <form /*onSubmit={this.send}*/>
@@ -95,8 +88,8 @@ export default function SalesArticleForm(props) {
           <ReactTagInput
             id="grid-product-tags"
             tags={tags}
-            placeholder={"Type and press enter (" + nbTagsMax + " max.)"}
-            maxTags={nbTagsMax}
+            placeholder={"Type and press enter (" + NB_TAGS_MAX + " max.)"}
+            maxTags={NB_TAGS_MAX}
             editable={true}
             readOnly={false}
             removeOnBackspace={true}
