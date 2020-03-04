@@ -14,6 +14,15 @@ import prodAPI from "../../utils/productsAPI";
 import Loader from "../Loader/LoaderScreen";
 import PaginationComp from "../Pagination/PaginationComp";
 
+const ARTCILES_PER_PAGE = 1;
+  
+/* 0, 1 or 2 ;
+   2 => all numbers are shown side by side ; 
+   1 => one number on each side of the current page number ;
+   0 => only current page number is shown
+*/
+const PAGINATION_NEIGHBOURS = 2;
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -124,8 +133,8 @@ class Dashboard extends React.Component {
               <div className="flex">
                 <PaginationComp
                   totalRecords={totalProducts}
-                  pageLimit={2}
-                  pageNeighbours={2}
+                  pageLimit={ARTCILES_PER_PAGE}
+                  pageNeighbours={PAGINATION_NEIGHBOURS}
                   onPageChanged={this.onPageChanged}
                 />
               </div>

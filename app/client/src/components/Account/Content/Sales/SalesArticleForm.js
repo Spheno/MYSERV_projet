@@ -1,6 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faStream, faTags } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faStream,
+  faTags,
+  faPaperPlane
+} from "@fortawesome/free-solid-svg-icons";
 import SalesImageUploader from "./SalesImageUploader";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
@@ -90,7 +95,7 @@ export default function SalesArticleForm(props) {
           <ReactTagInput
             id="grid-product-tags"
             tags={tags}
-            placeholder={"Type and press enter ("+ nbTagsMax +" max.)"}
+            placeholder={"Type and press enter (" + nbTagsMax + " max.)"}
             maxTags={nbTagsMax}
             editable={true}
             readOnly={false}
@@ -117,9 +122,15 @@ export default function SalesArticleForm(props) {
           <div className="w-1/2">
             <button
               type="submit"
-              className="w-40 py-3 -mt-4 text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
+              className="hidden w-40 py-3 -mt-4 text-white bg-green-500 rounded hover:bg-green-700 md:inline focus:outline-none"
             >
               Send
+            </button>
+            <button
+              type="submit"
+              className="inline px-16 py-3 -mt-4 text-white bg-green-500 border border-green-500 rounded md:hidden hover:bg-green-700 focus:outline-none"
+            >
+              <FontAwesomeIcon icon={faPaperPlane} size="1x" />
             </button>
           </div>
         </div>
