@@ -51,7 +51,8 @@ const userSchema = mongoose.Schema(
     },
     profilePicture: {
       type: String
-    }
+    },
+    orders: []
   },
   { timestamps: true, runSettersOnQuery: true }
 );
