@@ -141,7 +141,7 @@ module.exports = {
     const { picture, title, description, price, category, tags } = req.body;
 
     Product.findById(id).exec((err, product) => {
-      if (err) console.log("Updated Product: ", err);
+      if (err) console.log("Error updateProduct: ", err);
       product.picture = picture;
       product.title = title;
       product.description = description;

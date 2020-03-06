@@ -30,5 +30,9 @@ export default {
   logout: function() {
     localStorage.clear();
     return axios.get(url + "/logout");
+  },
+
+  createProduct: function(data) {
+    return axios.post(url + "/product");
   }
 };
