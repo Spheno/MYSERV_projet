@@ -9,15 +9,13 @@ import Footer from "../Footer/Footer";
 import dashboardSVG from "../../images/dashboard.svg";
 import ListCategories from "../Categories/ListCategories";
 
-import prodAPI from "../../utils/productsAPI";
 import Loader from "../Loader/LoaderScreen";
 import PaginationComp from "../Pagination/PaginationComp";
 
 import { connect } from "react-redux";
-import { getCategories } from "../../redux/actions/category_actions";
-import { getProducts } from "../../redux/actions/product_actions";
+import { getAllData } from "../../redux/actions/all_actions"; // redux dispatch categories and products
 
-const ARTCILES_PER_PAGE = 1;
+const ARTICLES_PER_PAGE = 2;
 
 /* 0, 1 or 2 ;
    2 => all numbers are shown side by side ; 
@@ -44,21 +42,16 @@ class Dashboard extends React.Component {
 
   async componentDidMount() {
     try {
-      this.props.dispatch(getCategories());
-      this.props.dispatch(getProducts());
+      const { getAllData } = this.props;
+      await getAllData();
 
-      // const categoriesList = await catAPI.getCategories();
-       const productsList = await prodAPI.getProducts();
-      //const productsList = this.props.products;
       const userData = JSON.parse(localStorage.getItem("user"));
       this.setState({
         loading: false,
         user: userData,
         categories: this.props.categories,
-        productsInfo: productsList.data,
-        totalProducts: productsList.data.products.length
-        //productsInfo: productsList,
-        //totalProducts: productsList.products.length
+        productsInfo: this.props.products,
+        totalProducts: this.props.products.length
       });
     } catch (error) {
       console.log(error); // for dev purpose
@@ -70,7 +63,7 @@ class Dashboard extends React.Component {
     const { currentPage, totalPages, pageLimit } = data;
 
     const offset = (currentPage - 1) * pageLimit;
-    const productsList = productsInfo.products;
+    const productsList = productsInfo;
     const currentProducts = productsList.slice(offset, offset + pageLimit);
 
     this.setState({ currentPage, currentProducts, totalPages });
@@ -142,7 +135,7 @@ class Dashboard extends React.Component {
               <div className="flex">
                 <PaginationComp
                   totalRecords={totalProducts}
-                  pageLimit={ARTCILES_PER_PAGE}
+                  pageLimit={ARTICLES_PER_PAGE}
                   pageNeighbours={PAGINATION_NEIGHBOURS}
                   onPageChanged={this.onPageChanged}
                 />
@@ -166,4 +159,11 @@ const mapStateToProps = state => ({
   errorProducts: state.products.error
 });
 
-export default connect(mapStateToProps)(Dashboard);
+function mapDispatchToProps(dispatch) {
+  return {
+    getAllData: (data) => dispatch(getAllData(data)),
+    dispatch
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
