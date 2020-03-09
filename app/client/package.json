@@ -23,6 +23,7 @@
     "react-loader-spinner": "^3.1.5",
     "react-medium-image-zoom": "^4.0.4",
     "react-phone-number-input": "^3.0.17",
+    "react-radio-group": "^3.0.3",
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.1",
