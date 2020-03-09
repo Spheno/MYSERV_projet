@@ -23,7 +23,7 @@ import {
   faMoneyBillWaveAlt,
   faWallet,
   faListOl,
-  faInfoCircle
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -48,7 +48,7 @@ library.add(
   faMoneyBillWaveAlt,
   faWallet,
   faListOl,
-  faInfoCircle
+  faInfoCircle,
 );
 
 class App extends React.Component {
