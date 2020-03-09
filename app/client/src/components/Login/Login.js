@@ -24,7 +24,7 @@ class Login extends React.Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-    
+
     const { phoneNumber, password } = this.state;
     if (!phoneNumber || phoneNumber.length === 0) return;
     if (!password || password.length === 0) return;
@@ -47,7 +47,7 @@ class Login extends React.Component {
         console.log("Error ", error.message);
       }
 
-      alert(error.response.data.text)
+      alert(error.response.data.text);
       this.setState({ password: "" });
     }
   };
@@ -75,8 +75,8 @@ class Login extends React.Component {
 
   componentDidMount() {
     const user = JSON.parse(localStorage.getItem("user"));
-    if(user) {
-      this.setState({phoneNumber: user.phoneNumber})
+    if (user) {
+      this.setState({ phoneNumber: user.phoneNumber });
     }
   }
 
@@ -87,107 +87,80 @@ class Login extends React.Component {
           <div className="flex flex-col font-sans bg-white">
             <div className="container px-8 mx-auto">
               <header className="relative flex flex-col items-center justify-between py-6 sm:flex-row">
-                <h3 className="text-2xl font-bold text-blue-900">ShooFly</h3>
-                <nav className="hidden text-lg md:flex">
-                  <a
-                    href="#top"
-                    className="px-6 py-3 text-gray-800 hover:text-purple-300"
-                  >
-                    About
-                  </a>
-                  <a
-                    href="#top"
-                    className="px-6 py-3 text-gray-800 hover:text-purple-300"
-                  >
-                    Contact
-                  </a>
-                  <a
-                    href="/signup"
-                    className="px-6 py-3 text-purple-700 uppercase bg-purple-200 rounded-full hover:bg-purple-300"
-                  >
-                    Join us!
-                  </a>
-                </nav>
-                <button className="absolute top-0 right-0 flex flex-col p-4 mt-5 md:hidden">
-                  <span className="w-5 h-px mb-1 bg-orange-500"></span>
-                  <span className="w-5 h-px mb-1 bg-orange-500"></span>
-                  <span className="w-5 h-px mb-1 bg-orange-500"></span>
-                </button>
+                <h3 className="text-3xl font-bold text-blue-900">ShooFly</h3>
               </header>
 
-              <main className="flex flex-col-reverse items-center py-8 sm:flex-row jusitfy-between">
-                <div className="flex flex-col items-center text-center sm:w-2/5 sm:items-start sm:text-left">
-                  <h1 className="mb-2 text-6xl font-bold leading-none tracking-wide text-blue-900 uppercase">
-                    Buy, Sell, Go.
-                  </h1>
-                  <h2 className="mb-6 text-4xl tracking-widest text-orange-500 text-secondary">
-                    You will come back.
-                  </h2>
-                </div>
-                <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
-              </main>
-
-              <div className="flex justify-center px-6 mb-12">
-                <div className="flex w-full border border-purple-400 rounded-lg xl:w-3/4 lg:w-11/12">
-                  <div className="hidden w-full h-auto bg-gray-400 bg-cover rounded-l-lg login_side_img lg:block lg:w-1/2">
-                    {/* change bg-img in login.css */}
+              <main className="block md:flex">
+                <div className="flex flex-col-reverse items-center w-full py-8 mx-auto sm:w-1/2 sm:flex-row jusitfy-between">
+                  <div className="flex flex-col items-center w-full text-center md:w-4/5 md:items-start md:text-left">
+                    <h1 className="mb-2 text-6xl font-bold leading-none tracking-wide text-blue-900 uppercase">
+                      Buy, Sell, Go.
+                    </h1>
+                    <h2 className="mb-6 text-4xl tracking-widest text-orange-500 text-secondary">
+                      You will come back.
+                    </h2>
                   </div>
-                  <div className="w-full p-5 bg-white rounded-lg lg:w-1/2 lg:rounded-l-none">
-                    <h3 className="pt-4 text-2xl text-center">Hello you</h3>
-                    <form
-                      className="px-8 pt-6 pb-8 mb-4 bg-white rounded"
-                      onSubmit={this.handleSubmit}
-                    >
-                      <PhoneInput
-                        className="w-full p-3 mb-4 border rounded border-grey-light"
-                        placeholder="Phone number"
-                        value={this.state.phoneNumber}
-                        onChange={this.handleOnChangePhoneNumber}
-                        required
-                      />
-                      <div className="mb-4">
-                        <input
-                          type="password"
+                </div>
+
+                <div className="flex justify-center w-full mx-auto mb-12 sm:w-1/2">
+                  <div className="flex-1 px-24 border-purple-400 rounded-lg">
+                    <div className="sounded-lg lg:rounded-l-none">
+                      <h3 className="pt-8 text-2xl text-center">Hello you</h3>
+                      <form
+                        className="pt-6 pb-8 mb-4 bg-white rounded"
+                        onSubmit={this.handleSubmit}
+                      >
+                        <PhoneInput
                           className="w-full p-3 mb-4 border rounded border-grey-light"
-                          name="password"
-                          placeholder="Password"
-                          value={this.state.password}
-                          onChange={this.handleChange}
+                          placeholder="Phone number"
+                          value={this.state.phoneNumber}
+                          onChange={this.handleOnChangePhoneNumber}
                           required
-                          autoComplete="true"
                         />
-                      </div>
+                        <div className="mb-4">
+                          <input
+                            type="password"
+                            className="w-full p-3 mb-4 border rounded border-grey-light"
+                            name="password"
+                            placeholder="Password"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                            required
+                            autoComplete="true"
+                          />
+                        </div>
 
-                      <div className="mb-6 text-center">
-                        <button
-                          type="submit"
-                          className="w-full py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
-                        >
-                          Sign in
-                        </button>
-                      </div>
-                      <hr className="my-4 border-t" />
-                      <div className="my-4 text-center text-gray-600">
-                        No account?{" "}
-                        <a
-                          className="text-blue-600 no-underline hover:text-blue-900"
-                          href="/signup"
-                        >
-                          Sign up!
-                        </a>{" "}
-                      </div>
-                      <div className="text-center">
-                        <a
-                          className="text-blue-600 no-underline hover:text-blue-900"
-                          href="#top"
-                        >
-                          Forgot your password?
-                        </a>
-                      </div>
-                    </form>
+                        <div className="mb-6 text-center">
+                          <button
+                            type="submit"
+                            className="w-full py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none"
+                          >
+                            Sign in
+                          </button>
+                        </div>
+                        <hr className="my-4 border-t" />
+                        <div className="my-4 text-center text-gray-600">
+                          No account?{" "}
+                          <a
+                            className="text-blue-600 no-underline hover:text-blue-900"
+                            href="/signup"
+                          >
+                            Sign up!
+                          </a>{" "}
+                        </div>
+                        <div className="text-center">
+                          <a
+                            className="text-blue-600 no-underline hover:text-blue-900"
+                            href="#top"
+                          >
+                            Forgot your password?
+                          </a>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </main>
             </div>
           </div>
         </div>
