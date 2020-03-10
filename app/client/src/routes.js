@@ -11,10 +11,12 @@ import SalesPage from "./components/Account/Menu/Sales";
 import ProfilePage from "./components/Account/Menu/Profile";
 import CartPage from "./components/Account/Menu/Cart";
 import FavsPage from "./components/Account/Menu/Favs";
+import ResetPassword from "./components/ResetPassword";
 
 export default (
   <Switch>
     <Route exact path="/" component={LoginPage} />
+    <Route exact path="/reset" component={ResetPassword} />
     <Route exact path="/signup" component={RegisterPage} />
     <PrivateRoute path="/dashboard" component={Dashboard} />
     <PrivateRoute path="/sales" component={SalesPage} />

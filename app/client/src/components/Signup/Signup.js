@@ -84,7 +84,7 @@ class Signup extends React.Component {
   render() {
     return (
       <div className="flex flex-col min-h-screen bg-gray-300">
-        <div className="container flex flex-col items-center justify-center flex-1 max-w-sm px-2 mx-auto">
+        <div className="flex flex-col items-center justify-center flex-1 max-w-lg px-2 mx-auto">
           <div className="w-full px-6 pt-4 pb-6 mt-3 text-black bg-white rounded shadow-md">
             <h1 className="mb-4 text-3xl text-center">Join us!</h1>
             <form method="post" onSubmit={this.handleSubmit}>

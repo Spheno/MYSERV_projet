@@ -151,7 +151,7 @@ class Login extends React.Component {
                         <div className="text-center">
                           <a
                             className="text-blue-600 no-underline hover:text-blue-900"
-                            href="#top"
+                            href="/reset"
                           >
                             Forgot your password?
                           </a>
