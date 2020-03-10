@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../../styles/cartArticle.css";
 import avatar from "../../../../images/avatar/einstein.jpg";
 import article from "../../../../images/articles/playstation5.jpg";
+import { confirmAlert } from 'react-confirm-alert'; /* custom confirm pop up */
+import AlertDeleteArticle from "../../../Alerts/AlertDeleteArticle"
 
 /* TODO: make articles clickable and zoomable (Magnifier.js) */
 
@@ -11,6 +13,7 @@ export default class CartArticle extends React.Component {
     super(props);
 
     this.state = {
+      showAlert: false,
       nbArticles: 1,
       total: null,
       product: {
@@ -40,6 +43,27 @@ export default class CartArticle extends React.Component {
         tags: [["gaming"], ["sony"], ["fun"]]
       }
     };
+  }
+
+  deleteArticle = () => {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure to do this?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.setState({ showAlert: true })
+        },
+        {
+          label: 'No',
+          onClick: () => null
+        }
+      ]
+    });
+  };
+
+  closeAlert() {
+    this.setState({ showAlert: false });
   }
 
   decrement(e) {
@@ -75,6 +99,8 @@ export default class CartArticle extends React.Component {
       <p>Wow such empty.</p>
     ) : (
       <div className="block w-full">
+        <AlertDeleteArticle showAlert={this.state.showAlert} closeAlert={this.closeAlert.bind(this)} />
+        
         <h1 className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
           Number of articles: {this.state.nbArticles}
         </h1>
@@ -175,13 +201,13 @@ export default class CartArticle extends React.Component {
                   </a>
                 </div>
                 <div className="px-2 m-2">
-                  <a
+                  <button
                     className="text-gray-700 no-underline hover:text-red-600"
-                    href="#top"
+                    onClick={this.deleteArticle}
                   >
                     <span className="hidden">Delete</span>
                     <FontAwesomeIcon icon="trash-alt" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </footer>

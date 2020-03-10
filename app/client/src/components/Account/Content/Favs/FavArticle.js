@@ -145,6 +145,7 @@ export default class CartArticle extends React.Component {
                     className="text-gray-700 no-underline hover:text-green-600"
                     href="#top"
                   >
+                    <span className="hidden">Add to cart</span>
                     <FontAwesomeIcon icon="cart-plus" />
                   </a>
                 </div>
@@ -153,6 +154,7 @@ export default class CartArticle extends React.Component {
                     className="container text-gray-700 no-underline hover:text-red-600"
                     onClick={this.deleteArticle}
                   >
+                    <span className="hidden">Delete</span>
                     <FontAwesomeIcon icon="trash-alt" />
                   </button>
                 </div>
