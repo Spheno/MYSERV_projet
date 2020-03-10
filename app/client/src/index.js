@@ -10,6 +10,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import "./styles/tailwind.css"; /* tailwindCSS stylesheet */
 import "react-phone-number-input/style.css"; /* style of phone number input in all pages */
+import 'react-confirm-alert/src/react-confirm-alert.css'; /* confirm alert css */
 
 const store = configureStore();
 

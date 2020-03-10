@@ -1,14 +1,18 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { confirmAlert } from 'react-confirm-alert'; /* custom confirm pop up */
+
 import "../../../../styles/cartArticle.css";
 import avatar from "../../../../images/avatar/einstein.jpg";
 import article from "../../../../images/articles/playstation5.jpg";
+import AlertDeleteArticle from "../../../Alerts/AlertDeleteArticle";
 
 export default class CartArticle extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      showAlert: false,
       nbFavorites: 1,
       total: null,
       product: {
@@ -40,16 +44,40 @@ export default class CartArticle extends React.Component {
     };
   }
 
+  deleteArticle = () => {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure to do this?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.setState({ showAlert: true })
+        },
+        {
+          label: 'No',
+          onClick: () => null
+        }
+      ]
+    });
+  };
+
+  closeAlert() {
+    this.setState({ showAlert: false });
+  }
+
   render() {
     let dateFormated = new Intl.DateTimeFormat(
       "default",
       this.state.product.options
     ).format(this.state.product.date);
 
+
     return this.state.nbArticles === 0 ? (
       <p>Wow such empty.</p>
     ) : (
       <div className="block w-full">
+        <AlertDeleteArticle showAlert={this.state.showAlert} closeAlert={this.closeAlert.bind(this)} />
+        
         <h1 className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
           Number of favorites: {this.state.nbFavorites}
         </h1>
@@ -117,18 +145,16 @@ export default class CartArticle extends React.Component {
                     className="text-gray-700 no-underline hover:text-green-600"
                     href="#top"
                   >
-                    <span className="hidden">Add to cart</span>
                     <FontAwesomeIcon icon="cart-plus" />
                   </a>
                 </div>
-                <div className="px-2 m-2">
-                  <a
-                    className="text-gray-700 no-underline hover:text-red-600"
-                    href="#top"
+                <div className="container px-2 m-2">
+                  <button
+                    className="container text-gray-700 no-underline hover:text-red-600"
+                    onClick={this.deleteArticle}
                   >
-                    <span className="hidden">Delete</span>
                     <FontAwesomeIcon icon="trash-alt" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </footer>
