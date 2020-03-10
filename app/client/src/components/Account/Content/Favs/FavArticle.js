@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { confirmAlert } from 'react-confirm-alert'; /* custom confirm pop up */
+import { confirmAlert } from "react-confirm-alert"; /* custom confirm pop up */
 
 import "../../../../styles/cartArticle.css";
 import avatar from "../../../../images/avatar/einstein.jpg";
@@ -46,15 +46,15 @@ export default class CartArticle extends React.Component {
 
   deleteArticle = () => {
     confirmAlert({
-      title: 'Confirm to delete',
-      message: 'Are you sure to do this?',
+      title: "Confirm to delete",
+      message: "Are you sure to do this?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: () => this.setState({ showAlert: true })
         },
         {
-          label: 'No',
+          label: "No",
           onClick: () => null
         }
       ]
@@ -71,98 +71,95 @@ export default class CartArticle extends React.Component {
       this.state.product.options
     ).format(this.state.product.date);
 
+    return (
+      <article className="overflow-hidden rounded-lg shadow-lg">
+        <AlertDeleteArticle
+          showAlert={this.state.showAlert}
+          closeAlert={this.closeAlert.bind(this)}
+        />
 
-    return this.state.nbArticles === 0 ? (
-      <p>Wow such empty.</p>
-    ) : (
-      <div className="block w-full">
-        <AlertDeleteArticle showAlert={this.state.showAlert} closeAlert={this.closeAlert.bind(this)} />
-        
-        <h1 className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
-          Number of favorites: {this.state.nbFavorites}
-        </h1>
-        <div className="w-24 h-1 mx-auto my-6 bg-indigo-700 rounded opacity-75"></div>
-        <div className="w-full max-w-sm lg:max-w-full lg:flex">
-          <div
-            className="flex-none h-48 overflow-hidden text-center bg-cover rounded-t lg:h-auto lg:w-48 lg:rounded-t-none lg:rounded-l"
-            style={{
-              flex: 1,
-              backgroundImage: `url(${article})`,
-              aspectRatio: 1.5,
-              resize: "contain"
-            }}
-            title="Article example"
-          ></div>
+        <a href="#top">
+          <img
+            alt="Article example"
+            className="block w-full h-auto"
+            src={article}
+          />
+        </a>
 
-          <div className="flex flex-col justify-between p-4 leading-normal bg-white border-b border-l border-r border-gray-400 rounded-b lg:border-l-0 lg:border-t lg:border-gray-400 lg:rounded-b-none lg:rounded-r">
-            <div className="mb-8">
-              <div className="mb-2 text-xl font-bold text-gray-900">
-                {this.state.product.title} -{" "}
-                <span className="text-gray-700">
-                  {this.state.product.price}
-                  {this.state.product.devise}
-                </span>
-              </div>
-              <p className="text-base text-gray-700">
-                {this.state.product.description}
-              </p>
-            </div>
-            <div className="block mt-1 mb-4">
-              <a
-                className="inline px-2 py-1 mx-1 text-xs text-gray-700 lowercase bg-gray-300 rounded-full"
-                href="#top"
-              >
-                #{this.state.product.tags[0]}
-              </a>
-              <a
-                className="inline px-2 py-1 mx-1 text-xs text-gray-700 lowercase bg-gray-300 rounded-full"
-                href="#top"
-              >
-                #{this.state.product.tags[1]}
-              </a>
-              <a
-                className="inline px-2 py-1 mx-1 text-xs text-gray-700 lowercase bg-gray-300 rounded-full"
-                href="#top"
-              >
-                #{this.state.product.tags[2]}
-              </a>
-            </div>
-            <footer className="relative flex items-center">
-              <img
-                className="w-10 h-10 mr-4 rounded-full"
-                src={avatar}
-                alt="Avatar"
-              />
-              <div className="text-sm">
-                <p className="leading-none text-gray-900">
-                  {this.state.product.authorName}
-                </p>
-                <p className="text-gray-600">{dateFormated}</p>
-              </div>
-              <div className="absolute right-0 flex justify-end text-2xl">
-                <div className="px-2 m-2">
-                  <a
-                    className="text-gray-700 no-underline hover:text-green-600"
-                    href="#top"
-                  >
-                    <span className="hidden">Add to cart</span>
-                    <FontAwesomeIcon icon="cart-plus" />
-                  </a>
-                </div>
-                <div className="container px-2 m-2">
-                  <button
-                    className="container text-gray-700 no-underline hover:text-red-600"
-                    onClick={this.deleteArticle}
-                  >
-                    <span className="hidden">Delete</span>
-                    <FontAwesomeIcon icon="trash-alt" />
-                  </button>
-                </div>
-              </div>
-            </footer>
+        <header className="flex items-center justify-between p-2 leading-tight md:p-4">
+          <h1 className="text-lg">
+            <a
+              className="font-bold text-gray-900 no-underline hover:underline"
+              href="#top"
+            >
+              {this.state.product.title} -{" "}
+              <span className="text-gray-700">
+                {this.state.product.price}
+                {this.state.product.devise}
+              </span>
+            </a>
+          </h1>
+          <p className="text-sm text-grey-darker">{dateFormated}</p>
+        </header>
+
+        <div className="flex flex-col justify-between px-4 py-2 leading-normal">
+          <p className="mb-4 text-base text-gray-700">
+            {this.state.product.description}
+          </p>
+
+          <div className="block mt-1 mb-4">
+            <a
+              className="inline px-2 py-1 mx-1 text-xs text-gray-700 lowercase bg-gray-300 rounded-full"
+              href="#top"
+            >
+              #{this.state.product.tags[0]}
+            </a>
+            <a
+              className="inline px-2 py-1 mx-1 text-xs text-gray-700 lowercase bg-gray-300 rounded-full"
+              href="#top"
+            >
+              #{this.state.product.tags[1]}
+            </a>
+            <a
+              className="inline px-2 py-1 mx-1 text-xs text-gray-700 lowercase bg-gray-300 rounded-full"
+              href="#top"
+            >
+              #{this.state.product.tags[2]}
+            </a>
           </div>
         </div>
-      </div>
+
+        <footer className="relative flex items-center p-2 leading-none md:p-4">
+          <a
+            className="flex items-center text-black no-underline hover:underline"
+            href="#top"
+          >
+            <img
+              alt="Placeholder"
+              className="w-10 h-10 mr-4 rounded-full"
+              src={avatar}
+            />
+            <p className="ml-2 text-sm">{this.state.product.authorName}</p>
+          </a>
+          <div className="absolute right-0 flex justify-end text-2xl">
+            <a
+              className="px-2 m-2 text-gray-700 no-underline hover:text-green-600"
+              href="#top"
+            >
+              <span className="hidden">Add to Cart</span>
+              <FontAwesomeIcon icon="shopping-cart" />
+            </a>
+            <button
+              className="px-2 m-2 text-gray-700 no-underline hover:text-red-600"
+              href="#top"
+              onClick={this.deleteArticle}
+            >
+              <span className="hidden">Delete</span>
+              <FontAwesomeIcon icon="trash-alt" />
+            </button>
+          </div>
+        </footer>
+      </article>
     );
   }
 }
