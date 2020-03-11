@@ -52,7 +52,9 @@ const userSchema = mongoose.Schema(
     profilePicture: {
       type: String
     },
-    orders: []
+    orders: [],
+    affiliates: [], // les User ayant utilisé son code de parrainage
+    codeParrain: String,
   },
   { timestamps: true, runSettersOnQuery: true }
 );

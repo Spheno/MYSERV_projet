@@ -8,6 +8,7 @@ import NavTabs from "../../Navigation/NavTabs";
 import PaymentInfo from "../Content/Profile/PaymentInfo";
 import ProfileCustom from "../Content/Profile/ProfileCustom";
 import AccountSettings from "../Content/Profile/AccountSettings";
+import Sponsorship from "../Content/Profile/Sponsorship";
 
 class Profile extends React.Component {
   render() {
@@ -36,11 +37,13 @@ class Profile extends React.Component {
             <NavTabs
               tabtitles={[
                 "Account settings",
+                "Sponsorship",
                 "Payment options",
                 "Profile customization"
               ]}
               contents={[
                 <AccountSettings />,
+                <Sponsorship />,
                 <PaymentInfo />,
                 <ProfileCustom />
               ]}

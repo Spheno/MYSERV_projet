@@ -34,8 +34,11 @@ module.exports = {
       lastname,
       email,
       phoneNumber,
-      password: passwordHash.generate(password)
+      password: passwordHash.generate(password),
+      codeParrain
     };
+
+    /* if codeParrain.valid -> inscription ok SINON erreur code */ 
 
     // On check en base si l'utilisateur existe déjà selon son email et numéro de téléphone
     try {

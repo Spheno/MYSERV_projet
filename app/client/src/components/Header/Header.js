@@ -6,6 +6,14 @@ import Sidebar from "./Sidebar";
 import "../../styles/burgerMenu.css";
 
 export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      coins: 0 // à récupérer depuis le store
+    };
+  }
+
   disconnect = () => {
     API.logout();
     window.location = "/";
@@ -14,9 +22,15 @@ export default class Header extends React.Component {
   render() {
     return (
       <header className="relative z-10 flex flex-col items-center py-6 sm:flex-row">
-        <h3 className="text-3xl font-bold text-blue-900">
-          <a href="/dashboard">ShooFly</a>
-        </h3>
+        <div className="flex">
+          <h3 className="text-3xl font-bold text-blue-900">
+            <a href="/dashboard">ShooFly</a>
+          </h3>
+          <span className="mx-8 mt-1 text-2xl text-gray-700">
+            {this.state.coins}{" "}
+            <FontAwesomeIcon icon="coins" title="Your wallet" />
+          </span>
+        </div>
         <nav className="hidden text-lg md:flex">
           <div className="absolute top-0 right-0 mt-6">
             <span className="fixed top-0 right-0 w-auto mt-12 mr-12 bg-gray-100 border shadow">

@@ -85,7 +85,7 @@ class Login extends React.Component {
       <>
         <div className="p-6 bg-purple-700">
           <div className="flex flex-col font-sans bg-white">
-            <div className="container px-8 mx-auto">
+            <div className="container min-h-screen px-8 mx-auto">
               <header className="relative flex flex-col items-center justify-between py-6 sm:flex-row">
                 <h3 className="text-3xl font-bold text-blue-900">ShooFly</h3>
               </header>

@@ -5,6 +5,7 @@ import PhoneInput, {
   isPossiblePhoneNumber /* only checks for input length (for testing purpose in our case) */,
   isValidPhoneNumber /* checks the validity of the number (for later on) */
 } from "react-phone-number-input";
+import HoverBtn from "../Buttons/HoverBtn";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class Signup extends React.Component {
       lastname: "",
       email: "",
       phoneNumber: "",
-      password: ""
+      password: "",
+      codeParrain: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -26,7 +28,14 @@ class Signup extends React.Component {
   handleSubmit = async event => {
     event.preventDefault();
 
-    const { firstname, lastname, email, phoneNumber, password } = this.state;
+    const {
+      firstname,
+      lastname,
+      email,
+      phoneNumber,
+      password,
+      codeParrain
+    } = this.state;
     if (!firstname || firstname.length === 0) return;
     if (!lastname || lastname.length === 0) return;
     if (!email || email.length === 0) return;
@@ -39,7 +48,8 @@ class Signup extends React.Component {
         lastname,
         email,
         phoneNumber,
-        password
+        password,
+        codeParrain
       });
 
       alert("Inscription réussie ! Bienvenue " + firstname);
@@ -83,8 +93,8 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-300">
-        <div className="flex flex-col items-center justify-center flex-1 max-w-lg px-2 mx-auto">
+      <div className="flex flex-col bg-gray-300">
+        <div className="container flex flex-col items-center justify-center flex-1 max-w-lg min-h-screen px-2 mx-auto">
           <div className="w-full px-6 pt-4 pb-6 mt-3 text-black bg-white rounded shadow-md">
             <h1 className="mb-4 text-3xl text-center">Join us!</h1>
             <form method="post" onSubmit={this.handleSubmit}>
@@ -92,7 +102,7 @@ class Signup extends React.Component {
                 type="text"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="firstname"
-                placeholder="First name"
+                placeholder="First name *"
                 value={this.state.firstname}
                 onChange={this.handleChange}
                 required
@@ -101,7 +111,7 @@ class Signup extends React.Component {
                 type="text"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="lastname"
-                placeholder="Last name"
+                placeholder="Last name *"
                 value={this.state.lastname}
                 onChange={this.handleChange}
                 required
@@ -109,7 +119,7 @@ class Signup extends React.Component {
 
               <PhoneInput
                 className="w-full p-3 mb-4 border rounded border-grey-light"
-                placeholder="Phone number"
+                placeholder="Phone number *"
                 value={this.state.phoneNumber}
                 onChange={this.handleOnChangePhoneNumber}
                 required
@@ -119,7 +129,7 @@ class Signup extends React.Component {
                 type="email"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="email"
-                placeholder="Email"
+                placeholder="Email *"
                 value={this.state.email}
                 onChange={this.handleChange}
                 required
@@ -128,12 +138,35 @@ class Signup extends React.Component {
                 type="password"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 name="password"
-                placeholder="Password"
+                placeholder="Password *"
                 value={this.state.password}
                 onChange={this.handleChange}
                 required
                 autoComplete="true"
               />
+              <div className="flex">
+                <HoverBtn
+                  icon={
+                    <svg
+                      className="w-5 h-5 mt-4 mr-4 text-teal-500 fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                    </svg>
+                  }
+                  text="Win money you can spend on ShooFly with your friend"
+                />
+
+                <input
+                  type="text"
+                  className="flex-1 p-3 mb-4 border rounded border-grey-light"
+                  name="codeParrain"
+                  placeholder="Code parrain"
+                  value={this.state.codeParrain}
+                  onChange={this.handleChange}
+                />
+              </div>
 
               <button
                 type="submit"
