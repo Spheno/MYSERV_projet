@@ -8,8 +8,31 @@ import SalesBuyings from "../Content/Sales/SalesBuyings";
 import SalesSellings from "../Content/Sales/SalesSellings";
 import SalesArticleForm from "../Content/Sales/SalesArticleForm";
 
-export default class Sales extends React.Component {
+import { connect } from "react-redux";
+import { getCategories } from "../../../redux/actions/category_actions";
+
+class Sales extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      categories: []
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      const { getCategories } = this.props;
+      await getCategories();
+      this.setState({ categories: this.props.categories });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
+    const { categories } = this.state;
+    
     return (
       <div className="z-50 p-6 bg-purple-700">
         <div className="flex flex-col font-sans bg-white">
@@ -34,7 +57,11 @@ export default class Sales extends React.Component {
 
             <NavTabs
               tabtitles={["Add a product", "Buyings", "Sellings"]}
-              contents={[<SalesArticleForm />,<SalesBuyings />, <SalesSellings />]}
+              contents={[
+                <SalesArticleForm categories={categories} />,
+                <SalesBuyings />,
+                <SalesSellings />
+              ]}
             />
           </div>
 
@@ -44,3 +71,17 @@ export default class Sales extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  categories: state.categories.categories,
+  errorCategories: state.categories.error
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getCategories: () => dispatch(getCategories()),
+    dispatch
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sales);
