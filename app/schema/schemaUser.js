@@ -10,16 +10,19 @@ const passwordHash = require("password-hash");
 const jwt = require("jwt-simple");
 const config = require("../config/config");
 
+const Schema = mongoose.Schema;
+
 /* Validation du numéro de téléphone avec le plugin libphonenumber (Google) */
 var mongooseIntlPhoneNumber = require("mongoose-intl-phone-number");
 /* Validation de l'email */
-require('mongoose-type-email');
+require("mongoose-type-email");
 mongoose.SchemaTypes.Email.defaults.message = "L'adresse email est invalide.";
 
-var uniqueValidator = require('mongoose-unique-validator');
+var uniqueValidator = require("mongoose-unique-validator");
 
-const userSchema = mongoose.Schema(
+const userSchema = new Schema(
   {
+    // création du compte avec données de base
     firstname: {
       type: String,
       trim: true,
@@ -49,12 +52,32 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    profilePicture: {
-      type: String
-    },
-    orders: [],
-    affiliates: [], // les User ayant utilisé son code de parrainage
-    codeParrain: String,
+
+    // customisation du profil
+    profilePicture: { type: String },
+    publicName: { type: String },
+    bio: { type: String },
+    linkFB: { type: String },
+    linkInstagram: { type: String },
+    address: { type: Schema.Types.ObjectId, ref: "Address" },
+
+    // produits uploadés et mis en vente
+    myProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+
+    // panier courant
+    cart: { type: Schema.Types.ObjectId, ref: "Cart" },
+
+    // favoris courant
+    favorites: { type: Schema.Types.ObjectId, ref: "Favorites" },
+
+    // tout les produits achetés
+    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+
+    // les User ayant utilisé son code de parrainage
+    affiliates: [{ type: Schema.Types.ObjectId, ref: "User" }],
+
+    // le code parrain donné à cet User
+    codeParrain: String
   },
   { timestamps: true, runSettersOnQuery: true }
 );
@@ -71,7 +94,7 @@ userSchema.plugin(mongooseIntlPhoneNumber, {
 */
 
 /* adds pre-save validation for UNIQUE fields within a Mongoose schema. (email, phoneNumber in our case) */
-userSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
+userSchema.plugin(uniqueValidator, { type: "mongoose-unique-validator" });
 
 userSchema.methods = {
   authenticate: function(password) {
