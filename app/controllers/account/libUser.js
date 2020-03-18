@@ -146,7 +146,7 @@ module.exports = {
       console.log("files", files)
       console.log("fields", fields)
 
-      let { title, description, price, category, tags } = fields;
+      let { title, description, price, category, tags, authorNumber } = fields;
       let { pictures } = files;
 
       if (!title || title.length === 0) {
@@ -170,7 +170,8 @@ module.exports = {
         description,
         price,
         category,
-        tags
+        tags,
+        authorNumber
       });
 
       newProduct.save();

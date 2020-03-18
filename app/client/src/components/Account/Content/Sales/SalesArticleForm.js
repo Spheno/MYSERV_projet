@@ -47,6 +47,8 @@ export default function SalesArticleForm(props) {
     data.set("price", price);
     data.set("category", category);
     data.set("tags", tags);
+    const authorData = JSON.parse(localStorage.getItem("user"));
+    data.set("authorNumber", authorData.phoneNumber)
 
     for (var pair of data.entries()) {
       console.log(pair[0] + " - " + pair[1]);

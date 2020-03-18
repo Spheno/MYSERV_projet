@@ -2,8 +2,13 @@ import React from "react";
 import ArticleSVG from "./ArticleSVG";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import imgNotFound from "../../images/articles/not_found.png"
+
 const Article = props => {
-  const { bgColor, category, title, devise, price, imagePath } = props;
+  const { bgColor, category, title, devise, price, pictures, imagePath } = props;
+
+  let imgPath = imagePath;
+  if(!imagePath) imgPath = imgNotFound;
 
   return (
     <div
@@ -12,7 +17,8 @@ const Article = props => {
         (bgColor || "bg-gray-500")
       }
     >
-      <ArticleSVG source={imagePath} />
+  
+      <ArticleSVG source={imgPath} />
 
       <div className="relative px-6 pb-6 mt-6 text-white">
         <span className="block -mb-1 opacity-75">{category}</span>
