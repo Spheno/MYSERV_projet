@@ -6,7 +6,7 @@ const express = require("express"),
   mongoose = require("mongoose"),
   bodyParser = require("body-parser"),
   session = require("express-session");
-
+  
 //Connexion à la base de donnée
 mongoose
   .connect(process.env.REACT_APP_CONNECTION_STRING, {
@@ -30,7 +30,6 @@ const urlencodedParser = bodyParser.urlencoded({
   extended: true
 });
 app.use(urlencodedParser);
-
 app.use(bodyParser.json());
 
 //Définition des CORS

@@ -1,96 +1,63 @@
 import React, { Component } from "react";
-import Spinner from "./Spinner";
-import Images from "./Images";
-import Buttons from "./Buttons";
-/*import { API_URL } from "../../../../utils/API";*/
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImages } from "@fortawesome/free-solid-svg-icons";
+
+const MAX_NB_PICTURES = 3;
+const MAX_PICTURE_SIZE = 4000000; // en octets => 4MB
 
 export default class SalesImageUploader extends Component {
-  state = {
-    uploading: false,
-    images: []
-  };
+  constructor(props) {
+    super(props);
 
-  onChange = e => {
-    let errs = [];
-    const files = Array.from(e.target.files);
-    this.setState({ uploading: true });
-    const formData = new FormData();
+    this.handleFiles = this.handleFiles.bind(this);
+  }
 
-    // There are too many files!
-    if (files.length > 1) {
-      const msg = "Only one image can be uploaded for this product";
-      return console.log(msg);
-    }
+  handleFiles(e, selectedFiles) {
+    let newFiles = [];
+    let err = null;
+    const types = ['image/png', 'image/jpeg']
 
-    const types = ["image/png", "image/jpeg"];
-
-    files.forEach((file, i) => {
-      // Catching wrong file types on the client
-      if (types.every(type => file.type !== type)) {
-        errs.push(`'${file.type}' is not a supported format`);
-      }
-
-      // Catching files that are too large on the client
-      if (file.size > 150000) {
-        errs.push(`'${file.name}' is too large, please pick a smaller file`);
-      }
-
-      formData.append(i, file);
-    });
-
-    if (errs.length) {
-      return errs.forEach(err => alert(err));
-    }
-
-    /*
-    fetch(`${API_URL}/image-upload`, {
-      method: "POST",
-      body: formData
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw res;
+    if (selectedFiles && selectedFiles !== undefined) {
+      Array.from(selectedFiles).forEach(file => {
+        if (types.every(type => file.type !== type)) {
+          err = "Only jpeg and png images are compatible. Please try again.";
+        } else if (file.size > MAX_PICTURE_SIZE) {
+          err = "Your picture is too large, please pick a smaller one. (max.: 4MB)"
+        } else {
+          newFiles.push(file);
         }
-        return res.json();
-      })
-      .then(images => {
-        this.setState({
-          uploading: false,
-          images
-        });
-      })
-      .catch(err => {
-        err.json().then(e => {
-          this.toast(e.message, "custom", 2000, toastColor);
-          this.setState({ uploading: false });
-        });
       });
-      */
-  };
+    } else {
+      err = "file upload error";
+    }
 
-  removeImage = id => {
-    this.setState({
-      images: this.state.images.filter(image => image.public_id !== id)
-    });
-  };
+    if(newFiles.length > MAX_NB_PICTURES) {
+      err = "Veuillez sélectionner au maximum 3 images."
+    }
+
+    if(err) {
+      alert(err);
+      e.target.value = null;
+    } else {
+      this.props.handlePictures(newFiles);
+    }
+  }
 
   render() {
-    const { uploading, images } = this.state;
-
-    const content = () => {
-      switch (true) {
-        case uploading:
-          return <Spinner />;
-        case images.length > 0:
-          return <Images images={images} removeImage={this.removeImage} />;
-        default:
-          return <Buttons onChange={this.onChange} />;
-      }
-    };
-
     return (
-      <div>
-        <div className="py-10 text-center border buttons">{content()}</div>
+      <div className="flex h-full p-4 border">
+        <div className="text-center text-blue-700">
+          <label>
+            <FontAwesomeIcon icon={faImages} size="8x" />
+            <input
+              type="file"
+              name="pictures"
+              multiple
+              onChange={e => this.handleFiles(e, e.target.files)}
+              accept="image/jpeg, image/png"
+            />
+          </label>
+        </div>
       </div>
     );
   }

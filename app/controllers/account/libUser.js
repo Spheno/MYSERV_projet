@@ -7,10 +7,18 @@
 const User = require("../../schema/schemaUser");
 const Product = require("../../schema/schemaProduct");
 const passwordHash = require("password-hash");
+const formidable = require("formidable");
 
 module.exports = {
   async signup(req, res) {
-    const { firstname, lastname, email, phoneNumber, password } = req.body;
+    const {
+      firstname,
+      lastname,
+      email,
+      phoneNumber,
+      password,
+      codeParrain
+    } = req.body;
     if (!firstname || !lastname || !password) {
       //Le cas où les paramètres ne serait pas saisis ou nuls
       return res.status(400).json({
@@ -38,7 +46,7 @@ module.exports = {
       codeParrain
     };
 
-    /* if codeParrain.valid -> inscription ok SINON erreur code */ 
+    /* if codeParrain.valid -> inscription ok SINON erreur code */
 
     // On check en base si l'utilisateur existe déjà selon son email et numéro de téléphone
     try {
@@ -122,20 +130,52 @@ module.exports = {
 
   removeFromCart(req, res) {},
 
-  createProduct(req, res) {
-    const { picture, title, description, price, category, tags } = req.body;
-
-    let newProduct = new Product({
-      picture,
-      title,
-      description,
-      price,
-      category,
-      tags
+  createProduct(req, res, next) {
+    const form = formidable({
+      encoding: "utf-8",
+      multiples: true,
+      maxFileSize: 4 * 1024 * 1024, // (4MB)
     });
 
-    newProduct.save();
-    res.status(200).json({ product: newProduct });
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        next(err);
+        return;
+      }
+
+      console.log("files", files)
+      console.log("fields", fields)
+
+      let { title, description, price, category, tags } = fields;
+      let { pictures } = files;
+
+      if (!title || title.length === 0) {
+        return res.status(401).json({
+          text: "Votre produit n'a pas de nom."
+        });
+      }
+
+      price = price*1; // conversion string -> number
+  
+      if (!price || isNaN(price) || typeof(price) != 'number' || price <= 0) {
+        return res.status(401).json({
+          typePrice: typeof(price),
+          text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
+        });
+      }
+
+      let newProduct = new Product({
+        pictures,
+        title,
+        description,
+        price,
+        category,
+        tags
+      });
+
+      newProduct.save();
+      res.status(200).json({ product: newProduct });
+    });
   },
 
   updateProduct(req, res) {

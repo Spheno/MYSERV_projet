@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import API from "../../../../utils/userAPI";
+
 import {
   faEye,
   faStream,
@@ -13,15 +15,84 @@ import "@pathofdev/react-tag-input/build/index.css";
 const NB_TAGS_MAX = 5;
 
 export default function SalesArticleForm(props) {
+  const [title, setTitle] = useState("Test");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(1);
+  const [category, setCategory] = useState("Other");
   const [tags, setTags] = useState([]);
-  const categories = props.categories;
+  const [pictures, setPicture] = useState([]);
+
+  const categories = props.categories; // categories list to display items in select
+
+  const handleSubmit = async evt => {
+    evt.preventDefault();
+
+    if(!title || title.length === 0) {
+      alert("Veuillez renseigner un nom pour votre produit.");
+      return;
+    }
+    if(!price || price <= 0) {
+      alert("Le prix de votre produit doit être supérieur à 0.")
+      return;
+    }
+
+    let data = new FormData();
+    data.set("title", title.trim());
+
+    pictures.map((picture, index) => {
+      return data.append("pictures", picture)
+    })
+
+    data.set("description", description.trim());
+    data.set("price", price);
+    data.set("category", category);
+    data.set("tags", tags);
+
+    for (var pair of data.entries()) {
+      console.log(pair[0] + " - " + pair[1]);
+    }
+
+    try {
+      const response = await API.createProduct(data);
+      console.log('Response', response)
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log("Status code: ", error.response.status);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error ", error.message);
+      }
+    }
+  };
+
+  // gets array of File and asigns it to pictures
+  const handlePicture = pics => {
+    setPicture(pics);
+  };
 
   return (
-    <form /*onSubmit={this.send}*/>
+    <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
       <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-4 bg-white border-gray-300 rounded md:shadow-md md:border">
+        <div className="px-3 mb-6 -mx-3">
+          <label
+            className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+            htmlFor="grid-product-category"
+          >
+            Title <FontAwesomeIcon icon={faStream} size="1x" />
+          </label>
+          <input
+            className="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          />
+        </div>
+
         <div className="mb-6 -mx-3 md:flex">
           <div className="px-3 mb-6 md:w-1/2 md:mb-0">
-            <SalesImageUploader />
+            <SalesImageUploader name="pictures" handlePictures={handlePicture} />
           </div>
           <div className="px-3 md:w-1/2">
             <label
@@ -36,6 +107,8 @@ export default function SalesArticleForm(props) {
               rows="9"
               type="text"
               placeholder="Describe me"
+              value={description}
+              onChange={e => setDescription(e.target.value)}
             />
           </div>
         </div>
@@ -58,8 +131,9 @@ export default function SalesArticleForm(props) {
                 type="number"
                 id="grid-product-price"
                 min="0"
-                defaultValue="0"
                 className="relative flex-1 flex-auto flex-grow flex-shrink w-px h-10 px-3 px-4 py-3 leading-normal bg-gray-200 border border-gray-200 rounded appearance-none"
+                value={price}
+                onChange={e => setPrice(e.target.value)}
               />
             </div>
           </div>
@@ -74,11 +148,16 @@ export default function SalesArticleForm(props) {
               <select
                 className="block w-full px-4 py-3 pr-8 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-product-category"
+                onChange={e => setCategory(e.target.value)}
               >
-                {categories.map((category, index) => {
-                  return <option key={index}>{category}</option>
+                <option defaultValue={category}>Other</option>
+                {categories.map((cat, index) => {
+                  return (
+                    <option key={index} value={cat}>
+                      {cat}
+                    </option>
+                  );
                 })}
-
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
                 <svg

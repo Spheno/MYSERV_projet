@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const options = {
+const jsonConfig = {
   "content-type": "application/json;charset=utf-8"
 };
+
 const url = "http://localhost:8800/user";
 
 export default {
@@ -14,13 +15,13 @@ export default {
         password
       },
       {
-        headers: options
+        headers: jsonConfig
       }
     );
   },
 
   signup: function(send) {
-    return axios.post(url + "/signup", send, { headers: options });
+    return axios.post(url + "/signup", send, { headers: jsonConfig });
   },
 
   isAuth: function() {
@@ -33,6 +34,6 @@ export default {
   },
 
   createProduct: function(data) {
-    return axios.post(url + "/product");
+    return axios.post(url + "/product", data);
   }
 };
