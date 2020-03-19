@@ -134,7 +134,7 @@ module.exports = {
     const form = formidable({
       encoding: "utf-8",
       multiples: true,
-      maxFileSize: 4 * 1024 * 1024, // (4MB)
+      maxFileSize: 4 * 1024 * 1024 // (4MB)
     });
 
     form.parse(req, (err, fields, files) => {
@@ -143,8 +143,8 @@ module.exports = {
         return;
       }
 
-      console.log("files", files)
-      console.log("fields", fields)
+      //console.log("files", files);
+      //console.log("fields", fields);
 
       let { title, description, price, category, tags, authorNumber } = fields;
       let { pictures } = files;
@@ -155,11 +155,11 @@ module.exports = {
         });
       }
 
-      price = price*1; // conversion string -> number
-  
-      if (!price || isNaN(price) || typeof(price) != 'number' || price <= 0) {
+      price = price * 1; // conversion string -> number
+
+      if (!price || isNaN(price) || typeof price != "number" || price <= 0) {
         return res.status(401).json({
-          typePrice: typeof(price),
+          typePrice: typeof price,
           text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
         });
       }
@@ -174,7 +174,21 @@ module.exports = {
         authorNumber
       });
 
+      // saving the new product in Product table
       newProduct.save();
+
+      // saving the new product in the User table (field myProducts)
+      let filter = { phoneNumber: authorNumber };
+      let update = { myProducts: newProduct };
+      User.findOneAndUpdate(
+        filter,
+        { $push: update },
+        { new: true },
+        function(err, doc) {
+          console.log(err);
+        }
+      );
+
       res.status(200).json({ product: newProduct });
     });
   },

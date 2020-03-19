@@ -12,7 +12,8 @@ mongoose
   .connect(process.env.REACT_APP_CONNECTION_STRING, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("Connected to mongoDB");

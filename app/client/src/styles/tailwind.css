@@ -878,6 +878,23 @@ video {
   border-color: #63b3ed;
 }
 
+.stylistic-quote-mark {
+  font-size: 5rem;
+  right: 100%;
+  position: absolute;
+  top: 0;
+  display: none;
+  margin-right: 0.5rem;
+  line-height: 1;
+  color: #a0aec0;
+}
+
+@media (min-width: 640px) {
+  .stylistic-quote-mark {
+    display: block;
+  }
+}
+
 /* injects all of Tailwind’s utility classes (including the default and your own utilities)
    they are generated based on your config file.
 */

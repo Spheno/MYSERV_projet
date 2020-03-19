@@ -12,6 +12,18 @@
 */
 @tailwind components;
 
+.stylistic-quote-mark {
+  font-size: 5rem;
+  right: 100%;
+  @apply absolute top-0 hidden mr-2 leading-none text-gray-500;
+}
+
+@screen sm {
+  .stylistic-quote-mark {
+    @apply block;
+  }
+}
+
 /* injects all of Tailwind’s utility classes (including the default and your own utilities)
    they are generated based on your config file.
 */

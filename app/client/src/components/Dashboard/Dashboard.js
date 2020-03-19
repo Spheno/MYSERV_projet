@@ -9,6 +9,7 @@ import Footer from "../Footer/Footer";
 import dashboardSVG from "../../images/dashboard.svg";
 import ListCategories from "../Categories/ListCategories";
 
+import Quote from "../Quote";
 import Loader from "../Loader/LoaderScreen";
 import PaginationComp from "../Pagination/PaginationComp";
 
@@ -80,8 +81,6 @@ class Dashboard extends React.Component {
       totalPages
     } = this.state;
 
-    if (totalProducts === 0) return null;
-
     if (!loading) {
       return (
         <div className="p-6 bg-purple-700">
@@ -111,26 +110,50 @@ class Dashboard extends React.Component {
                 <strong>{totalProducts}</strong> products available in the
                 database
               </h2>
+              {/* ***** */}
 
-              {currentPage && (
+              {currentPage > 0 && (
                 <span className="inline-block h-full">
                   Page <span className="font-bold">{currentPage}</span> /{" "}
                   <span className="font-bold">{totalPages}</span>
                 </span>
               )}
-              {/* ***** */}
 
-              <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
-                Explore & Choose
-              </h1>
+              {totalProducts > 0 && (
+                <div>
+                  <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
+                    Explore & Choose
+                  </h1>
 
-              <div className="my-12">
-                <ListCategories categories={categories} />
-              </div>
+                  <div className="my-12">
+                    <ListCategories categories={categories} />
+                  </div>
 
-              <div>
-                <ArticlesList products={currentProducts} />
-              </div>
+                  <div>
+                    <ArticlesList products={currentProducts} />
+                  </div>
+                </div>
+              )}
+
+              {totalProducts === 0 && (
+                <div>
+                  <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
+                    Quickly add a product{" "}
+                    <a
+                      className="font-medium text-gray-700 hover:text-gray-900"
+                      href="/sales"
+                      rel="noopener noreferrer"
+                    >
+                      here
+                    </a>
+                  </h1>
+
+                  <Quote
+                    name="Cole Sear (The Sixth Sense)"
+                    quote="I see dead articles... They don't know they are dead."
+                  />
+                </div>
+              )}
 
               <div className="flex">
                 <PaginationComp
@@ -161,9 +184,9 @@ const mapStateToProps = state => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    getAllData: (data) => dispatch(getAllData(data)),
+    getAllData: data => dispatch(getAllData(data)),
     dispatch
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import imgNotFound from "../../images/articles/not_found.png"
 
 const Article = props => {
+  // devise and bgColor are not in props but could be in future
+  // (for the moment, they are replaced by "€" and "bg-gray-500")
   const { bgColor, category, title, devise, price, pictures, imagePath } = props;
 
   let imgPath = imagePath;
