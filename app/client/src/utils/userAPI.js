@@ -35,5 +35,16 @@ export default {
 
   createProduct: function(data) {
     return axios.post(url + "/product", data);
+  },
+
+  getMyProducts: async function(phoneNumber) {
+    try {
+      const response = await axios.get(url + "/myProducts", {
+        params: { phoneNumber: phoneNumber }
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
   }
 };

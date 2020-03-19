@@ -15,5 +15,6 @@ router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/product/:id", account.deleteProduct);
 
 router.get("/logout", account.logout);
+router.get("/myProducts", account.getMyProducts);
 
 module.exports = router;

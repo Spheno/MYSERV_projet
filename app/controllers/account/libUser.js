@@ -193,6 +193,28 @@ module.exports = {
     });
   },
 
+  getMyProducts(req, res) {
+    const { phoneNumber } = req.query;
+
+    if (!phoneNumber) {
+      return res.status(401).json({
+        text: "Numéro de téléphone non reconnu."
+      });
+    }
+
+    User.findOne({phoneNumber : phoneNumber}, 'myProducts', function(err, user) {
+      if (err) console.log("Error getMyProducts ids", err);
+
+      //console.log("return ids from getMyProducts", user.myProducts);
+      Product.find({_id: { $in: user.myProducts }}, function(err, myProductsData) {
+        if (err) console.log("Error getMyProducts data", err);
+
+        //console.log("return from getMyProducts data", myProductsData);
+        res.status(200).send(myProductsData);
+      })
+    })
+  },
+
   updateProduct(req, res) {
     const { id } = req.params;
 

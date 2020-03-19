@@ -10,28 +10,32 @@ import SalesArticleForm from "../Content/Sales/SalesArticleForm";
 
 import { connect } from "react-redux";
 import { getCategories } from "../../../redux/actions/category_actions";
+import SalesModifyProduct from "../Content/Sales/SalesModifyProduct";
 
 class Sales extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      phoneNumber: "",
       categories: []
     };
   }
 
   async componentDidMount() {
     try {
+      const userData = JSON.parse(localStorage.getItem("user"));
+      
       const { getCategories } = this.props;
       await getCategories();
-      this.setState({ categories: this.props.categories });
+      this.setState({ phoneNumber: userData.phoneNumber, categories: this.props.categories });
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
-    const { categories } = this.state;
+    const { phoneNumber, categories } = this.state;
     
     return (
       <div className="z-50 p-6 bg-purple-700">
@@ -56,9 +60,10 @@ class Sales extends React.Component {
             </main>
 
             <NavTabs
-              tabtitles={["Add a product", "Buyings", "Sellings"]}
+              tabtitles={["Add a product", "Modify your products", "Buyings", "Sellings"]}
               contents={[
                 <SalesArticleForm categories={categories} />,
+                <SalesModifyProduct phoneNumber={phoneNumber} />,
                 <SalesBuyings />,
                 <SalesSellings />
               ]}
