@@ -7,20 +7,19 @@ const Product = require("../../schema/schemaProduct");
 
 module.exports = {
   getAllProducts(req, res, next) {
-    Product.find()
-      .exec(function(err, products) {
-        if (err) return console.log(err);
-        res.status(200).json(products);
-      });
+    Product.find().exec(function(err, products) {
+      if (err) return console.log(err);
+      res.status(200).json(products);
+    });
   },
 
-  getProduct(req, res, next) {
-    const { id } = req.params;
-    Product.findById(id).exec((err, product) => {
-      if (err) return console.log("error getProductByID: ", err);
+  getProductByID(req, res) {
+    const { id } = req.query;
 
-      console.log("success getProductByID!");
-      res.status(200).json({ product });
+    Product.findOne({ _id: id }, function(err, product) {
+      if (err) console.log("Error getProductByID id", err);
+
+      res.status(200).send(product);
     });
   }
 };
