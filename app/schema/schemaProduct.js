@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-  _id: { type: Schema.Types.ObjectId },
   imagePath: { type: String },
   title: { type: String, required: true },
   pictures: [],

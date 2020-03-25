@@ -27,7 +27,7 @@ class ArticlesList extends React.Component {
 
     if (!loading) {
       return (
-        <div className="flex flex-wrap items-center justify-center">
+        <div className="flex flex-wrap items-stretch justify-center">
           {articles.length
             ? articles.map((product, index) => (
                 <Article key={index} {...product} />

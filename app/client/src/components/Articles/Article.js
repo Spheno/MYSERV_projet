@@ -10,12 +10,19 @@ const Article = props => {
   const { bgColor, category, title, devise, price, pictures, imagePath } = props;
 
   let imgPath = imagePath;
-  if(!imagePath) imgPath = imgNotFound;
 
+  pictures.map(picture => {
+    return imgPath = picture.path
+  })
+
+  if(!imgPath) imgPath = imgNotFound;
+
+  console.log("articles", props)
+  
   return (
     <div
       className={
-        "flex-shrink-0 container m-6 relative overflow-hidden rounded-lg max-w-xs shadow-lg " +
+        "m-6 relative overflow-hidden rounded-lg max-w-xs shadow-lg " +
         (bgColor || "bg-gray-500")
       }
     >
@@ -36,7 +43,7 @@ const Article = props => {
         </span>
       </div>
 
-      <div className="absolute top-0 right-0 m-3 text-white">
+      <div className="absolute bottom-0 right-0 m-6 text-white">
         <button
           type="button"
           className="mr-2 hover:text-blue-600" /* onClick={this.showInfo} */

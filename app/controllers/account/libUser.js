@@ -8,6 +8,8 @@ const User = require("../../schema/schemaUser");
 const Product = require("../../schema/schemaProduct");
 const passwordHash = require("password-hash");
 const formidable = require("formidable");
+const fs = require("fs");
+const path = require("path");
 
 module.exports = {
   async signup(req, res) {
@@ -134,17 +136,65 @@ module.exports = {
     const form = formidable({
       encoding: "utf-8",
       multiples: true,
+      uploadDir: "./client/public/uploads/",
+      keepExtensions: true,
       maxFileSize: 4 * 1024 * 1024 // (4MB)
     });
+
+    let productTitle = null;
+    let authorNumber = null;
+
+    form
+      .on("error", function(err) {
+        if (err) {
+          console.log("an error has occured with form upload");
+          console.log(err);
+          req.resume();
+        }
+      })
+
+      .on("field", function(field, value) {
+        if (field === "title") productTitle = value;
+        if (field === "authorNumber") authorNumber = value.substr(1);
+
+        //console.log("title", productTitle);
+        //console.log("number", authorNumber);
+      })
+
+      .on("file", function(name, file) {
+        let newPath = path.join(__dirname, "../../", form.uploadDir, authorNumber, productTitle);
+        
+        if (
+          !fs.existsSync(newPath, function(err) {
+            if (err) throw err;
+          })
+        )
+          fs.mkdirSync(newPath, { recursive: true });
+
+        let desiredPath = path.join(newPath, file.name);
+        console.log("desiredPath", desiredPath);
+        
+        fs.rename(file.path, desiredPath, function(err) {
+          if (err) {
+            throw err;
+          } else {
+            console.log("Successfully renamed the file!", file.path);
+          }
+        });
+
+        file.path = path.join("uploads", authorNumber, productTitle, file.name);
+      })
+
+      .on("progress", function(bytesReceived, bytesExpected) {
+        var percent = ((bytesReceived / bytesExpected) * 100) | 0;
+        console.log("Uploading: %" + percent + "\r");
+      });
 
     form.parse(req, (err, fields, files) => {
       if (err) {
         next(err);
         return;
       }
-
-      //console.log("files", files);
-      //console.log("fields", fields);
 
       let { title, description, price, category, tags, authorNumber } = fields;
       let { pictures } = files;
@@ -175,19 +225,22 @@ module.exports = {
       });
 
       // saving the new product in Product table
-      newProduct.save();
+      try {
+        newProduct.save();
+      } catch (error) {
+        console.log(error);
+      }
 
       // saving the new product in the User table (field myProducts)
       let filter = { phoneNumber: authorNumber };
       let update = { myProducts: newProduct };
-      User.findOneAndUpdate(
-        filter,
-        { $push: update },
-        { new: true },
-        function(err, doc) {
-          console.log(err);
-        }
-      );
+      User.findOneAndUpdate(filter, { $push: update }, { new: true }, function(
+        err,
+        doc
+      ) {
+        if (err) console.log("error", err);
+        //console.log("doc", doc);
+      });
 
       res.status(200).json({ product: newProduct });
     });
@@ -202,17 +255,23 @@ module.exports = {
       });
     }
 
-    User.findOne({phoneNumber : phoneNumber}, 'myProducts', function(err, user) {
+    User.findOne({ phoneNumber: phoneNumber }, "myProducts", function(
+      err,
+      user
+    ) {
       if (err) console.log("Error getMyProducts ids", err);
 
       //console.log("return ids from getMyProducts", user.myProducts);
-      Product.find({_id: { $in: user.myProducts }}, function(err, myProductsData) {
+      Product.find({ _id: { $in: user.myProducts } }, function(
+        err,
+        myProductsData
+      ) {
         if (err) console.log("Error getMyProducts data", err);
 
         //console.log("return from getMyProducts data", myProductsData);
         res.status(200).send(myProductsData);
-      })
-    })
+      });
+    });
   },
 
   updateProduct(req, res) {

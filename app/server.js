@@ -5,7 +5,8 @@ require("dotenv").config();
 const express = require("express"),
   mongoose = require("mongoose"),
   bodyParser = require("body-parser"),
-  session = require("express-session");
+  session = require("express-session"),
+  path = require("path")
   
 //Connexion à la base de donnée
 mongoose
@@ -64,6 +65,9 @@ app.use(
   })
 );
 
+// routes statiques pour charger les images uploadées
+app.use(express.static(path.join(__dirname, 'client', 'public')))
+
 // Hello World
 app.get("/hello", function(req, res) {
   res.json("Hello World");
@@ -82,6 +86,9 @@ app.use("/products", productController);
 
 var categoryController = require(__dirname + "/controllers/categoryController");
 app.use("/categories", categoryController);
+
+var uploadsController = require(__dirname + "/controllers/uploadsController")
+app.use("/uploads", uploadsController)
 
 //Définition et mise en place du port d'écoute
 const port = 8800;
