@@ -33,7 +33,7 @@ export default {
     return axios.get(url + "/logout");
   },
 
-  createProduct: function(data) {
+  createProduct: async function(data) {
     return axios.post(url + "/product", data);
   },
 
