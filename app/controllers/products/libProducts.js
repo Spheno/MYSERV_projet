@@ -14,7 +14,7 @@ module.exports = {
   },
 
   getProductByID(req, res) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     Product.findOne({ _id: id }, function(err, product) {
       if (err) console.log("Error getProductByID id", err);

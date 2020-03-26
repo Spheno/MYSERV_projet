@@ -7,7 +7,9 @@ export default {
     return axios.get(url + "/");
   },
 
-  getProduct() {
-    return axios.get(url + "/:id");
+  getProduct(id) {
+    return axios.get(url + "/", {
+      params: { id: id }
+    });
   }
 };

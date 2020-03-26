@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import API from "../../../../utils/userAPI";
@@ -27,6 +28,8 @@ export default class SalesModifyProduct extends React.Component {
 
   render() {
     const { loading, myProducts } = this.state;
+    let filteredTags = [];
+
     console.log(myProducts);
 
     if (!loading) {
@@ -34,7 +37,7 @@ export default class SalesModifyProduct extends React.Component {
         return (
           <div>
             <h1 className="mb-8 text-3xl font-thin tracking-wide text-center">
-              Quickly add a product by clicking on the tab 'Add a product' 
+              Quickly add a product by clicking on the tab 'Add a product'
             </h1>
 
             <Quote
@@ -42,7 +45,7 @@ export default class SalesModifyProduct extends React.Component {
               quote="I'm going to make him an offer he can't refuse."
             />
           </div>
-        )
+        );
       } else {
         return (
           <div className="flex flex-col">
@@ -100,25 +103,45 @@ export default class SalesModifyProduct extends React.Component {
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                            {product.tags}
+                            <div className="text-sm leading-5 text-gray-900">
+                              {
+                                (filteredTags = product.tags.filter(function(
+                                  tag
+                                ) {
+                                  return tag !== "";
+                                }))
+                              }
+                              {filteredTags.length > 0 ? (
+                                filteredTags
+                              ) : (
+                                <p className="italic">None</p>
+                              )}
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                            <ReadableDate date={product.uploadDate} />
+                            <div className="text-sm leading-5 text-gray-900">
+                              <ReadableDate date={product.uploadDate} />
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                            {product && product.pictures.length > 0
-                              ? product.pictures.length
-                              : 0}{" "}
-                            image(s)
+                            <div className="text-sm leading-5 text-gray-900">
+                              {product && product.pictures.length > 0
+                                ? product.pictures.length
+                                : 0}{" "}
+                              image(s)
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
-                            <button
+                            <Link
                               className="px-2 m-2 text-gray-700 no-underline hover:text-red-600"
-                              href="#top"
+                              to={{
+                                pathname: "sales/" + product._id,
+                                state: { categories: this.props.categories }
+                              }}
                             >
                               <span className="hidden">Update</span>
                               <FontAwesomeIcon icon="edit" />
-                            </button>
+                            </Link>
                             <button
                               className="px-2 m-2 text-gray-700 no-underline hover:text-red-600"
                               href="#top"

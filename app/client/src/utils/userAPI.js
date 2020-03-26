@@ -44,7 +44,16 @@ export default {
 
   updateProduct: async function(id) {
     try{
-      const response = axios.put(url + "/product/:id", id)
+      const response = axios.put(url + "/product/edit/:id", id)
+      return response.data;
+    } catch(error) {
+      return error
+    }
+  },
+
+  deleteProduct: async function(id) {
+    try{
+      const response = axios.delete(url + "/product/delete/:id", id)
       return response.data;
     } catch(error) {
       return error

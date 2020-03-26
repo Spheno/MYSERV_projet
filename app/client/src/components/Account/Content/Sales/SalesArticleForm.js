@@ -42,7 +42,7 @@ export default function SalesArticleForm(props) {
     let data = new FormData();
     data.set("title", title.trim());
 
-    pictures.map((picture, index) => {
+    pictures.map((picture) => {
       return data.append("pictures", picture);
     });
 

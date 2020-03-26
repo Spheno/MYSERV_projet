@@ -73,7 +73,7 @@ class Sales extends React.Component {
                   "Sellings"
                 ]}
                 contents={[
-                  <SalesModifyProduct phoneNumber={phoneNumber} />,
+                  <SalesModifyProduct phoneNumber={phoneNumber} categories={categories} />,
                   <SalesArticleForm categories={categories} />,
                   <SalesBuyings />,
                   <SalesSellings />

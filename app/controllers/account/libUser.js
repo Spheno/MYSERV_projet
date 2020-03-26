@@ -275,7 +275,7 @@ module.exports = {
   },
 
   updateProduct(req, res) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     const { pictures, title, description, price, category, tags } = req.body;
 

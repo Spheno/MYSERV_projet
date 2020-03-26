@@ -12,6 +12,7 @@ import ProfilePage from "./components/Account/Menu/Profile";
 import CartPage from "./components/Account/Menu/Cart";
 import FavsPage from "./components/Account/Menu/Favs";
 import ResetPassword from "./components/ResetPassword";
+import EditProduct from "./components/Account/Content/Sales/EditProduct";
 
 export default (
   <Switch>
@@ -19,7 +20,10 @@ export default (
     <Route exact path="/reset" component={ResetPassword} />
     <Route exact path="/signup" component={RegisterPage} />
     <PrivateRoute path="/dashboard" component={Dashboard} />
-    <PrivateRoute path="/sales" component={SalesPage} />
+
+    <PrivateRoute exact path="/sales" component={SalesPage} />
+    <PrivateRoute path="/sales/:id" component={EditProduct} />
+    
     <PrivateRoute path="/profile" component={ProfilePage} />
     <PrivateRoute path="/cart" component={CartPage} />
     <PrivateRoute path="/favs" component={FavsPage} />

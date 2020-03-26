@@ -17,7 +17,7 @@ const Article = props => {
 
   if(!imgPath) imgPath = imgNotFound;
 
-  console.log("articles", props)
+  console.log("imgPath", imgPath)
   
   return (
     <div

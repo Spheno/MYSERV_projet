@@ -9,10 +9,10 @@ router.post("/signup", account.signup);
 router.post("/addToCart", account.addToCart);
 router.post("/product", account.createProduct);
 
-router.put("/product/:id", account.updateProduct);
+router.put("/product/edit/:id", account.updateProduct);
 
 router.delete("/removeFromCart", account.removeFromCart);
-router.delete("/product/:id", account.deleteProduct);
+router.delete("/product/delete/:id", account.deleteProduct);
 
 router.get("/logout", account.logout);
 router.get("/myProducts", account.getMyProducts);
