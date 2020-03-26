@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import API from "../../../../utils/userAPI";
 import LoaderScreen from "../../../Loader/LoaderScreen";
 import Quote from "../../../Quote";
+import ReadableDate from "../../../Date/ReadableDate";
 
 export default class SalesModifyProduct extends React.Component {
   constructor(props) {
@@ -22,21 +23,6 @@ export default class SalesModifyProduct extends React.Component {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  formatDate(date) {
-    var readable = new Date(date)
-    
-    var m = readable.getMonth();
-    var d = readable.getDay();
-    var y = readable.getFullYear();
-
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    var mlong = months[m];
-
-    var fullDate = mlong + " " + d + ", " + y;
-    return fullDate
   }
 
   render() {
@@ -117,7 +103,7 @@ export default class SalesModifyProduct extends React.Component {
                             {product.tags}
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                            {this.formatDate(product.uploadDate)}
+                            <ReadableDate date={product.uploadDate} />
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
                             {product && product.pictures.length > 0
