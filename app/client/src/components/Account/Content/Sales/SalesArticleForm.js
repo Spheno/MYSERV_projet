@@ -60,9 +60,7 @@ export default function SalesArticleForm(props) {
     try {
       const response = await API.createProduct(data);
       if(response) {
-        e.target.reset();
         toast.success("upload success");
-        //formRef.reset()
         console.log("Response", response);
       }
     } catch (error) {

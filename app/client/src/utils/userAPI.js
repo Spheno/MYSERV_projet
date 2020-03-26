@@ -34,7 +34,21 @@ export default {
   },
 
   createProduct: async function(data) {
-    return axios.post(url + "/product", data);
+    try {
+      const response = axios.post(url + "/product", data);
+      return response;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  updateProduct: async function(id) {
+    try{
+      const response = axios.put(url + "/product/:id", id)
+      return response.data;
+    } catch(error) {
+      return error
+    }
   },
 
   getMyProducts: async function(phoneNumber) {

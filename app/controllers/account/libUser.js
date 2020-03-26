@@ -132,7 +132,7 @@ module.exports = {
 
   removeFromCart(req, res) {},
 
-  createProduct(req, res, next) {
+  createProduct(req, res) {
     const form = formidable({
       encoding: "utf-8",
       multiples: true,
@@ -192,8 +192,7 @@ module.exports = {
 
     form.parse(req, (err, fields, files) => {
       if (err) {
-        next(err);
-        return;
+        throw err;
       }
 
       let { title, description, price, category, tags, authorNumber } = fields;
@@ -269,19 +268,20 @@ module.exports = {
         if (err) console.log("Error getMyProducts data", err);
 
         //console.log("return from getMyProducts data", myProductsData);
+        console.log("typeProductsData", typeof(myProductsData))
         res.status(200).send(myProductsData);
       });
     });
   },
 
   updateProduct(req, res) {
-    const { id } = req.params;
+    const { id } = req.query;
 
-    const { picture, title, description, price, category, tags } = req.body;
+    const { pictures, title, description, price, category, tags } = req.body;
 
     Product.findById(id).exec((err, product) => {
       if (err) console.log("Error updateProduct: ", err);
-      product.picture = picture;
+      product.pictures = pictures ;
       product.title = title;
       product.description = description;
       product.price = price;
