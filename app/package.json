@@ -13,6 +13,7 @@
     "express-session": "^1.17.0",
     "faker": "^4.1.0",
     "formidable": "^1.2.2",
+    "fs-extra": "^9.0.0",
     "jwt-simple": "^0.5.1",
     "mongoose": "^5.0.7",
     "mongoose-intl-phone-number": "^1.1.1",

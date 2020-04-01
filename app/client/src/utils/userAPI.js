@@ -42,9 +42,9 @@ export default {
     }
   },
 
-  updateProduct: async function(id) {
+  updateProduct: async function(id, data) {
     try{
-      const response = axios.put(url + "/product/edit/:id", id)
+      const response = axios.put(url + `/product/edit/${id}`, data, { headers: jsonConfig })
       return response.data;
     } catch(error) {
       return error

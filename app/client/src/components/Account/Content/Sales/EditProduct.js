@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import API from "../../../../utils/productsAPI";
+import productAPI from "../../../../utils/productsAPI";
+import userAPI from "../../../../utils/userAPI";
+
 import LoaderScreen from "../../../Loader/LoaderScreen";
 import Header from "../../../Header/Header";
 import SVGIcon from "../../../SVG/SVGIcon";
@@ -16,13 +18,17 @@ import {
   faPaperPlane
 } from "@fortawesome/free-solid-svg-icons";
 import ReactTagInput from "@pathofdev/react-tag-input";
+import { ToastContainer, toast } from "react-toastify";
 import "@pathofdev/react-tag-input/build/index.css";
 import { useParams } from "react-router-dom";
+import SalesImageUploader from "./SalesImageUploader";
 
 const NB_TAGS_MAX = 5;
 
 export default function EditProduct(props) {
   const [loading, setLoading] = useState(true);
+  const [oldTitle, setOldTitle] = useState(""); // passed to the update function to rename the old title folder
+  const [filesURL, setFilesURL] = useState([]);
   const [product, setProduct] = useState({
     pictures: [],
     tags: [],
@@ -39,9 +45,17 @@ export default function EditProduct(props) {
   useEffect(() => {
     async function getProduct() {
       try {
-        const response = await API.getProduct(id);
+        const response = await productAPI.getProduct(id);
         setLoading(false);
         setProduct(response.data[0]);
+        setOldTitle(response.data[0].title)
+        response.data[0].pictures.map((pic) => {
+            if(pic.path.includes("uploads")) {
+                return setFilesURL(filesURL => [...filesURL, '/' + pic.path])
+            } else {
+                return setFilesURL(filesURL => [...filesURL, pic.path])
+            }
+        })        
       } catch (error) {
         console.log(error);
       }
@@ -49,8 +63,62 @@ export default function EditProduct(props) {
     getProduct();
   }, [id]);
 
-  const handleSubmit = event => {
-    event.preventDefault();
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    if(!product.title || product.title.length === 0) {
+      alert("Veuillez renseigner un nom pour votre produit.");
+      return;
+    }
+
+    if (!product.price || product.price <= 0) {
+      alert("Le prix de votre produit doit être supérieur à 0.");
+      return;
+    }
+
+    let data = new FormData();
+    data.set("title", product.title.trim());
+
+    product.pictures.map(picture => {
+      return data.append("pictures", picture);
+    });
+
+    data.set("description", product.description.trim());
+    data.set("price", product.price);
+    data.set("category", product.category);
+    data.set("tags", product.tags);
+    const authorData = JSON.parse(localStorage.getItem("user"));
+    data.set("authorNumber", authorData.phoneNumber);
+    data.set("oldTitle", oldTitle)
+
+    for (var pair of data.entries()) {
+      console.log(pair[0] + " - " + pair[1]);
+    }
+    
+    try {
+      const response = await userAPI.updateProduct(id, data);
+      if (response) {
+        toast.success("upload success");
+        console.log("Response", response);
+      }
+    } catch (error) {
+      toast.error("upload fail", error);
+      if (error.response) {
+        console.log(error.response.data);
+        console.log("Status code: ", error.response.status);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error ", error.message);
+      }
+    }
+  };
+
+  const handlePicture = (pics, urls) => {
+    setFilesURL(urls);
+    setProduct(prevState => {
+      return { ...prevState, pictures: pics };
+    });
   };
 
   const emptyBoxes = emptyImgToShow => {
@@ -78,8 +146,9 @@ export default function EditProduct(props) {
   };
 
   if (!loading && product) {
-    console.log("prod", product);
     let emptyImgToShow = 3; // if the user has not uploaded a picture yet, we show 3 empty boxes
+    console.log("productEdit", product);
+    console.log("urls", filesURL)
 
     return (
       <div className="z-50 p-6 bg-purple-700">
@@ -103,12 +172,34 @@ export default function EditProduct(props) {
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
 
+            <div className="form-group">
+              <ToastContainer />
+            </div>
+
             <form
               onSubmit={handleSubmit}
               encType="multipart/form-data"
               method="post"
             >
-              <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-4 bg-white border-gray-300 rounded md:shadow-md md:border">
+              <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-8 bg-white border-gray-300 rounded md:shadow-md md:border">
+                
+                <div className="container flex flex-col items-center px-8 mx-auto mb-8 bg-purple-100 md:flex-row md:border md:border-gray-300 md:shadow-md md:mb-4">
+                  <div className="flex flex-col items-start justify-center w-full px-6 py-8 font-mono lg:w-1/2">
+                    <p className="mb-4 uppercase tracking-loose">
+                      <FontAwesomeIcon icon="info-circle" /> How to upload your images?
+                    </p>
+                    <p className="leading-normal">
+                      Select all your images at the same time.
+                    </p>
+                  </div>
+                  <div className="w-full text-center lg:w-1/2">
+                    <SalesImageUploader
+                      name="pictures"
+                      handlePictures={handlePicture}
+                    />
+                  </div>
+                </div>
+
                 <div className="px-3 mb-6 -mx-3">
                   <label
                     className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
@@ -136,25 +227,23 @@ export default function EditProduct(props) {
                       Pictures <FontAwesomeIcon icon="camera" size="1x" />
                     </h3>
                     <div className="flex flex-wrap h-full -mx-2">
-                      {product.pictures.map((picture, index) => {
+                      {filesURL.map((url, index) => {
                         emptyImgToShow--;
                         return (
                           <div
                             key={index}
                             className={
-                              "w-full px-2 mb-4 lg:mb-0 lg:flex-1 md:w-1/" +
-                              emptyImgToShow
+                              "w-full px-2 mb-4 lg:mb-0 lg:flex-1"
                             }
                           >
                             <img
-                              className="w-full h-48 p-1 bg-gray-300 bg-center bg-no-repeat bg-cover lg:h-56"
-                              src={"/" + picture.path}
+                              className="h-48 min-w-full p-1 bg-gray-300 bg-center bg-no-repeat bg-cover lg:h-56"
+                              src={url}
                               alt=""
                             />
                           </div>
                         );
                       })}
-                      {console.log("empty", emptyImgToShow)}
                       {emptyBoxes(emptyImgToShow)}
                     </div>
                   </div>

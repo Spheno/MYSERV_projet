@@ -9,6 +9,7 @@ const Product = require("../../schema/schemaProduct");
 const passwordHash = require("password-hash");
 const formidable = require("formidable");
 const fs = require("fs");
+const fse = require("fs-extra");
 const path = require("path");
 
 module.exports = {
@@ -133,94 +134,123 @@ module.exports = {
   removeFromCart(req, res) {},
 
   createProduct(req, res) {
+    let productTitle,
+      productDesc,
+      productPrice,
+      productCategory,
+      authorNb = "";
+    let productTags = [];
+    let productPics = null;
+
     const form = formidable({
       encoding: "utf-8",
       multiples: true,
-      uploadDir: "./client/public/uploads/",
       keepExtensions: true,
       maxFileSize: 4 * 1024 * 1024 // (4MB)
     });
 
-    let productTitle = null;
-    let authorNumber = null;
-
-    form
-      .on("error", function(err) {
-        if (err) {
-          console.log("an error has occured with form upload");
-          console.log(err);
-          req.resume();
-        }
-      })
-
-      .on("field", function(field, value) {
-        if (field === "title") productTitle = value;
-        if (field === "authorNumber") authorNumber = value.substr(1);
-
-        //console.log("title", productTitle);
-        //console.log("number", authorNumber);
-      })
-
-      .on("file", function(name, file) {
-        let newPath = path.join(__dirname, "../../", form.uploadDir, authorNumber, productTitle);
-        
-        if (
-          !fs.existsSync(newPath, function(err) {
-            if (err) throw err;
-          })
-        )
-          fs.mkdirSync(newPath, { recursive: true });
-
-        let desiredPath = path.join(newPath, file.name);
-        console.log("desiredPath", desiredPath);
-        
-        fs.rename(file.path, desiredPath, function(err) {
-          if (err) {
-            throw err;
-          } else {
-            console.log("Successfully renamed the file!", file.path);
-          }
-        });
-
-        file.path = path.join("uploads", authorNumber, productTitle, file.name);
-      })
-
-      .on("progress", function(bytesReceived, bytesExpected) {
-        var percent = ((bytesReceived / bytesExpected) * 100) | 0;
-        console.log("Uploading: %" + percent + "\r");
-      });
-
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        throw err;
-      }
+    form.parse(req, function(err, fields, files) {
+      if (err) console.log("error parsing", err);
 
       let { title, description, price, category, tags, authorNumber } = fields;
       let { pictures } = files;
 
-      if (!title || title.length === 0) {
+      productTitle = title;
+      productDesc = description;
+      productPrice = price;
+      productCategory = category;
+      productTags = tags;
+      authorNb = authorNumber.slice(1);
+
+      productPics = pictures;
+    });
+
+    form.on("error", function(err) {
+      if (err) {
+        console.log("an error has occured with form upload");
+        console.log(err);
+      }
+    });
+
+    form.on("progress", function(bytesReceived, bytesExpected) {
+      var percent = ((bytesReceived / bytesExpected) * 100) | 0;
+      console.log("Uploading: %" + percent + "\r");
+    });
+
+    form.on("end", function(err, fields, files) {
+      if (err) throw err;
+
+      let newPath = path.join(
+        __dirname,
+        "../../client/public/uploads/",
+        authorNb,
+        productTitle, '/'
+      );
+      console.log("new path", newPath);
+
+      if (
+        !fs.existsSync(newPath, function(err) {
+          if (err) throw err;
+        })
+      )
+        fs.mkdirSync(newPath, { recursive: true });
+
+      console.log("end number", authorNb);
+      console.log("end title", productTitle);
+      console.log("end desc", productDesc);
+      console.log("end price", productPrice);
+      console.log("end category", productCategory);
+      console.log("end tags", productTags);
+
+      /* Copie des fichiers uploadés depuis le dossier temporaire
+      au dossier public/upload/{authorNumber}/{productTitle} */
+      console.log("Nb files to upload", this.openedFiles.length);
+      for (let i = 0; i < this.openedFiles.length; i++) {
+        let tempPath = this.openedFiles[i].path;
+        let fileName = this.openedFiles[i].name;
+
+        console.log("temp path", tempPath);
+        console.log("file name", fileName);
+        this.openedFiles[i].path = path.join("uploads", authorNb, productTitle, fileName)
+
+        fse.move(tempPath, newPath + fileName, { overwrite: true }, function(
+          err
+        ) {
+          if (err) console.error(err);
+
+          console.log("success!");
+        });
+      }
+
+      /* Config to insert in database */
+      if (!productTitle || productTitle.length === 0) {
         return res.status(401).json({
           text: "Votre produit n'a pas de nom."
         });
       }
 
-      price = price * 1; // conversion string -> number
+      productPrice = productPrice * 1; // conversion string -> number
 
-      if (!price || isNaN(price) || typeof price != "number" || price <= 0) {
+      if (
+        !productPrice ||
+        isNaN(productPrice) ||
+        typeof productPrice != "number" ||
+        productPrice <= 0
+      ) {
         return res.status(401).json({
-          typePrice: typeof price,
+          typePrice: typeof productPrice,
           text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
         });
       }
 
       let newProduct = new Product({
-        pictures,
-        title,
-        description,
-        price,
-        category,
-        tags,
-        authorNumber
+        pictures: productPics,
+        title: productTitle,
+        description: productDesc,
+        price: productPrice,
+        category: productCategory,
+        tags: productTags,
+        authorNumber: authorNb
       });
 
       // saving the new product in Product table
@@ -231,15 +261,16 @@ module.exports = {
       }
 
       // saving the new product in the User table (field myProducts)
-      let filter = { phoneNumber: authorNumber };
+      let filter = { phoneNumber: "+" + authorNb };
       let update = { myProducts: newProduct };
       User.findOneAndUpdate(filter, { $push: update }, { new: true }, function(
         err,
         doc
       ) {
         if (err) console.log("error", err);
-        //console.log("doc", doc);
+        console.log("doc", doc);
       });
+      /* end of database processing */
 
       res.status(200).json({ product: newProduct });
     });
@@ -268,7 +299,6 @@ module.exports = {
         if (err) console.log("Error getMyProducts data", err);
 
         //console.log("return from getMyProducts data", myProductsData);
-        console.log("typeProductsData", typeof(myProductsData))
         res.status(200).send(myProductsData);
       });
     });
@@ -277,19 +307,120 @@ module.exports = {
   updateProduct(req, res) {
     const { id } = req.params;
 
-    const { pictures, title, description, price, category, tags } = req.body;
+    const form = formidable({
+      encoding: "utf-8",
+      multiples: true,
+      uploadDir: "./client/public/uploads/",
+      keepExtensions: true,
+      maxFileSize: 4 * 1024 * 1024 // (4MB)
+    });
 
-    Product.findById(id).exec((err, product) => {
-      if (err) console.log("Error updateProduct: ", err);
-      product.pictures = pictures ;
-      product.title = title;
-      product.description = description;
-      product.price = price;
-      product.category = category;
-      product.tags = tags;
+    let oldProductTitle = "";
+    let productTitle = "";
+    let authorNumber = "";
 
-      product.save();
-      res.status(200).json({ product });
+    form
+      .on("error", function(err) {
+        if (err) {
+          console.log("an error has occured with form upload");
+          console.log(err);
+          req.resume();
+        }
+      })
+
+      .on("field", function(field, value) {
+        if (field === "oldTitle") oldProductTitle = value;
+        if (field === "title") productTitle = value;
+        if (field === "authorNumber") authorNumber = value.substr(1);
+
+        let pathToRename = path.join(
+          __dirname,
+          "../../",
+          form.uploadDir,
+          authorNumber,
+          oldProductTitle
+        );
+
+        let pathToUpload = path.join(
+          __dirname,
+          "../../",
+          form.uploadDir,
+          authorNumber,
+          productTitle
+        );
+
+        if (oldProductTitle && productTitle && authorNumber) {
+          console.log("Gonna empty", pathToRename);
+          fse.emptyDirSync(pathToRename);
+          if (pathToUpload !== pathToRename) {
+            console.log("Renaming to", pathToUpload);
+            fs.renameSync(pathToRename, pathToUpload);
+          } else {
+            console.log(
+              "Not renaming cause the title hasn't changed!",
+              pathToUpload
+            );
+          }
+        }
+      })
+
+      .on("file", function(name, file) {
+        console.log("pathToUpload", pathToUpload);
+
+        let desiredPath = path.join(pathToUpload, file.name);
+        console.log("desiredPath", desiredPath);
+
+        fs.rename(file.path, desiredPath, function(err) {
+          if (err) {
+            throw err;
+          } else {
+            console.log("Successfully renamed the file!", file.path);
+          }
+        });
+
+        file.path = path.join("uploads", authorNumber, productTitle, file.name);
+      })
+
+      .on("progress", function(bytesReceived, bytesExpected) {
+        var percent = ((bytesReceived / bytesExpected) * 100) | 0;
+        console.log("Uploading: %" + percent + "\r");
+      });
+
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        throw err;
+      }
+
+      let { title, description, price, category, tags } = fields;
+      let { pictures } = files;
+
+      if (!title || title.length === 0) {
+        return res.status(401).json({
+          text: "Votre produit n'a pas de nom."
+        });
+      }
+
+      price = price * 1; // conversion string -> number
+
+      if (!price || isNaN(price) || typeof price != "number" || price <= 0) {
+        return res.status(401).json({
+          typePrice: typeof price,
+          text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
+        });
+      }
+
+      Product.findById(id).exec((err, product) => {
+        if (err) console.log("Error updateProduct: ", err);
+        product.pictures = pictures;
+        product.title = title;
+        product.description = description;
+        product.price = price;
+        product.category = category;
+        product.tags = tags;
+
+        product.save();
+        res.status(200).json({ product });
+      });
     });
   },
 

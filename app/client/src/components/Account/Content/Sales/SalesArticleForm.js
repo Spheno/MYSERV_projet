@@ -24,6 +24,7 @@ export default function SalesArticleForm(props) {
   const [category, setCategory] = useState("Other");
   const [tags, setTags] = useState([]);
   const [pictures, setPicture] = useState([]);
+  const [picURLs, setPicURL] = useState([]);
 
   const categories = props.categories; // categories list to display items in select
 
@@ -42,7 +43,7 @@ export default function SalesArticleForm(props) {
     let data = new FormData();
     data.set("title", title.trim());
 
-    pictures.map((picture) => {
+    pictures.map(picture => {
       return data.append("pictures", picture);
     });
 
@@ -59,12 +60,12 @@ export default function SalesArticleForm(props) {
 
     try {
       const response = await API.createProduct(data);
-      if(response) {
+      if (response) {
         toast.success("upload success");
         console.log("Response", response);
       }
     } catch (error) {
-      toast.error("upload fail", error)
+      toast.error("upload fail", error);
       if (error.response) {
         console.log(error.response.data);
         console.log("Status code: ", error.response.status);
@@ -77,8 +78,10 @@ export default function SalesArticleForm(props) {
   };
 
   // gets array of File and asigns it to pictures
-  const handlePicture = pics => {
+  // also set urls for preview
+  const handlePicture = (pics, filesURL) => {
     setPicture(pics);
+    setPicURL(filesURL);
   };
 
   return (
@@ -87,8 +90,23 @@ export default function SalesArticleForm(props) {
         <ToastContainer />
       </div>
 
+      {console.log("articleForm", pictures)}
+
       <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
         <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-4 bg-white border-gray-300 rounded md:shadow-md md:border">
+          <div className="flex flex-row justify-center max-w-md mx-auto mb-4">
+            {(picURLs || []).map((url, index) => {
+              return (
+                <img
+                  className="w-1/3 h-32 px-4 py-2 m-2"
+                  src={url}
+                  key={index}
+                  alt="pic"
+                />
+              );
+            })}
+          </div>
+
           <div className="px-3 mb-6 -mx-3">
             <label
               className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
