@@ -11,6 +11,7 @@ const formidable = require("formidable");
 const fs = require("fs");
 const fse = require("fs-extra");
 const path = require("path");
+const util = require("util");
 
 module.exports = {
   async signup(req, res) {
@@ -184,7 +185,8 @@ module.exports = {
         __dirname,
         "../../client/public/uploads/",
         authorNb,
-        productTitle, '/'
+        productTitle,
+        "/"
       );
       console.log("new path", newPath);
 
@@ -211,7 +213,12 @@ module.exports = {
 
         console.log("temp path", tempPath);
         console.log("file name", fileName);
-        this.openedFiles[i].path = path.join("uploads", authorNb, productTitle, fileName)
+        this.openedFiles[i].path = path.join(
+          "uploads",
+          authorNb,
+          productTitle,
+          fileName
+        );
 
         fse.move(tempPath, newPath + fileName, { overwrite: true }, function(
           err
@@ -307,116 +314,183 @@ module.exports = {
   updateProduct(req, res) {
     const { id } = req.params;
 
+    let oldProductTitle,
+      productTitle,
+      productDesc,
+      productPrice,
+      productCategory,
+      authorNb = "";
+    let productTags = [];
+    let productPics = null;
+    let existentPics = null;
+
     const form = formidable({
       encoding: "utf-8",
       multiples: true,
-      uploadDir: "./client/public/uploads/",
       keepExtensions: true,
       maxFileSize: 4 * 1024 * 1024 // (4MB)
     });
 
-    let oldProductTitle = "";
-    let productTitle = "";
-    let authorNumber = "";
+    form.parse(req, function(err, fields, files) {
+      if (err) console.log("error parsing", err);
 
-    form
-      .on("error", function(err) {
-        if (err) {
-          console.log("an error has occured with form upload");
-          console.log(err);
-          req.resume();
-        }
-      })
+      if(fields.pictures) console.log("fields pictures", JSON.parse(fields.pictures))
+      let noImageUploaded = (Object.keys(files).length === 0)
+      let pictures = {};
 
-      .on("field", function(field, value) {
-        if (field === "oldTitle") oldProductTitle = value;
-        if (field === "title") productTitle = value;
-        if (field === "authorNumber") authorNumber = value.substr(1);
+      let {
+        oldTitle,
+        title,
+        description,
+        price,
+        category,
+        tags,
+        authorNumber,
+      } = fields;
 
-        let pathToRename = path.join(
-          __dirname,
-          "../../",
-          form.uploadDir,
-          authorNumber,
-          oldProductTitle
-        );
+      if(noImageUploaded) {
+        // si pas d'upload d'image alors le formulaire envoie un object Object qui passe dans fields
+        pictures = JSON.parse(fields.pictures);
+      } else {
+        ({ pictures } = files);
+      }
 
-        let pathToUpload = path.join(
-          __dirname,
-          "../../",
-          form.uploadDir,
-          authorNumber,
-          productTitle
-        );
+      oldProductTitle = oldTitle;
+      productTitle = title;
+      productDesc = description;
+      productPrice = price;
+      productCategory = category;
+      productTags = tags;
+      authorNb = authorNumber.slice(1);
 
-        if (oldProductTitle && productTitle && authorNumber) {
-          console.log("Gonna empty", pathToRename);
-          fse.emptyDirSync(pathToRename);
-          if (pathToUpload !== pathToRename) {
-            console.log("Renaming to", pathToUpload);
-            fs.renameSync(pathToRename, pathToUpload);
-          } else {
-            console.log(
-              "Not renaming cause the title hasn't changed!",
-              pathToUpload
-            );
-          }
-        }
-      })
+      if(noImageUploaded) existentPics = pictures;
+      else productPics = pictures;
+    });
 
-      .on("file", function(name, file) {
-        console.log("pathToUpload", pathToUpload);
+    form.on("error", function(err) {
+      if (err) {
+        console.log("an error has occured with form upload");
+        console.log(err);
+      }
+    });
 
-        let desiredPath = path.join(pathToUpload, file.name);
-        console.log("desiredPath", desiredPath);
+    form.on("progress", function(bytesReceived, bytesExpected) {
+      var percent = ((bytesReceived / bytesExpected) * 100) | 0;
+      console.log("Uploading: %" + percent + "\r");
+    });
 
-        fs.rename(file.path, desiredPath, function(err) {
-          if (err) {
-            throw err;
-          } else {
-            console.log("Successfully renamed the file!", file.path);
-          }
-        });
-
-        file.path = path.join("uploads", authorNumber, productTitle, file.name);
-      })
-
-      .on("progress", function(bytesReceived, bytesExpected) {
-        var percent = ((bytesReceived / bytesExpected) * 100) | 0;
-        console.log("Uploading: %" + percent + "\r");
-      });
-
-    form.parse(req, (err, fields, files) => {
+    form.on("end", function(err) {
       if (err) {
         throw err;
       }
 
-      let { title, description, price, category, tags } = fields;
-      let { pictures } = files;
+      let oldPath = path.join(
+        __dirname,
+        "../../client/public/uploads/",
+        authorNb,
+        oldProductTitle,
+        "/"
+      );
 
-      if (!title || title.length === 0) {
+      let newPath = path.join(
+        __dirname,
+        "../../client/public/uploads/",
+        authorNb,
+        productTitle,
+        "/"
+      );
+
+      console.log("pathToRename", oldPath);
+      console.log("pathToUpload", newPath);
+      var noNewImage = true;
+
+      if (!productPics || productPics === undefined) {
+        console.log("No new image to upload");
+        if (productTitle !== oldProductTitle) {
+          console.log("New title detected", productTitle);
+          console.log("Renaming directory...");
+          fs.renameSync(oldPath, newPath);
+        }
+      } else {
+        noNewImage = false;
+        console.log("New image(s) added! Processing...");
+        if (productTitle !== oldProductTitle) {
+          console.log("Creating new dir", newPath);
+          fse.ensureDirSync(newPath);
+          console.log("Removing old dir", oldPath);
+          fse.removeSync(oldPath);
+        } else {
+          console.log("Not renaming cause the title hasn't changed!", newPath);
+
+          console.log("Emptying dir", oldPath);
+          fse.emptyDirSync(oldPath);
+        }
+      }
+
+      /* Copie des fichiers uploadés depuis le dossier temporaire
+      au dossier public/upload/{authorNumber}/{productTitle} */
+      console.log("Nb files to upload", this.openedFiles.length);
+      for (let i = 0; i < this.openedFiles.length; i++) {
+        let tempPath = this.openedFiles[i].path;
+        let fileName = this.openedFiles[i].name;
+
+        console.log("temp path", tempPath);
+        console.log("file name", fileName);
+        this.openedFiles[i].path = path.join(
+          "uploads",
+          authorNb,
+          productTitle,
+          fileName
+        );
+
+        fse.move(tempPath, newPath + fileName, { overwrite: true }, function(
+          err
+        ) {
+          if (err) console.error(err);
+
+          console.log("success!");
+        });
+      }
+
+      /* Config update de la base de données */
+      if (!productTitle || productTitle.length === 0) {
         return res.status(401).json({
           text: "Votre produit n'a pas de nom."
         });
       }
 
-      price = price * 1; // conversion string -> number
+      productPrice = productPrice * 1; // conversion string -> number
 
-      if (!price || isNaN(price) || typeof price != "number" || price <= 0) {
+      if (
+        !productPrice ||
+        isNaN(productPrice) ||
+        typeof productPrice != "number" ||
+        productPrice <= 0
+      ) {
         return res.status(401).json({
-          typePrice: typeof price,
+          typePrice: typeof productPrice,
           text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
         });
       }
 
       Product.findById(id).exec((err, product) => {
         if (err) console.log("Error updateProduct: ", err);
-        product.pictures = pictures;
-        product.title = title;
-        product.description = description;
-        product.price = price;
-        product.category = category;
-        product.tags = tags;
+        // s'il y a une nouvelle image, on ajoute la nouvelle image
+        if (!noNewImage) product.pictures = productPics;
+        // s'il n'y a pas de nouvelle image et que le titre a changé, on change le path des images déjà présentes
+        if (noNewImage && (productTitle != oldProductTitle)) {
+          console.log("Updating files path...");
+          existentPics.map((pic) => {
+            pic.path = path.join("uploads", authorNb, productTitle, pic.name)
+          })
+          
+          product.pictures = existentPics;
+        }
+        product.title = productTitle;
+        product.description = productDesc;
+        product.price = productPrice;
+        product.category = productCategory;
+        product.tags = productTags;
 
         product.save();
         res.status(200).json({ product });

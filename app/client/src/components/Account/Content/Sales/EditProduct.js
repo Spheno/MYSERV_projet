@@ -48,14 +48,15 @@ export default function EditProduct(props) {
         const response = await productAPI.getProduct(id);
         setLoading(false);
         setProduct(response.data[0]);
-        setOldTitle(response.data[0].title)
-        response.data[0].pictures.map((pic) => {
-            if(pic.path.includes("uploads")) {
-                return setFilesURL(filesURL => [...filesURL, '/' + pic.path])
-            } else {
-                return setFilesURL(filesURL => [...filesURL, pic.path])
-            }
-        })        
+        setOldTitle(response.data[0].title);
+        response.data[0].pictures.map(pic => {
+          console.log("pic", pic)
+          if (pic.path.includes("uploads")) {
+            return setFilesURL(filesURL => [...filesURL, "/" + pic.path]);
+          } else {
+            return setFilesURL(filesURL => [...filesURL, pic.path]);
+          }
+        });
       } catch (error) {
         console.log(error);
       }
@@ -66,7 +67,7 @@ export default function EditProduct(props) {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if(!product.title || product.title.length === 0) {
+    if (!product.title || product.title.length === 0) {
       alert("Veuillez renseigner un nom pour votre produit.");
       return;
     }
@@ -78,23 +79,29 @@ export default function EditProduct(props) {
 
     let data = new FormData();
     data.set("title", product.title.trim());
-
-    product.pictures.map(picture => {
-      return data.append("pictures", picture);
-    });
-
     data.set("description", product.description.trim());
     data.set("price", product.price);
     data.set("category", product.category);
     data.set("tags", product.tags);
     const authorData = JSON.parse(localStorage.getItem("user"));
     data.set("authorNumber", authorData.phoneNumber);
-    data.set("oldTitle", oldTitle)
+    data.set("oldTitle", oldTitle);
+
+    let pics = [];
+    product.pictures.map((picture) => {
+      if(!(picture instanceof File)) pics.push(picture)
+      else data.append("pictures", picture)
+      
+      return pics;
+    });
+
+    if(pics.length) data.append("pictures", JSON.stringify(pics));
+    console.log("pics", pics)
 
     for (var pair of data.entries()) {
       console.log(pair[0] + " - " + pair[1]);
     }
-    
+
     try {
       const response = await userAPI.updateProduct(id, data);
       if (response) {
@@ -112,6 +119,8 @@ export default function EditProduct(props) {
         console.log("Error ", error.message);
       }
     }
+
+    //window.location.reload(false)
   };
 
   const handlePicture = (pics, urls) => {
@@ -147,8 +156,8 @@ export default function EditProduct(props) {
 
   if (!loading && product) {
     let emptyImgToShow = 3; // if the user has not uploaded a picture yet, we show 3 empty boxes
-    console.log("productEdit", product);
-    console.log("urls", filesURL)
+    console.log("product cat", product.category);
+    console.log("prod", product);
 
     return (
       <div className="z-50 p-6 bg-purple-700">
@@ -182,11 +191,11 @@ export default function EditProduct(props) {
               method="post"
             >
               <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-8 bg-white border-gray-300 rounded md:shadow-md md:border">
-                
                 <div className="container flex flex-col items-center px-8 mx-auto mb-8 bg-purple-100 md:flex-row md:border md:border-gray-300 md:shadow-md md:mb-4">
                   <div className="flex flex-col items-start justify-center w-full px-6 py-8 font-mono lg:w-1/2">
                     <p className="mb-4 uppercase tracking-loose">
-                      <FontAwesomeIcon icon="info-circle" /> How to upload your images?
+                      <FontAwesomeIcon icon="info-circle" /> How to upload your
+                      images?
                     </p>
                     <p className="leading-normal">
                       Select all your images at the same time.
@@ -229,12 +238,11 @@ export default function EditProduct(props) {
                     <div className="flex flex-wrap h-full -mx-2">
                       {filesURL.map((url, index) => {
                         emptyImgToShow--;
+                        console.log("file url", url)
                         return (
                           <div
                             key={index}
-                            className={
-                              "w-full px-2 mb-4 lg:mb-0 lg:flex-1"
-                            }
+                            className={"w-full px-2 mb-4 lg:mb-0 lg:flex-1"}
                           >
                             <img
                               className="h-48 min-w-full p-1 bg-gray-300 bg-center bg-no-repeat bg-cover lg:h-56"
@@ -323,7 +331,6 @@ export default function EditProduct(props) {
                             });
                           }}
                         >
-                          <option defaultValue={product.category}>Other</option>
                           {categories.map((cat, index) => {
                             return (
                               <option key={index} value={cat}>
