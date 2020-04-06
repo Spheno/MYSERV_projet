@@ -33,6 +33,19 @@ export default {
     return axios.get(url + "/logout");
   },
 
+  getUser: async function(id) {
+    try {
+      const response = await axios.get(url + "/", { params: { id: id } });
+      return response.data.user;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  editUser: async function(data) {
+    return await axios.post(url + "/", data);
+  },
+
   createProduct: async function(data) {
     try {
       const response = axios.post(url + "/product", data);
@@ -43,20 +56,22 @@ export default {
   },
 
   updateProduct: async function(id, data) {
-    try{
-      const response = axios.put(url + `/product/edit/${id}`, data, { headers: jsonConfig })
+    try {
+      const response = axios.put(url + `/product/edit/${id}`, data, {
+        headers: jsonConfig
+      });
       return response.data;
-    } catch(error) {
-      return error
+    } catch (error) {
+      return error;
     }
   },
 
   deleteProduct: async function(id) {
-    try{
-      const response = axios.delete(url + "/product/delete/:id", id)
+    try {
+      const response = axios.delete(url + "/product/delete/:id", id);
       return response.data;
-    } catch(error) {
-      return error
+    } catch (error) {
+      return error;
     }
   },
 

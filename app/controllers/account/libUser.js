@@ -6,12 +6,13 @@
 */
 const User = require("../../schema/schemaUser");
 const Product = require("../../schema/schemaProduct");
-const passwordHash = require("password-hash");
+const bcrypt = require("bcrypt");
 const formidable = require("formidable");
 const fs = require("fs");
 const fse = require("fs-extra");
 const path = require("path");
-const util = require("util");
+
+const SALT_ROUNDS = 10;
 
 module.exports = {
   async signup(req, res) {
@@ -40,13 +41,15 @@ module.exports = {
       });
     }
 
+    let hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS);
+
     // Création d'un objet user, dans lequel on hash le mot de passe
     const user = {
       firstname,
       lastname,
       email,
       phoneNumber,
-      password: passwordHash.generate(password),
+      password: hashedPassword,
       codeParrain
     };
 
@@ -102,7 +105,7 @@ module.exports = {
           text: "L'utilisateur n'existe pas"
         });
       }
-      if (!findUser.authenticate(password)) {
+      if (!bcrypt.compareSync(password, findUser.password)) {
         console.log("Mot de passe incorrect");
         return res.status(401).json({
           text: "Mot de passe incorrect"
@@ -128,6 +131,41 @@ module.exports = {
   logout(req, res) {
     req.session.destroy();
     res.status(200).json({ message: "Logout Successfully!" });
+  },
+
+  getUser(req, res) {
+    const { id } = req.query;
+
+    User.findById(id, '-password').exec((err, user) => {
+      if(err) throw err;
+
+      res.status(200).json({ user });
+    })
+  },
+
+  editUser(req, res) {
+    const { id, firstName, lastName, oldPassword, password } = req.body;
+
+    User.findById(id).exec((err, user) => {
+      if(err) throw err;
+
+      if(!bcrypt.compareSync(oldPassword, user.password)) {
+        console.log("Ancien mot de passe incorrect");
+        return res.status(401).json({
+          text: "Ancien mot de passe incorrect"
+        });
+      }
+
+      if(firstName) user.firstname = firstName;
+      if(lastName) user.lastname = lastName;
+      if(password) {
+        console.log(password)
+        user.password = bcrypt.hashSync(password, SALT_ROUNDS);
+      }
+
+      user.save();
+      res.status(200).json({ user })
+    })
   },
 
   addToCart(req, res) {},
@@ -360,7 +398,7 @@ module.exports = {
       productDesc = description;
       productPrice = price;
       productCategory = category;
-      productTags = tags;
+      productTags = tags.split(",");
       authorNb = authorNumber.slice(1);
 
       if(noImageUploaded) existentPics = pictures;

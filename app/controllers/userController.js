@@ -6,6 +6,7 @@ const account = require("./account/libUser.js");
 
 router.post("/login", account.login);
 router.post("/signup", account.signup);
+router.post("/", account.editUser);
 router.post("/addToCart", account.addToCart);
 router.post("/product", account.createProduct);
 
@@ -15,6 +16,7 @@ router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/product/delete/:id", account.deleteProduct);
 
 router.get("/logout", account.logout);
+router.get("/", account.getUser);
 router.get("/myProducts", account.getMyProducts);
 
 module.exports = router;

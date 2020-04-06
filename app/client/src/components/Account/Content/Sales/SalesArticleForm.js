@@ -75,6 +75,8 @@ export default function SalesArticleForm(props) {
         console.log("Error ", error.message);
       }
     }
+
+    window.location.reload(false)
   };
 
   // gets array of File and asigns it to pictures

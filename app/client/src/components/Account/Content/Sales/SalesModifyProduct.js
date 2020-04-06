@@ -28,9 +28,6 @@ export default class SalesModifyProduct extends React.Component {
 
   render() {
     const { loading, myProducts } = this.state;
-    let filteredTags = [];
-
-    console.log(myProducts);
 
     if (!loading) {
       if (myProducts.length === 0) {
@@ -104,15 +101,8 @@ export default class SalesModifyProduct extends React.Component {
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
                             <div className="text-sm leading-5 text-gray-900">
-                              {
-                                (filteredTags = product.tags.filter(function(
-                                  tag
-                                ) {
-                                  return tag !== "";
-                                }))
-                              }
-                              {filteredTags.length > 0 ? (
-                                filteredTags
+                              {product.tags[0] !== "" ? (
+                                product.tags
                               ) : (
                                 <p className="italic">None</p>
                               )}

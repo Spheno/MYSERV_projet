@@ -29,6 +29,7 @@ export default function EditProduct(props) {
   const [loading, setLoading] = useState(true);
   const [oldTitle, setOldTitle] = useState(""); // passed to the update function to rename the old title folder
   const [filesURL, setFilesURL] = useState([]);
+  const [tags, setTags] = useState([]); // define new tags
   const [product, setProduct] = useState({
     pictures: [],
     tags: [],
@@ -49,8 +50,8 @@ export default function EditProduct(props) {
         setLoading(false);
         setProduct(response.data[0]);
         setOldTitle(response.data[0].title);
+        setTags(response.data[0].tags);
         response.data[0].pictures.map(pic => {
-          console.log("pic", pic)
           if (pic.path.includes("uploads")) {
             return setFilesURL(filesURL => [...filesURL, "/" + pic.path]);
           } else {
@@ -82,21 +83,23 @@ export default function EditProduct(props) {
     data.set("description", product.description.trim());
     data.set("price", product.price);
     data.set("category", product.category);
-    data.set("tags", product.tags);
+
+    data.append("tags", tags);
+
     const authorData = JSON.parse(localStorage.getItem("user"));
     data.set("authorNumber", authorData.phoneNumber);
     data.set("oldTitle", oldTitle);
 
     let pics = [];
-    product.pictures.map((picture) => {
-      if(!(picture instanceof File)) pics.push(picture)
-      else data.append("pictures", picture)
-      
+    product.pictures.map(picture => {
+      if (!(picture instanceof File)) pics.push(picture);
+      else data.append("pictures", picture);
+
       return pics;
     });
 
-    if(pics.length) data.append("pictures", JSON.stringify(pics));
-    console.log("pics", pics)
+    if (pics.length) data.append("pictures", JSON.stringify(pics));
+    console.log("pics", pics);
 
     for (var pair of data.entries()) {
       console.log(pair[0] + " - " + pair[1]);
@@ -120,7 +123,7 @@ export default function EditProduct(props) {
       }
     }
 
-    //window.location.reload(false)
+    window.location.reload(false)
   };
 
   const handlePicture = (pics, urls) => {
@@ -156,8 +159,6 @@ export default function EditProduct(props) {
 
   if (!loading && product) {
     let emptyImgToShow = 3; // if the user has not uploaded a picture yet, we show 3 empty boxes
-    console.log("product cat", product.category);
-    console.log("prod", product);
 
     return (
       <div className="z-50 p-6 bg-purple-700">
@@ -238,7 +239,6 @@ export default function EditProduct(props) {
                     <div className="flex flex-wrap h-full -mx-2">
                       {filesURL.map((url, index) => {
                         emptyImgToShow--;
-                        console.log("file url", url)
                         return (
                           <div
                             key={index}
@@ -324,6 +324,7 @@ export default function EditProduct(props) {
                           className="block w-full px-4 py-3 pr-8 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                           id="grid-product-category"
                           name="category"
+                          value={product.category}
                           onChange={e => {
                             const value = e.target.value;
                             setProduct(prevState => {
@@ -364,7 +365,7 @@ export default function EditProduct(props) {
                   <ReactTagInput
                     id="grid-product-tags"
                     name="tags"
-                    tags={product.tags}
+                    tags={tags}
                     placeholder={
                       "Type and press enter (" + NB_TAGS_MAX + " max.)"
                     }
@@ -372,11 +373,12 @@ export default function EditProduct(props) {
                     editable={true}
                     readOnly={false}
                     removeOnBackspace={true}
-                    onChange={newTags => {
-                      setProduct(prevState => {
-                        return { ...prevState, tags: newTags };
-                      });
+                    validator={value => {
+                      const validTag = value.includes(",") === false;
+                      if (!validTag) alert("Tags can't have comma in it");
+                      return validTag;
                     }}
+                    onChange={newTags => setTags(newTags)}
                   />
                 </div>
 
