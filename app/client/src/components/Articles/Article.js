@@ -1,24 +1,31 @@
 import React from "react";
 import ArticleSVG from "./ArticleSVG";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
-import imgNotFound from "../../images/articles/not_found.png"
+import imgNotFound from "../../images/articles/not_found.png";
 
 const Article = props => {
   // devise and bgColor are not in props but could be in future
   // (for the moment, they are replaced by "€" and "bg-gray-500")
-  const { bgColor, category, title, devise, price, pictures, imagePath } = props;
+  const {
+    bgColor,
+    category,
+    title,
+    devise,
+    price,
+    pictures,
+    imagePath
+  } = props;
 
   let imgPath = imagePath;
 
   pictures.map(picture => {
-    return imgPath = picture.path
-  })
+    return (imgPath = picture.path);
+  });
 
-  if(!imgPath) imgPath = imgNotFound;
+  if (!imgPath) imgPath = imgNotFound;
 
-  console.log("imgPath", imgPath)
-  
   return (
     <div
       className={
@@ -26,7 +33,6 @@ const Article = props => {
         (bgColor || "bg-gray-500")
       }
     >
-  
       <ArticleSVG source={imgPath} />
 
       <div className="relative px-6 pb-6 mt-6 text-white">
@@ -46,9 +52,17 @@ const Article = props => {
       <div className="absolute bottom-0 right-0 m-6 text-white">
         <button
           type="button"
-          className="mr-2 hover:text-blue-600" /* onClick={this.showInfo} */
+          className="mr-2 hover:text-blue-600"
         >
-          <FontAwesomeIcon icon="info-circle" size="2x" />
+          <Link
+            to={{
+              pathname: "product/" + props._id,
+              state: { product: props }
+            }}
+          >
+            <span className="hidden">Details</span>
+            <FontAwesomeIcon icon="info-circle" size="2x" />
+          </Link>
         </button>
         <button
           type="button"

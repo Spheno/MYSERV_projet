@@ -123,7 +123,7 @@ export default function EditProduct(props) {
       }
     }
 
-    window.location.reload(false)
+    window.location.reload(false);
   };
 
   const handlePicture = (pics, urls) => {
