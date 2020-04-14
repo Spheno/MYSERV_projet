@@ -8,6 +8,7 @@ import Footer from "../Footer/Footer";
 import NavTabs from "../Navigation/NavTabs";
 import notFoundPNG from "../../images/articles/not_found.png";
 import ArticleCommentList from "./ArticleCommentList";
+import MagnifierImage from "../MagnifierImage";
 
 export default function ArticleDetail(props) {
   let location = useLocation();
@@ -153,12 +154,12 @@ export default function ArticleDetail(props) {
                 </div>
 
                 {console.log("pics", pictures)}
-                {console.log("first pic", pictures[0].path)}
+            
                 <div className="px-8 lg:w-1/2">
                   <img
-                    className="mb-4 rounded shadow-md"
+                    className="max-w-sm mb-4 rounded shadow-md md:max-w-md"
                     src={firstPic}
-                    alt=""
+                    alt="Zoomed product"
                   />
                   {pictures.length > 1 && (
                     <div className="flex flex-wrap -mx-2">
@@ -169,6 +170,7 @@ export default function ArticleDetail(props) {
                               className="h-24 rounded shadow-md "
                               src={"/" + picture.path}
                               alt=""
+                              onClick={() => setFirstPic("/" + picture.path)}
                             />
                           </div>
                         );

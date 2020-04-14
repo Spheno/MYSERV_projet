@@ -1,20 +1,16 @@
-import React, { Component } from "react";
-import Zoom from 'react-medium-image-zoom'
+import React from "react";
+import Zoom from "react-medium-image-zoom";
 
+const MagnifierImage = (props) => {
+  const { imageSrc, imageAlt } = props;
 
-export default class MagnifierImage extends Component {
-  render() {
-    const { imageSrc, imgAlt } = this.props;
+  return (
+    <>
+      <Zoom>
+        <img alt={imageAlt} src={imageSrc} width="500" />
+      </Zoom>
+    </>
+  );
+};
 
-    return (
-      <>
-        <Zoom>
-          <img
-            alt={imgAlt}
-            src={imageSrc}
-          />
-        </Zoom>
-      </>
-    );
-  }
-}
+export default MagnifierImage;

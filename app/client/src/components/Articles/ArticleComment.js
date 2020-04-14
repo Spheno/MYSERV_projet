@@ -9,7 +9,7 @@ export default class ArticleComment extends React.Component {
       userName: "Mary T.",
       commentTitle: "Super product",
       commentContent:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, se do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laborisnisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        "I really loved this product, simple to use and not so expensive. I recommend it 99%, I only gave 4 stars because I'm the only perfect thing here.",
       commentStars: 4
     };
   }
