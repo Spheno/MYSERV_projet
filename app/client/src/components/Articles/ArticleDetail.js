@@ -8,14 +8,17 @@ import Footer from "../Footer/Footer";
 import NavTabs from "../Navigation/NavTabs";
 import notFoundPNG from "../../images/articles/not_found.png";
 import ArticleCommentList from "./ArticleCommentList";
+import { ToastContainer, toast } from "react-toastify";
+
+import API from "../../utils/userAPI";
 
 export default function ArticleDetail(props) {
   let location = useLocation();
   const { product } = location.state;
   const { id } = useParams();
 
-  console.log(product);
-  console.log(id);
+  console.log("product", product);
+  console.log("productID", id)
 
   const [loading, setLoading] = useState(true);
   const [isAuthor, setIsAuthor] = useState(false);
@@ -26,6 +29,7 @@ export default function ArticleDetail(props) {
   const [tags, setTags] = useState([]);
   const [pictures, setPictures] = useState([]);
   const [firstPic, setFirstPic] = useState();
+  const [clientPhoneNumber, setClientPhoneNumber] = useState();
 
   useEffect(() => {
     setTitle(product.title);
@@ -42,6 +46,7 @@ export default function ArticleDetail(props) {
     }
 
     const authorData = JSON.parse(localStorage.getItem("user"));
+    setClientPhoneNumber(authorData.phoneNumber);
     const phoneNumber = authorData.phoneNumber.slice(1);
     console.log("phone nb", phoneNumber);
     // if the user is the author of this product
@@ -51,6 +56,34 @@ export default function ArticleDetail(props) {
 
     setLoading(false);
   }, [product]);
+
+  async function addToCart(data) {
+    try {
+      console.log("data addToCart", data)
+      const response = await API.addToCart(data);
+      if (response) {
+        toast.success("Successfully added to cart!");
+        console.log("addToCart", response);
+      }
+    } catch(error) {
+      toast.error("Oups an error has occured...")
+      console.log("Error addToCart", error)
+    }
+  }
+
+  async function addToFavs(data) {
+    try {
+      console.log("data addToFavs", data)
+      const response = await API.addToFavs(data);
+      if (response) {
+        toast.success("Successfully added to your favorites!");
+        console.log("addToFavs", response);
+      }
+    } catch(error) {
+      toast.error("Oups an error has occured...")
+      console.log("Error addToFavs", error)
+    }
+  }
 
   if (loading) {
     return <LoaderScreen />;
@@ -79,6 +112,10 @@ export default function ArticleDetail(props) {
               />
               <div className="mt-8 mb-16 sm:mb-0 sm:mt-0 sm:w-3/5 sm:pl-12"></div>
             </main>
+
+            <div className="form-group">
+              <ToastContainer />
+            </div>
 
             <section className="px-4 py-12">
               <div className="flex flex-wrap -mx-8">
@@ -126,18 +163,18 @@ export default function ArticleDetail(props) {
 
                   {!isAuthor && (
                     <>
-                      <a
+                      <button
                         className="inline-block px-8 py-4 leading-none text-white bg-indigo-500 rounded hover:bg-indigo-600"
-                        href="#top"
+                        onClick={() => addToCart({ productID: id, buyerPhoneNumber: clientPhoneNumber})}
                       >
                         Add to cart
-                      </a>
-                      <a
+                      </button>
+                      <button
                         className="ml-3 leading-tight text-gray-700 hover:text-gray-500"
-                        href="#top"
+                        onClick={() => addToFavs({ productID: id, favPhoneNumber: clientPhoneNumber})}
                       >
                         Add to favorites
-                      </a>
+                      </button>
                     </>
                   )}
                   {isAuthor && (

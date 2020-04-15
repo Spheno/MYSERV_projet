@@ -9,6 +9,7 @@ const productSchema = new Schema({
   price: { type: Number, required: true },
   category: { type: String },
   tags: [],
+  sold: { type: Boolean, default: false },
   authorNumber: { type: String, required: true },
   uploadDate: { type: Date, default: Date.now }
 });

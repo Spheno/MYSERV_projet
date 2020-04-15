@@ -65,13 +65,14 @@ const userSchema = new Schema(
     myProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 
     // panier courant
-    cart: { type: Schema.Types.ObjectId, ref: "Cart" },
-
+    cart: { type: Schema.Types.ObjectId, ref: "Product" },
     // favoris courant
-    favorites: { type: Schema.Types.ObjectId, ref: "Favorites" },
+    favorites: { type: Schema.Types.ObjectId, ref: "Product" },
 
-    // tout les produits achetés
+    // tous les produits achetés
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+    // tous les produits vendus
+    sold: [{ type: Schema.Types.ObjectId, ref: "Sold" }],
 
     // les User ayant utilisé son code de parrainage
     affiliates: [{ type: Schema.Types.ObjectId, ref: "User" }],

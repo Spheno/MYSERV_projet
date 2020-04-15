@@ -2,9 +2,8 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  cart: { type: Schema.Types.ObjectId, ref: "Cart", required: true },
-  address: { type: Schema.Types.ObjectId, ref: "Address", required: true },
+  cart: { type: Schema.Types.ObjectId, ref: "Product", required: true }, // list of products
+  address: { type: Schema.Types.ObjectId, ref: "Address", required: true }, // address of shipment
   paymentId: { type: String, required: true }
 });
 

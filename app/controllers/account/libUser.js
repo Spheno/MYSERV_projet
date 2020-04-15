@@ -136,41 +136,178 @@ module.exports = {
   getUser(req, res) {
     const { id } = req.query;
 
-    User.findById(id, '-password').exec((err, user) => {
-      if(err) throw err;
+    User.findById(id, "-password").exec((err, user) => {
+      if (err) throw err;
 
       res.status(200).json({ user });
-    })
+    });
   },
 
   editUser(req, res) {
     const { id, firstName, lastName, oldPassword, password } = req.body;
 
     User.findById(id).exec((err, user) => {
-      if(err) throw err;
+      if (err) throw err;
 
-      if(!bcrypt.compareSync(oldPassword, user.password)) {
+      if (!bcrypt.compareSync(oldPassword, user.password)) {
         console.log("Ancien mot de passe incorrect");
         return res.status(401).json({
           text: "Ancien mot de passe incorrect"
         });
       }
 
-      if(firstName) user.firstname = firstName;
-      if(lastName) user.lastname = lastName;
-      if(password) {
-        console.log(password)
+      if (firstName) user.firstname = firstName;
+      if (lastName) user.lastname = lastName;
+      if (password) {
+        console.log(password);
         user.password = bcrypt.hashSync(password, SALT_ROUNDS);
       }
 
       user.save();
-      res.status(200).json({ user })
+      res.status(200).json({ user });
+    });
+  },
+
+  getMyCart(req, res) {
+    const { phoneNumber } = req.query;
+
+    if (!phoneNumber)
+      res.status(401).json({ text: "No specified phone number" });
+    if (phoneNumber.charAt(0) !== "+")
+      res
+        .status(401)
+        .json({ text: "Specified phone number must begin with character +" });
+
+    User.findOne({ phoneNumber: phoneNumber }, "cart", function(err, cart) {
+      if (err) console.log("Error getMyCart", err);
+
+      res.status(200).send(cart);
+    });
+  },
+
+  addToCart(req, res) {
+    const { productID, buyerPhoneNumber } = req.body;
+
+    if (!productID)
+      return res.status(401).json({ text: "No product ID given." });
+    if (!buyerPhoneNumber)
+      return res.status(401).json({ text: "No buyer phone number given." });
+    if (buyerPhoneNumber.charAt(0) !== "+")
+      return res
+        .status(401)
+        .json({ text: "Specified phone number must begin with character +" });
+
+    Product.findOne({ _id: productID }, function(err, product) {
+      if (err) console.log("Error addToCart ids", err);
+
+      //console.log("return product from addToCart", product);
+      product.sold = true;
+      product.save();
+
+      // saving the new product in the User table (field myProducts)
+      let filter = { phoneNumber: buyerPhoneNumber };
+      let update = {
+        $addToSet: { cart: product }
+      };
+
+      User.findOneAndUpdate(filter, update, function(err, doc) {
+        if (err) console.log("error", err);
+        console.log("doc", doc);
+      });
+      /* end of database processing */
+
+      //console.log("return from addToCart data", buyerUser);
+      res.status(200).send({ product });
+    });
+  },
+
+  removeFromCart(req, res) {
+    const { phoneNumber, productID } = req.query;
+
+    if(!phoneNumber) res.status(401).json({ text: "No specified phone number." })
+    if(phoneNumber.charAt(0) !== "+") res.status(401).json({ text: "Specified phone number must begin with '+'." })
+    if(!productID) res.status(401).json({ text: "No product ID given." })
+
+    let condition = { phoneNumber: phoneNumber };
+    let removeFilter = { $pull: {
+      cart: productID
+    }}
+
+    User.updateOne(condition, removeFilter, function(err, user) {
+      if(err) console.log("Error removeFromCart", err);
+
+      res.status(200).send("Product removed from cart!")
     })
   },
 
-  addToCart(req, res) {},
+  getMyFavs(req, res) {
+    const { phoneNumber } = req.query;
 
-  removeFromCart(req, res) {},
+    if (!phoneNumber)
+      res.status(401).json({ text: "No specified phone number" });
+    if (phoneNumber.charAt(0) !== "+")
+      res
+        .status(401)
+        .json({ text: "Specified phone number must begin with character +" });
+
+    User.findOne({ phoneNumber: phoneNumber }, "favorites", function(err, favs) {
+      if (err) console.log("Error getMyCart", err);
+
+      res.status(200).send(favs);
+    });
+  },
+
+  addToFavs(req, res) {
+    const { productID, favPhoneNumber } = req.body;
+
+    if (!productID)
+      return res.status(401).json({ text: "No product ID given." });
+    if (!favPhoneNumber)
+      return res.status(401).json({ text: "No phone number given." });
+    if (favPhoneNumber.charAt(0) !== "+")
+      return res
+        .status(401)
+        .json({ text: "Specified phone number must begin with character +" });
+
+    Product.findOne({ _id: productID }, function(err, product) {
+      if (err) console.log("Error addToCart ids", err);
+
+      //console.log("return product from addToFavs", product);
+
+      // saving the new product in the User table (field favorites)
+      let filter = { phoneNumber: favPhoneNumber };
+      let update = {
+        $addToSet: { favorites: product }
+      };
+
+      User.findOneAndUpdate(filter, update, function(err, doc) {
+        if (err) console.log("error", err);
+        console.log("doc", doc);
+      });
+      /* end of database processing */
+
+      res.status(200).send({ product });
+    });
+  },
+
+  removeFromFavs(req, res) {
+    const { phoneNumber, productID } = req.query;
+
+    if(!phoneNumber) res.status(401).json({ text: "No specified phone number." })
+    if(phoneNumber.charAt(0) !== "+") res.status(401).json({ text: "Specified phone number must begin with '+'." })
+    if(!productID) res.status(401).json({ text: "No product ID given." })
+
+    let condition = { phoneNumber: phoneNumber };
+    let removeFilter = { $pull: {
+      favorites: productID
+    }}
+
+    User.updateOne(condition, removeFilter, function(err, user) {
+      if(err) console.log("Error removeFromFavs", err);
+
+      res.status(200).send("Product removed from favorites!")
+    })
+  },
 
   createProduct(req, res) {
     let productTitle,
@@ -349,6 +486,30 @@ module.exports = {
     });
   },
 
+  getMyProductsSold(req, res) {
+    const { phoneNumber } = req.query;
+
+    if (!phoneNumber) {
+      return res.status(401).json({
+        text: "Numéro de téléphone non reconnu."
+      });
+    }
+
+    User.findOne({ phoneNumber: phoneNumber }, "sold", function(err, user) {
+      if (err) console.log("Error getMySoldProducts ids", err);
+
+      console.log("return ids from getMyProducts", user);
+
+      if (user.sold.length === 0) {
+        res.status(200).send({ sold: user.sold, text: "No products sold." });
+      } else {
+        /*
+          TODO: parcourir les ID des produits vendus et récupérer les produits.
+        */
+      }
+    });
+  },
+
   updateProduct(req, res) {
     const { id } = req.params;
 
@@ -372,8 +533,9 @@ module.exports = {
     form.parse(req, function(err, fields, files) {
       if (err) console.log("error parsing", err);
 
-      if(fields.pictures) console.log("fields pictures", JSON.parse(fields.pictures))
-      let noImageUploaded = (Object.keys(files).length === 0)
+      if (fields.pictures)
+        console.log("fields pictures", JSON.parse(fields.pictures));
+      let noImageUploaded = Object.keys(files).length === 0;
       let pictures = {};
 
       let {
@@ -383,10 +545,10 @@ module.exports = {
         price,
         category,
         tags,
-        authorNumber,
+        authorNumber
       } = fields;
 
-      if(noImageUploaded) {
+      if (noImageUploaded) {
         // si pas d'upload d'image alors le formulaire envoie un object Object qui passe dans fields
         pictures = JSON.parse(fields.pictures);
       } else {
@@ -401,7 +563,7 @@ module.exports = {
       productTags = tags.split(",");
       authorNb = authorNumber.slice(1);
 
-      if(noImageUploaded) existentPics = pictures;
+      if (noImageUploaded) existentPics = pictures;
       else productPics = pictures;
     });
 
@@ -516,12 +678,12 @@ module.exports = {
         // s'il y a une nouvelle image, on ajoute la nouvelle image
         if (!noNewImage) product.pictures = productPics;
         // s'il n'y a pas de nouvelle image et que le titre a changé, on change le path des images déjà présentes
-        if (noNewImage && (productTitle != oldProductTitle)) {
+        if (noNewImage && productTitle != oldProductTitle) {
           console.log("Updating files path...");
-          existentPics.map((pic) => {
-            pic.path = path.join("uploads", authorNb, productTitle, pic.name)
-          })
-          
+          existentPics.map(pic => {
+            pic.path = path.join("uploads", authorNb, productTitle, pic.name);
+          });
+
           product.pictures = existentPics;
         }
         product.title = productTitle;

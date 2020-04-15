@@ -46,6 +46,48 @@ export default {
     return await axios.post(url + "/", data);
   },
 
+  getMyFavs: async function(phoneNumber) {
+    try {
+      const response = await axios.get(url + "/myFavs", {
+        params: { phoneNumber: phoneNumber }
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  getMyCart: async function(phoneNumber) {
+    try {
+      const response = await axios.get(url + "/myCart", {
+        params: { phoneNumber: phoneNumber }
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  addToCart: async function(data) {
+    return await axios.post(url + "/addToCart", data);
+  },
+
+  removeFromCart: async function(phoneNumber, productID) {
+    return await axios.delete(url + "/removeFromCart", {
+      params: { phoneNumber: phoneNumber, productID: productID }
+    });
+  },
+
+  removeFromFavs: async function(phoneNumber, productID) {
+    return await axios.delete(url + "/removeFromFavs", {
+      params: { phoneNumber: phoneNumber, productID: productID }
+    });
+  },
+
+  addToFavs: async function(data) {
+    return await axios.post(url + "/addToFavs", data);
+  },
+
   createProduct: async function(data) {
     try {
       const response = axios.post(url + "/product", data);
@@ -78,6 +120,17 @@ export default {
   getMyProducts: async function(phoneNumber) {
     try {
       const response = await axios.get(url + "/myProducts", {
+        params: { phoneNumber: phoneNumber }
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  getMyProductsSold: async function(phoneNumber) {
+    try {
+      const response = await axios.get(url + "/myProductsSold", {
         params: { phoneNumber: phoneNumber }
       });
       return response.data;
