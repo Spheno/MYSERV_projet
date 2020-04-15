@@ -7,9 +7,14 @@ export default {
     return axios.get(url + "/");
   },
 
-  getProduct(id) {
-    return axios.get(url + "/", {
-      params: { id: id }
-    });
+  getProductByID: async function(id) {
+    try {
+      const response = await axios.get(url + "/id", {
+        params: { id: id }
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
   }
 };

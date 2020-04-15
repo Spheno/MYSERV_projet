@@ -8,7 +8,6 @@ import Footer from "../Footer/Footer";
 import NavTabs from "../Navigation/NavTabs";
 import notFoundPNG from "../../images/articles/not_found.png";
 import ArticleCommentList from "./ArticleCommentList";
-import MagnifierImage from "../MagnifierImage";
 
 export default function ArticleDetail(props) {
   let location = useLocation();

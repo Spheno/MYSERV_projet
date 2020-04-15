@@ -9,16 +9,19 @@ module.exports = {
   getAllProducts(req, res, next) {
     Product.find().exec(function(err, products) {
       if (err) return console.log(err);
+
+      console.log("wesh")
       res.status(200).json(products);
     });
   },
 
   getProductByID(req, res) {
-    const { id } = req.params;
+    const { id } = req.query;
 
     Product.findOne({ _id: id }, function(err, product) {
       if (err) console.log("Error getProductByID id", err);
 
+      console.log(product)
       res.status(200).send(product);
     });
   }

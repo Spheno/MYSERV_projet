@@ -46,12 +46,13 @@ export default function EditProduct(props) {
   useEffect(() => {
     async function getProduct() {
       try {
-        const response = await productAPI.getProduct(id);
+        const response = await productAPI.getProductByID(id);
+        console.log("response", response)
         setLoading(false);
-        setProduct(response.data[0]);
-        setOldTitle(response.data[0].title);
-        setTags(response.data[0].tags);
-        response.data[0].pictures.map(pic => {
+        setProduct(response);
+        setOldTitle(response.title);
+        setTags(response.tags);
+        response.pictures.map(pic => {
           if (pic.path.includes("uploads")) {
             return setFilesURL(filesURL => [...filesURL, "/" + pic.path]);
           } else {
@@ -158,6 +159,7 @@ export default function EditProduct(props) {
   };
 
   if (!loading && product) {
+    console.log("product", product)
     let emptyImgToShow = 3; // if the user has not uploaded a picture yet, we show 3 empty boxes
 
     return (
