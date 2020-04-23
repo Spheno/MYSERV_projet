@@ -1,9 +1,9 @@
 import { getCategories } from "./category_actions";
-import { getProducts } from "./product_actions";
+import { getProductsOnSale } from "./product_actions";
 
-export function getAllData() {
+export function getAllData(phoneNumber) {
     return dispatch => Promise.all([
       dispatch(getCategories()),
-      dispatch(getProducts())
+      dispatch(getProductsOnSale(phoneNumber))
     ]);
   }

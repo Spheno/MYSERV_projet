@@ -221,7 +221,6 @@ module.exports = {
       if (err) console.log("Error addToCart ids", err);
 
       //console.log("return product from addToCart", product);
-      product.sold = true;
       product.save();
 
       // saving the new product in the User table (field myProducts)

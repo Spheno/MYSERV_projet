@@ -6,11 +6,11 @@ import {
   GET_PRODUCTS_FAILURE
 } from "../constants/action-types";
 
-export function getProducts() {
+export function getProductsOnSale(phoneNumber) {
   return async dispatch => {
     dispatch(getProductsBegin());
     try {
-      const response = await API.getProducts();
+      const response = await API.getProductsOnSale(phoneNumber);
       dispatch(getProductsSuccess(response.data));
     } catch (error) {
       return dispatch(getProductsFailure(error));

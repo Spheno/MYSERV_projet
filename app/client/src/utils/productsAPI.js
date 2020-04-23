@@ -16,5 +16,10 @@ export default {
     } catch (error) {
       return error;
     }
+  },
+
+  // not sold products from other users
+  getProductsOnSale: async phoneNumber => {
+    return axios.get(url + "/onSale", { params: { phoneNumber: phoneNumber } });
   }
 };
