@@ -30,7 +30,7 @@ export default class AccountSettings extends React.Component {
     const userID = authorData._id;
 
     try {
-      const response = await API.getUser(userID);
+      const response = await API.getUser(userID, null);
       this.setState({
         loading: false,
         id: response._id,

@@ -134,13 +134,26 @@ module.exports = {
   },
 
   getUser(req, res) {
-    const { id } = req.query;
+    const { id, phoneNumber } = req.query;
+    let search = null;
 
-    User.findById(id, "-password").exec((err, user) => {
-      if (err) throw err;
+    if(id) search = id;
+    else if(phoneNumber) search = phoneNumber;
+    else res.status(401).json({ text: "No id or phoneNumber provided" })
 
-      res.status(200).json({ user });
-    });
+    if(id) {
+      User.findById(search, "-password").exec((err, user) => {
+        if (err) throw err;
+
+        res.status(200).json({ user });
+      });
+    } else {
+      User.findOne({phoneNumber: search}, "-password").exec((err, user) => {
+        if (err) throw err;
+
+        res.status(200).json({ user });
+      })
+    }
   },
 
   editUser(req, res) {
@@ -173,7 +186,8 @@ module.exports = {
 
     if (!phoneNumber)
       res.status(401).json({ text: "No specified phone number" });
-    if (phoneNumber.charAt(0) !== "+")
+    
+    if (phoneNumber && phoneNumber.charAt(0) !== "+")
       res
         .status(401)
         .json({ text: "Specified phone number must begin with character +" });
@@ -181,7 +195,13 @@ module.exports = {
     User.findOne({ phoneNumber: phoneNumber }, "cart", function(err, cart) {
       if (err) console.log("Error getMyCart", err);
 
-      res.status(200).send(cart);
+      if(cart) {
+        res.status(200).send(cart.cart);
+      } else {
+        res.status(401).json({
+          text: "Nothing in cart."
+        })
+      }
     });
   },
 
@@ -222,7 +242,8 @@ module.exports = {
   },
 
   removeFromCart(req, res) {
-    const { phoneNumber, productID } = req.query;
+    const { productID, phoneNumber } = req.query;
+    console.log("req query", req.query)
 
     if(!phoneNumber) res.status(401).json({ text: "No specified phone number." })
     if(phoneNumber.charAt(0) !== "+") res.status(401).json({ text: "Specified phone number must begin with '+'." })
@@ -251,9 +272,15 @@ module.exports = {
         .json({ text: "Specified phone number must begin with character +" });
 
     User.findOne({ phoneNumber: phoneNumber }, "favorites", function(err, favs) {
-      if (err) console.log("Error getMyCart", err);
+      if (err) console.log("Error getMyFavs", err);
 
-      res.status(200).send(favs);
+      if(favs) {
+        res.status(200).send(favs.favorites);
+      } else {
+        res.status(401).json({
+          text: "Nothing in favs."
+        })
+      }
     });
   },
 

@@ -124,7 +124,7 @@ export default function ArticleDetail(props) {
                   <p className="mb-6">{price}€</p>
 
                   <div className="flex mb-6">
-                    <ul className="flex p-0 list-none">
+                    <ul className="flex-1 p-0 list-none">
                       <NavTabs
                         tabtitles={["Description", "Reviews"]}
                         contents={[
@@ -138,7 +138,11 @@ export default function ArticleDetail(props) {
                   </div>
 
                   <table className="w-full mb-6">
-                    <tbody>
+                    <tbody className="border-t">
+                      <tr>
+                        <td className="py-3">Reference</td>
+                        <td className="text-right uppercase">{id}</td>
+                      </tr>
                       <tr className="border-t">
                         <td className="py-3">Category</td>
                         <td className="text-right">{category}</td>
@@ -146,16 +150,17 @@ export default function ArticleDetail(props) {
                       <tr className="border-t">
                         <td className="py-3">Tags</td>
                         <td className="text-right">
-                          {tags.map((tag, index) => {
+                          {tags.length > 1 && tags.map((tag, index) => {
                             return (
-                              <span
+                              <button
                                 key={index}
-                                className="p-2 mr-2 bg-gray-300 rounded-full"
+                                className="p-2 mr-2 bg-gray-300"
                               >
                                 {tag}
-                              </span>
+                              </button>
                             );
                           })}
+                          {tags.length <= 1 && <p className="italic">No tags</p>}
                         </td>
                       </tr>
                     </tbody>

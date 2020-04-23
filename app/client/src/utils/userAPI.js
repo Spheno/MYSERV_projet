@@ -33,9 +33,9 @@ export default {
     return axios.get(url + "/logout");
   },
 
-  getUser: async function(id) {
+  getUser: async function(id, phoneNumber) {
     try {
-      const response = await axios.get(url + "/", { params: { id: id } });
+      const response = await axios.get(url + "/", { params: { id: id, phoneNumber: phoneNumber } });
       return response.data.user;
     } catch (error) {
       return error;
@@ -81,7 +81,7 @@ export default {
   removeFromFavs: async function(phoneNumber, productID) {
     return await axios.delete(url + "/removeFromFavs", {
       params: { phoneNumber: phoneNumber, productID: productID }
-    });
+    }, { headers: null });
   },
 
   addToFavs: async function(data) {

@@ -6,7 +6,7 @@ const Quote = ({ name, quote }) => (
     <div className="stylistic-quote-mark" aria-hidden="true">
       &ldquo;
     </div>
-    <p className="mb-4">{quote}</p>
+    <p className="float-none mb-4">{quote}</p>
     <cite className="flex items-center">
       <div className="flex flex-col items-start">
         <span className="mb-1 text-sm italic font-bold">{name}</span>

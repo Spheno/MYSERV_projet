@@ -10,7 +10,6 @@ module.exports = {
     Product.find().exec(function(err, products) {
       if (err) return console.log(err);
 
-      console.log("wesh")
       res.status(200).json(products);
     });
   },
@@ -21,7 +20,6 @@ module.exports = {
     Product.findOne({ _id: id }, function(err, product) {
       if (err) console.log("Error getProductByID id", err);
 
-      console.log(product)
       res.status(200).send(product);
     });
   }

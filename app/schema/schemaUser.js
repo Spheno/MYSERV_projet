@@ -65,9 +65,9 @@ const userSchema = new Schema(
     myProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 
     // panier courant
-    cart: { type: Schema.Types.ObjectId, ref: "Product" },
+    cart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     // favoris courant
-    favorites: { type: Schema.Types.ObjectId, ref: "Product" },
+    favorites: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 
     // tous les produits achetés
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
