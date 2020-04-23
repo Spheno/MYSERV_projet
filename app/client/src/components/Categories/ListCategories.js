@@ -4,13 +4,13 @@ export default class ListCategories extends React.Component {
   render() {
     var categories = this.props.categories.map((category, index) => {
       return (
-        <a
+        <button
           key={index}
-          href="#top"
-          className="px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded-l hover:bg-gray-400"
+          className="px-4 py-2 mr-1 font-bold text-gray-800 bg-gray-300 border border-gray-500 rounded hover:bg-gray-400"
+          onClick={() => this.props.showCategory(category)}
         >
           {category}
-        </a>
+        </button>
       );
     });
 

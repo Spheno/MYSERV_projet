@@ -7,7 +7,6 @@ import ArticlesList from "../Articles/ArticlesList";
 import Footer from "../Footer/Footer";
 
 import dashboardSVG from "../../images/dashboard.svg";
-import ListCategories from "../Categories/ListCategories";
 
 import Quote from "../Quote";
 import Loader from "../Loader/LoaderScreen";
@@ -125,12 +124,8 @@ class Dashboard extends React.Component {
                     Explore & Choose
                   </h1>
 
-                  <div className="my-12">
-                    <ListCategories categories={categories} />
-                  </div>
-
                   <div>
-                    <ArticlesList products={currentProducts} />
+                    <ArticlesList categories={categories} products={currentProducts} user={user} />
                   </div>
                 </div>
               )}

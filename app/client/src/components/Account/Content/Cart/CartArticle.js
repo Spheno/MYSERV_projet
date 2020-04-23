@@ -73,7 +73,10 @@ export default class CartArticle extends React.Component {
           onClick: async () => {
             this.setState({ showAlert: true });
             try {
-              const userRes = await userAPI.removeFromCart(phoneNumber, productID);
+              const userRes = await userAPI.removeFromCart(
+                phoneNumber,
+                productID
+              );
               console.log("res remove from cart", userRes);
             } catch (error) {
               console.log("Error delete from cart", error);
@@ -146,17 +149,14 @@ export default class CartArticle extends React.Component {
 
         <header className="flex items-center justify-between p-2 leading-tight md:p-4">
           <h1 className="text-lg">
-            <a
-              className="font-bold text-gray-900 no-underline hover:underline"
-              href="#top"
-            >
+            <p>
               {product.title} -{" "}
               <span className="text-gray-700">
                 {product.price}
                 {""}
                 {devise}
               </span>
-            </a>
+            </p>
           </h1>
           <p className="text-sm text-grey-darker">{dateFormated}</p>
         </header>
@@ -225,9 +225,7 @@ export default class CartArticle extends React.Component {
             <button
               className="px-1 m-1 text-gray-700 no-underline hover:text-black"
               href="#top"
-              onClick={() =>
-                this.deleteArticle(clientPhoneNumber, product._id)
-              }
+              onClick={() => this.deleteArticle(clientPhoneNumber, product._id)}
             >
               <span className="hidden">Delete</span>
               <FontAwesomeIcon icon="trash-alt" />

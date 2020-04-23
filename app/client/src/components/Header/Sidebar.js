@@ -11,26 +11,25 @@ export default class Sidebar extends React.Component {
 
   render() {
     return (
-      <Menu right >
+      <Menu right>
         <a className="menu-item" href="/dashboard">
           <FontAwesomeIcon icon="home" className="mr-2" /> Home
         </a>
 
         <a className="menu-item" href="/sales">
-          <FontAwesomeIcon icon="money-bill-wave-alt" className="mr-2" /> Your
-          sales
+          <FontAwesomeIcon icon="money-bill-wave-alt" className="mr-1" /> Sales
         </a>
 
         <a className="menu-item" href="/profile">
-          <FontAwesomeIcon icon="user" className="mr-2" /> My profile
+          <FontAwesomeIcon icon="user" className="mr-2" /> Profile
         </a>
 
         <a className="menu-item" href="/cart">
-          <FontAwesomeIcon icon="shopping-cart" className="mr-2" /> My cart
+          <FontAwesomeIcon icon="shopping-cart" className="mr-1" /> Cart
         </a>
 
         <a className="menu-item" href="/favs">
-          <FontAwesomeIcon icon="heart" className="mr-2" /> My favorites
+          <FontAwesomeIcon icon="heart" className="mr-2" /> Favorites
         </a>
 
         <hr />

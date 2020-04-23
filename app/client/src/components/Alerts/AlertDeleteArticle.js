@@ -54,7 +54,7 @@ export default class AlertDeleteArticle extends React.Component {
             title="close"
             htmlFor="banneralert"
           >
-            Damn dude, you just deleted your article...
+            Article removed!
             <svg
               className="text-white fill-current"
               xmlns="http://www.w3.org/2000/svg"
