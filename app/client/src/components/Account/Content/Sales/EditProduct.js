@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import productAPI from "../../../../utils/productsAPI";
-import userAPI from "../../../../utils/userAPI";
+import uploadsAPI from "../../../../utils/uploadsAPI";
 
 import LoaderScreen from "../../../Loader/LoaderScreen";
 import Header from "../../../Header/Header";
@@ -107,7 +107,7 @@ export default function EditProduct(props) {
     }
 
     try {
-      const response = await userAPI.updateProduct(id, data);
+      const response = await uploadsAPI.updateProduct(id, data);
       if (response) {
         toast.success("upload success");
         console.log("Response", response);

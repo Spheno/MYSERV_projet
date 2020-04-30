@@ -87,18 +87,7 @@ export default {
   addToFavs: async function(data) {
     return await axios.post(url + "/addToFavs", data);
   },
-
-  updateProduct: async function(id, data) {
-    try {
-      const response = axios.put(url + `/product/edit/${id}`, data, {
-        headers: jsonConfig
-      });
-      return response.data;
-    } catch (error) {
-      return error;
-    }
-  },
-
+  
   deleteProduct: async function(productID) {
     return await axios.delete(url + "/deleteProduct", {
       params: { productID: productID }

@@ -1,5 +1,9 @@
 import axios from "axios";
 
+const jsonConfig = {
+  "content-type": "application/json;charset=utf-8"
+};
+
 const url = "http://localhost:8800/uploads";
 
 export default {
@@ -21,6 +25,17 @@ export default {
     try {
       const response = axios.post(url + "/product", data);
       return response;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  updateProduct: async function(id, data) {
+    try {
+      const response = axios.put(url + `/product/edit/${id}`, data, {
+        headers: jsonConfig
+      });
+      return response.data;
     } catch (error) {
       return error;
     }

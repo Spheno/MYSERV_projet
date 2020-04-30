@@ -7,4 +7,6 @@ router.get("/", upload.getProductPictures);
 
 router.post("/product", upload.createProduct);
 
+router.put("/product/edit/:id", upload.updateProduct);
+
 module.exports = router;

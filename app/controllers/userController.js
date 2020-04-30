@@ -10,8 +10,6 @@ router.post("/", account.editUser);
 router.post("/addToCart", account.addToCart);
 router.post("/addToFavs", account.addToFavs);
 
-router.put("/product/edit/:id", account.updateProduct);
-
 router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/removeFromFavs", account.removeFromFavs);
 router.delete("/deleteProduct", account.deleteProduct);

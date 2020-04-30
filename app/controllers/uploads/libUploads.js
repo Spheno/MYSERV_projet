@@ -3,7 +3,8 @@ const Product = require("../../schema/schemaProduct");
 const fse = require("fs-extra");
 const fs = require("fs");
 const path = require("path");
-const multer = require("multer");
+const multer = require("multer"); // utilisé par createProduct
+const formidable = require("formidable"); // utilisé par updateProduct
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -31,24 +32,6 @@ var fileFilter = (req, file, cb) => {
   // allow images only
   if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
     return cb(new Error("Only image are allowed."), false);
-  }
-
-  var { authorNumber, title } = req.body;
-  authorNumber = authorNumber.slice(1);
-  const uploadDir = path.join(
-    __dirname,
-    "../../client/public/uploads/",
-    authorNumber,
-    title
-  );
-
-  if (fs.existsSync(uploadDir)) {
-    fs.readdir(uploadDir, (error, files) => {
-      if (error) console.log(error);
-
-      let totalFiles = files.length;
-      if (totalFiles > 0) cb(null, false);
-    });
   }
 
   cb(null, true);
@@ -154,6 +137,194 @@ module.exports = {
       } catch (error) {
         console.log(error);
       }
+    });
+  },
+
+  updateProduct(req, res) {
+    const { id } = req.params;
+
+    let oldProductTitle,
+      productTitle,
+      productDesc,
+      productPrice,
+      productCategory,
+      authorNb = "";
+    let productTags = [];
+    let productPics = null;
+    let existentPics = null;
+
+    const form = formidable({
+      encoding: "utf-8",
+      multiples: true,
+      keepExtensions: true,
+      maxFileSize: 4 * 1024 * 1024 // (4MB)
+    });
+
+    form.parse(req, function(err, fields, files) {
+      if (err) console.log("error parsing", err);
+
+      if (fields.pictures)
+        console.log("fields pictures", JSON.parse(fields.pictures));
+      let noImageUploaded = Object.keys(files).length === 0;
+      let pictures = {};
+
+      let {
+        oldTitle,
+        title,
+        description,
+        price,
+        category,
+        tags,
+        authorNumber
+      } = fields;
+
+      if (noImageUploaded) {
+        // si pas d'upload d'image alors le formulaire envoie un object Object qui passe dans fields
+        pictures = JSON.parse(fields.pictures);
+      } else {
+        ({ pictures } = files);
+      }
+
+      oldProductTitle = oldTitle;
+      productTitle = title;
+      productDesc = description;
+      productPrice = price;
+      productCategory = category;
+      productTags = tags.split(",");
+      authorNb = authorNumber.slice(1);
+
+      if (noImageUploaded) existentPics = pictures;
+      else productPics = pictures;
+    });
+
+    form.on("error", function(err) {
+      if (err) {
+        console.log("an error has occured with form upload");
+        console.log(err);
+      }
+    });
+
+    form.on("progress", function(bytesReceived, bytesExpected) {
+      var percent = ((bytesReceived / bytesExpected) * 100) | 0;
+      console.log("Uploading: %" + percent + "\r");
+    });
+
+    form.on("end", function(err) {
+      if (err) {
+        throw err;
+      }
+
+      let oldPath = path.join(
+        __dirname,
+        "../../client/public/uploads/",
+        authorNb,
+        oldProductTitle,
+        "/"
+      );
+
+      let newPath = path.join(
+        __dirname,
+        "../../client/public/uploads/",
+        authorNb,
+        productTitle,
+        "/"
+      );
+
+      console.log("pathToRename", oldPath);
+      console.log("pathToUpload", newPath);
+      var noNewImage = true;
+
+      if (!productPics || productPics === undefined) {
+        console.log("No new image to upload");
+        if (productTitle !== oldProductTitle) {
+          console.log("New title detected", productTitle);
+          console.log("Renaming directory...");
+          fs.renameSync(oldPath, newPath);
+        }
+      } else {
+        noNewImage = false;
+        console.log("New image(s) added! Processing...");
+        if (productTitle !== oldProductTitle) {
+          console.log("Creating new dir", newPath);
+          fse.ensureDirSync(newPath);
+          console.log("Removing old dir", oldPath);
+          fse.removeSync(oldPath);
+        } else {
+          console.log("Not renaming cause the title hasn't changed!", newPath);
+
+          console.log("Emptying dir", oldPath);
+          fse.emptyDirSync(oldPath);
+        }
+      }
+
+      /* Copie des fichiers uploadés depuis le dossier temporaire
+      au dossier public/upload/{authorNumber}/{productTitle} */
+      console.log("Nb files to upload", this.openedFiles.length);
+      for (let i = 0; i < this.openedFiles.length; i++) {
+        let tempPath = this.openedFiles[i].path;
+        let fileName = this.openedFiles[i].name;
+
+        console.log("temp path", tempPath);
+        console.log("file name", fileName);
+        this.openedFiles[i].path = path.join(
+          "uploads",
+          authorNb,
+          productTitle,
+          fileName
+        );
+
+        fse.move(tempPath, newPath + fileName, { overwrite: true }, function(
+          err
+        ) {
+          if (err) console.error(err);
+
+          console.log("success!");
+        });
+      }
+
+      /* Config update de la base de données */
+      if (!productTitle || productTitle.length === 0) {
+        return res.status(401).json({
+          text: "Votre produit n'a pas de nom."
+        });
+      }
+
+      productPrice = productPrice * 1; // conversion string -> number
+
+      if (
+        !productPrice ||
+        isNaN(productPrice) ||
+        typeof productPrice != "number" ||
+        productPrice <= 0
+      ) {
+        return res.status(401).json({
+          typePrice: typeof productPrice,
+          text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
+        });
+      }
+
+      Product.findById(id).exec((err, product) => {
+        if (err) console.log("Error updateProduct: ", err);
+        // s'il y a une nouvelle image, on ajoute la nouvelle image
+        if (!noNewImage) product.pictures = productPics;
+        // s'il n'y a pas de nouvelle image et que le titre a changé, on change le path des images déjà présentes
+        if (noNewImage && productTitle != oldProductTitle) {
+          console.log("Updating files path...");
+          existentPics.map(pic => {
+            pic.path = path.join("uploads", authorNb, productTitle, pic.filename);
+          });
+
+          product.pictures = existentPics;
+        }
+        product.title = productTitle;
+        product.description = productDesc;
+        product.price = productPrice;
+        product.category = productCategory;
+        product.tags = productTags;
+
+        product.save();
+        res.status(200).json({ product });
+      });
     });
   },
 
