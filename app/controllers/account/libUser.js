@@ -397,30 +397,5 @@ module.exports = {
         */
       }
     });
-  },
-
-  deleteProduct(req, res) {
-    const { productID } = req.query;
-
-    Product.deleteOne({ _id: productID }).exec((err, product) => {
-      if (err) console.log("Delete One Error: ", err);
-
-      User.updateMany(
-        {},
-        {
-          $pull: {
-            myProducts: productID,
-            cart: productID,
-            favorites: productID,
-            sold: productID
-          }
-        },
-        (err, user) => {
-          if (err) throw err;
-
-          res.status(200).json({ product, user });
-        }
-      );
-    });
   }
 };

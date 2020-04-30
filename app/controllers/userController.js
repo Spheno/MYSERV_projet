@@ -12,7 +12,6 @@ router.post("/addToFavs", account.addToFavs);
 
 router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/removeFromFavs", account.removeFromFavs);
-router.delete("/deleteProduct", account.deleteProduct);
 
 router.get("/logout", account.logout);
 router.get("/", account.getUser);

@@ -40,4 +40,14 @@ export default {
       return error;
     }
   },
+
+  deleteProduct: async function(productID, phoneNumber, title) {
+    return await axios.delete(
+      url + "/deleteProduct",
+      {
+        params: { productID: productID, phoneNumber: phoneNumber, title: title }
+      },
+      { headers: null }
+    );
+  }
 };

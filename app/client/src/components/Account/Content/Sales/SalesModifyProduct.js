@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import API from "../../../../utils/userAPI";
+import uploadsAPI from "../../../../utils/uploadsAPI";
 import LoaderScreen from "../../../Loader/LoaderScreen";
 import Quote from "../../../Quote";
 import ReadableDate from "../../../Date/ReadableDate";
+import { ToastContainer } from "react-toastify";
+import { confirmAlert } from "react-confirm-alert"; /* custom confirm pop up */
+import AlertDeleteArticle from "../../../Alerts/AlertDeleteArticle";
 
 export default class SalesModifyProduct extends React.Component {
   constructor(props) {
@@ -13,6 +17,7 @@ export default class SalesModifyProduct extends React.Component {
 
     this.state = {
       loading: true,
+      showAlert: false,
       myProducts: []
     };
   }
@@ -26,8 +31,42 @@ export default class SalesModifyProduct extends React.Component {
     }
   }
 
+  deleteArticle = async (productID, phoneNumber, title) => {
+    confirmAlert({
+      title: "Confirm to delete",
+      message: "Are you sure to do this?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            this.setState({ showAlert: true });
+            try {
+              const deleteRes = await uploadsAPI.deleteProduct(
+                productID,
+                phoneNumber,
+                title
+              );
+              console.log("res remove from my articles", deleteRes);
+            } catch (error) {
+              console.log("Error delete from my articles", error);
+            }
+          }
+        },
+        {
+          label: "No",
+          onClick: () => null
+        }
+      ]
+    });
+  };
+
+  closeAlert = () => {
+    this.setState({ showAlert: false });
+  };
+
   render() {
-    const { loading, myProducts } = this.state;
+    const { loading, showAlert, myProducts } = this.state;
+    console.log("my prods", myProducts);
 
     if (!loading) {
       if (myProducts.length === 0) {
@@ -48,6 +87,15 @@ export default class SalesModifyProduct extends React.Component {
           <div className="flex flex-col">
             <div className="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
               <div className="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+                <AlertDeleteArticle
+                  showAlert={showAlert}
+                  closeAlert={this.closeAlert.bind(this)}
+                />
+
+                <div className="form-group">
+                  <ToastContainer />
+                </div>
+
                 <table className="min-w-full">
                   <thead>
                     <tr>
@@ -133,8 +181,15 @@ export default class SalesModifyProduct extends React.Component {
                               <FontAwesomeIcon icon="edit" />
                             </Link>
                             <button
-                              className="px-2 m-2 text-gray-700 no-underline hover:text-red-600"
+                              className="px-1 m-1 text-gray-700 no-underline hover:text-black"
                               href="#top"
+                              onClick={() =>
+                                this.deleteArticle(
+                                  product._id,
+                                  product.authorNumber,
+                                  product.title
+                                )
+                              }
                             >
                               <span className="hidden">Delete</span>
                               <FontAwesomeIcon icon="trash-alt" />

@@ -311,7 +311,12 @@ module.exports = {
         if (noNewImage && productTitle != oldProductTitle) {
           console.log("Updating files path...");
           existentPics.map(pic => {
-            pic.path = path.join("uploads", authorNb, productTitle, pic.filename);
+            pic.path = path.join(
+              "uploads",
+              authorNb,
+              productTitle,
+              pic.filename
+            );
           });
 
           product.pictures = existentPics;
@@ -325,6 +330,41 @@ module.exports = {
         product.save();
         res.status(200).json({ product });
       });
+    });
+  },
+
+  deleteProduct(req, res) {
+    const { productID, phoneNumber, title } = req.query;
+
+    const uploadDir = path.join(
+      __dirname,
+      "../../client/public/uploads/",
+      phoneNumber.slice(1),
+      title
+    );
+
+    Product.deleteOne({ _id: productID }).exec((err, product) => {
+      if (err) console.log("Delete One Error: ", err);
+      console.log("product", product);
+
+      User.updateMany(
+        {},
+        {
+          $pull: {
+            myProducts: productID,
+            cart: productID,
+            favorites: productID,
+            sold: productID
+          }
+        },
+        (err, user) => {
+          if (err) throw err;
+
+          console.log("uploadDir", uploadDir)
+          fse.removeSync(uploadDir)
+          res.status(200).json({ product, user });
+        }
+      );
     });
   },
 
