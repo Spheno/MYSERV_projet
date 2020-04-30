@@ -88,15 +88,6 @@ export default {
     return await axios.post(url + "/addToFavs", data);
   },
 
-  createProduct: async function(data) {
-    try {
-      const response = axios.post(url + "/product", data);
-      return response;
-    } catch (error) {
-      return error;
-    }
-  },
-
   updateProduct: async function(id, data) {
     try {
       const response = axios.put(url + `/product/edit/${id}`, data, {
@@ -108,13 +99,10 @@ export default {
     }
   },
 
-  deleteProduct: async function(id) {
-    try {
-      const response = axios.delete(url + "/product/delete/:id", id);
-      return response.data;
-    } catch (error) {
-      return error;
-    }
+  deleteProduct: async function(productID) {
+    return await axios.delete(url + "/deleteProduct", {
+      params: { productID: productID }
+    }, { headers: null });
   },
 
   getMyProducts: async function(phoneNumber) {

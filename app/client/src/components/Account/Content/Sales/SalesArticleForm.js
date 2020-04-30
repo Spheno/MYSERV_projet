@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import API from "../../../../utils/userAPI";
+import API from "../../../../utils/uploadsAPI";
 
 import {
   faEye,
@@ -41,18 +41,19 @@ export default function SalesArticleForm(props) {
     }
 
     let data = new FormData();
+
+    const authorData = JSON.parse(localStorage.getItem("user"));
+    data.set("authorNumber", authorData.phoneNumber);
+    
     data.set("title", title.trim());
+    data.set("description", description.trim());
+    data.set("price", price);
+    data.set("category", category);
+    data.append("tags", tags);
 
     pictures.map(picture => {
       return data.append("pictures", picture);
     });
-
-    data.set("description", description.trim());
-    data.set("price", price);
-    data.set("category", category);
-    data.set("tags", tags);
-    const authorData = JSON.parse(localStorage.getItem("user"));
-    data.set("authorNumber", authorData.phoneNumber);
 
     for (var pair of data.entries()) {
       console.log(pair[0] + " - " + pair[1]);
@@ -76,7 +77,7 @@ export default function SalesArticleForm(props) {
       }
     }
 
-    window.location.reload(false)
+    //window.location.reload(false)
   };
 
   // gets array of File and asigns it to pictures
@@ -91,8 +92,6 @@ export default function SalesArticleForm(props) {
       <div className="form-group">
         <ToastContainer />
       </div>
-
-      {console.log("articleForm", pictures)}
 
       <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
         <div className="flex flex-col px-8 pt-6 pb-8 my-2 mb-4 bg-white border-gray-300 rounded md:shadow-md md:border">
@@ -224,6 +223,11 @@ export default function SalesArticleForm(props) {
               editable={true}
               readOnly={false}
               removeOnBackspace={true}
+              validator={value => {
+                const validTag = value.includes(",") === false;
+                if (!validTag) alert("Tags can't have comma in it");
+                return validTag;
+              }}
               onChange={newTags => setTags(newTags)}
             />
           </div>

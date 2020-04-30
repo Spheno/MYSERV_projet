@@ -80,7 +80,6 @@ module.exports = {
 
       return res.status(200).json({
         text: "Good job: User saved successfully! :)",
-        token: userData.getToken(),
         session: JSON.stringify(req.session.user)
       });
     } catch (error) {
@@ -119,7 +118,6 @@ module.exports = {
       console.log("Connexion réussie !");
 
       return res.status(200).json({
-        token: findUser.getToken(),
         session: JSON.stringify(req.session.user),
         text: "Authentification réussie !"
       });
@@ -137,22 +135,22 @@ module.exports = {
     const { id, phoneNumber } = req.query;
     let search = null;
 
-    if(id) search = id;
-    else if(phoneNumber) search = phoneNumber;
-    else res.status(401).json({ text: "No id or phoneNumber provided" })
+    if (id) search = id;
+    else if (phoneNumber) search = phoneNumber;
+    else res.status(401).json({ text: "No id or phoneNumber provided" });
 
-    if(id) {
+    if (id) {
       User.findById(search, "-password").exec((err, user) => {
         if (err) throw err;
 
         res.status(200).json({ user });
       });
     } else {
-      User.findOne({phoneNumber: search}, "-password").exec((err, user) => {
+      User.findOne({ phoneNumber: search }, "-password").exec((err, user) => {
         if (err) throw err;
 
         res.status(200).json({ user });
-      })
+      });
     }
   },
 
@@ -186,7 +184,7 @@ module.exports = {
 
     if (!phoneNumber)
       res.status(401).json({ text: "No specified phone number" });
-    
+
     if (phoneNumber && phoneNumber.charAt(0) !== "+")
       res
         .status(401)
@@ -195,12 +193,12 @@ module.exports = {
     User.findOne({ phoneNumber: phoneNumber }, "cart", function(err, cart) {
       if (err) console.log("Error getMyCart", err);
 
-      if(cart) {
+      if (cart) {
         res.status(200).send(cart.cart);
       } else {
         res.status(401).json({
           text: "Nothing in cart."
-        })
+        });
       }
     });
   },
@@ -242,22 +240,28 @@ module.exports = {
 
   removeFromCart(req, res) {
     const { productID, phoneNumber } = req.query;
-    console.log("req query", req.query)
+    console.log("req query", req.query);
 
-    if(!phoneNumber) res.status(401).json({ text: "No specified phone number." })
-    if(phoneNumber.charAt(0) !== "+") res.status(401).json({ text: "Specified phone number must begin with '+'." })
-    if(!productID) res.status(401).json({ text: "No product ID given." })
+    if (!phoneNumber)
+      res.status(401).json({ text: "No specified phone number." });
+    if (phoneNumber.charAt(0) !== "+")
+      res
+        .status(401)
+        .json({ text: "Specified phone number must begin with '+'." });
+    if (!productID) res.status(401).json({ text: "No product ID given." });
 
     let condition = { phoneNumber: phoneNumber };
-    let removeFilter = { $pull: {
-      cart: productID
-    }}
+    let removeFilter = {
+      $pull: {
+        cart: productID
+      }
+    };
 
     User.updateOne(condition, removeFilter, function(err, user) {
-      if(err) console.log("Error removeFromCart", err);
+      if (err) console.log("Error removeFromCart", err);
 
-      res.status(200).send("Product removed from cart!")
-    })
+      res.status(200).send("Product removed from cart!");
+    });
   },
 
   getMyFavs(req, res) {
@@ -270,15 +274,18 @@ module.exports = {
         .status(401)
         .json({ text: "Specified phone number must begin with character +" });
 
-    User.findOne({ phoneNumber: phoneNumber }, "favorites", function(err, favs) {
+    User.findOne({ phoneNumber: phoneNumber }, "favorites", function(
+      err,
+      favs
+    ) {
       if (err) console.log("Error getMyFavs", err);
 
-      if(favs) {
+      if (favs) {
         res.status(200).send(favs.favorites);
       } else {
         res.status(401).json({
           text: "Nothing in favs."
-        })
+        });
       }
     });
   },
@@ -319,168 +326,25 @@ module.exports = {
   removeFromFavs(req, res) {
     const { phoneNumber, productID } = req.query;
 
-    if(!phoneNumber) res.status(401).json({ text: "No specified phone number." })
-    if(phoneNumber.charAt(0) !== "+") res.status(401).json({ text: "Specified phone number must begin with '+'." })
-    if(!productID) res.status(401).json({ text: "No product ID given." })
+    if (!phoneNumber)
+      res.status(401).json({ text: "No specified phone number." });
+    if (phoneNumber.charAt(0) !== "+")
+      res
+        .status(401)
+        .json({ text: "Specified phone number must begin with '+'." });
+    if (!productID) res.status(401).json({ text: "No product ID given." });
 
     let condition = { phoneNumber: phoneNumber };
-    let removeFilter = { $pull: {
-      favorites: productID
-    }}
+    let removeFilter = {
+      $pull: {
+        favorites: productID
+      }
+    };
 
     User.updateOne(condition, removeFilter, function(err, user) {
-      if(err) console.log("Error removeFromFavs", err);
+      if (err) console.log("Error removeFromFavs", err);
 
-      res.status(200).send("Product removed from favorites!")
-    })
-  },
-
-  createProduct(req, res) {
-    let productTitle,
-      productDesc,
-      productPrice,
-      productCategory,
-      authorNb = "";
-    let productTags = [];
-    let productPics = null;
-
-    const form = formidable({
-      encoding: "utf-8",
-      multiples: true,
-      keepExtensions: true,
-      maxFileSize: 4 * 1024 * 1024 // (4MB)
-    });
-
-    form.parse(req, function(err, fields, files) {
-      if (err) console.log("error parsing", err);
-
-      let { title, description, price, category, tags, authorNumber } = fields;
-      let { pictures } = files;
-
-      productTitle = title;
-      productDesc = description;
-      productPrice = price;
-      productCategory = category;
-      productTags = tags;
-      authorNb = authorNumber.slice(1);
-
-      productPics = pictures;
-    });
-
-    form.on("error", function(err) {
-      if (err) {
-        console.log("an error has occured with form upload");
-        console.log(err);
-      }
-    });
-
-    form.on("progress", function(bytesReceived, bytesExpected) {
-      var percent = ((bytesReceived / bytesExpected) * 100) | 0;
-      console.log("Uploading: %" + percent + "\r");
-    });
-
-    form.on("end", function(err, fields, files) {
-      if (err) throw err;
-
-      let newPath = path.join(
-        __dirname,
-        "../../client/public/uploads/",
-        authorNb,
-        productTitle,
-        "/"
-      );
-      console.log("new path", newPath);
-
-      if (
-        !fs.existsSync(newPath, function(err) {
-          if (err) throw err;
-        })
-      )
-        fs.mkdirSync(newPath, { recursive: true });
-
-      console.log("end number", authorNb);
-      console.log("end title", productTitle);
-      console.log("end desc", productDesc);
-      console.log("end price", productPrice);
-      console.log("end category", productCategory);
-      console.log("end tags", productTags);
-
-      /* Copie des fichiers uploadés depuis le dossier temporaire
-      au dossier public/upload/{authorNumber}/{productTitle} */
-      console.log("Nb files to upload", this.openedFiles.length);
-      for (let i = 0; i < this.openedFiles.length; i++) {
-        let tempPath = this.openedFiles[i].path;
-        let fileName = this.openedFiles[i].name;
-
-        console.log("temp path", tempPath);
-        console.log("file name", fileName);
-        this.openedFiles[i].path = path.join(
-          "uploads",
-          authorNb,
-          productTitle,
-          fileName
-        );
-
-        fse.move(tempPath, newPath + fileName, { overwrite: true }, function(
-          err
-        ) {
-          if (err) console.error(err);
-
-          console.log("success!");
-        });
-      }
-
-      /* Config to insert in database */
-      if (!productTitle || productTitle.length === 0) {
-        return res.status(401).json({
-          text: "Votre produit n'a pas de nom."
-        });
-      }
-
-      productPrice = productPrice * 1; // conversion string -> number
-
-      if (
-        !productPrice ||
-        isNaN(productPrice) ||
-        typeof productPrice != "number" ||
-        productPrice <= 0
-      ) {
-        return res.status(401).json({
-          typePrice: typeof productPrice,
-          text: "Votre produit n'a pas de prix ou n'est pas supérieur à 0."
-        });
-      }
-
-      let newProduct = new Product({
-        pictures: productPics,
-        title: productTitle,
-        description: productDesc,
-        price: productPrice,
-        category: productCategory,
-        tags: productTags,
-        authorNumber: authorNb
-      });
-
-      // saving the new product in Product table
-      try {
-        newProduct.save();
-      } catch (error) {
-        console.log(error);
-      }
-
-      // saving the new product in the User table (field myProducts)
-      let filter = { phoneNumber: "+" + authorNb };
-      let update = { myProducts: newProduct };
-      User.findOneAndUpdate(filter, { $push: update }, { new: true }, function(
-        err,
-        doc
-      ) {
-        if (err) console.log("error", err);
-        console.log("doc", doc);
-      });
-      /* end of database processing */
-
-      res.status(200).json({ product: newProduct });
+      res.status(200).send("Product removed from favorites!");
     });
   },
 
@@ -725,11 +589,27 @@ module.exports = {
   },
 
   deleteProduct(req, res) {
-    const { id } = req.params;
+    const { productID } = req.query;
 
-    Product.deleteOne({ _id: id }).exec((err, product) => {
+    Product.deleteOne({ _id: productID }).exec((err, product) => {
       if (err) console.log("Delete One Error: ", err);
-      res.status(200).json({ product });
+
+      User.updateMany(
+        {},
+        {
+          $pull: {
+            myProducts: productID,
+            cart: productID,
+            favorites: productID,
+            sold: productID
+          }
+        },
+        (err, user) => {
+          if (err) throw err;
+
+          res.status(200).json({ product, user });
+        }
+      );
     });
   }
 };

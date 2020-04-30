@@ -6,9 +6,6 @@
 /*  - getToken() : génère un jeton d'accès à partir du modèle et de notre chaine de caractères secrète (/config)
 /****************************************************************************************************************/
 const mongoose = require("mongoose");
-const passwordHash = require("password-hash");
-const jwt = require("jwt-simple");
-const config = require("../config/config");
 
 const Schema = mongoose.Schema;
 
@@ -96,14 +93,5 @@ userSchema.plugin(mongooseIntlPhoneNumber, {
 
 /* adds pre-save validation for UNIQUE fields within a Mongoose schema. (email, phoneNumber in our case) */
 userSchema.plugin(uniqueValidator, { type: "mongoose-unique-validator" });
-
-userSchema.methods = {
-  authenticate: function(password) {
-    return passwordHash.verify(password, this.password);
-  },
-  getToken: function() {
-    return jwt.encode(this, config.secret);
-  }
-};
 
 module.exports = mongoose.model("User", userSchema);
