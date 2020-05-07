@@ -8,13 +8,19 @@ export default class AvatarProfile extends React.Component {
     super(props);
 
     this.state = {
-      preview: ""
+      preview: null
     };
 
     this.checkFileBeforeLoad = this.checkFileBeforeLoad.bind(this);
     this.loadImage = this.loadImage.bind(this);
     this.onCrop = this.onCrop.bind(this);
     this.onClose = this.onClose.bind(this);
+  }
+
+  componentDidUpdate(previousProps, previousState) {
+    if(previousProps !== this.props) {
+      this.setState({ preview: this.props.img })
+    }
   }
 
   checkFileBeforeLoad(event, preview) {
@@ -65,12 +71,13 @@ export default class AvatarProfile extends React.Component {
             onFileLoad={this.loadImage}
             onClose={this.onClose}
             onCrop={this.onCrop}
-            src={this.props.img}
           />
         </div>
-        <div className="hidden w-1/2 lg:block">
-          <img className="border" src={this.state.preview} alt="Preview" />
-        </div>
+        {this.state.preview && (
+          <div className="hidden w-1/2 lg:block">
+            <img className="border" src={this.state.preview} alt="Preview" />
+          </div>
+        )}
       </div>
     );
   }

@@ -30,6 +30,14 @@ export default {
     }
   },
 
+  deleteAvatar: function(authorNumber) {
+    return axios.get(url + "/deleteAvatar", {
+      params: {
+        authorNumber: authorNumber
+      }
+    });
+  },
+
   createProduct: async function(data) {
     try {
       const response = axios.post(url + "/product", data);

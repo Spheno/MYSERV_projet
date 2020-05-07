@@ -43,6 +43,20 @@ var upload = multer({
 }).single("avatar");
 
 module.exports = {
+  deleteProfilePic(req, res) {
+    const { authorNumber } = req.query;
+
+    const uploadDir = path.join(
+        __dirname,
+        "../../client/public/uploads/",
+        authorNumber.slice(1),
+        "avatar"
+    );
+
+    fse.removeSync(uploadDir);
+    res.status(200).send("Avatar pic deleted!")
+  },
+
   customProfile(req, res) {
     upload(req, res, async err => {
       var {
