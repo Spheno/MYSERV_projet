@@ -21,6 +21,15 @@ export default {
     }
   },
 
+  customProfile: async function(data) {
+    try {
+      const response = axios.post(url + "/customProfile", data);
+      return response;
+    } catch (error) {
+      return error;
+    }
+  },
+
   createProduct: async function(data) {
     try {
       const response = axios.post(url + "/product", data);

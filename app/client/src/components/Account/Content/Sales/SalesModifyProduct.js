@@ -149,8 +149,10 @@ export default class SalesModifyProduct extends React.Component {
                           </td>
                           <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
                             <div className="text-sm leading-5 text-gray-900">
-                              {product.tags[0] !== "" ? (
-                                product.tags
+                              {product.tags.length ? (
+                                product.tags.map((tag, index) => {
+                                  return <span key={index} className="p-2 mr-1 bg-gray-300 rounded-md">{tag}</span>
+                                })
                               ) : (
                                 <p className="italic">None</p>
                               )}

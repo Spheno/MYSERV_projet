@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import API from "../../../../utils/uploadsAPI";
 
 import {
-  faEye,
   faStream,
   faTags,
   faPaperPlane
@@ -233,21 +232,7 @@ export default function SalesArticleForm(props) {
           </div>
 
           <div className="flex content-center my-8 text-center">
-            <div className="w-1/2">
-              <a
-                className="hidden px-4 py-3 my-1 text-white bg-teal-500 border border-blue-500 rounded md:inline hover:bg-teal-700 focus:outline-none"
-                href="#top"
-              >
-                Watch your offer before sending
-              </a>
-              <a
-                className="inline px-16 py-3 text-white bg-teal-500 border border-blue-500 rounded md:hidden hover:bg-teal-700 focus:outline-none"
-                href="#top"
-              >
-                <FontAwesomeIcon icon={faEye} size="1x" />
-              </a>
-            </div>
-            <div className="w-1/2">
+            <div className="w-full">
               <button
                 type="submit"
                 className="hidden w-40 py-3 -mt-4 text-white bg-green-500 rounded hover:bg-green-700 md:inline focus:outline-none"

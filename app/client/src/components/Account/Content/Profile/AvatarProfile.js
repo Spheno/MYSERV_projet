@@ -8,10 +8,11 @@ export default class AvatarProfile extends React.Component {
     super(props);
 
     this.state = {
-      preview: null
+      preview: ""
     };
 
     this.checkFileBeforeLoad = this.checkFileBeforeLoad.bind(this);
+    this.loadImage = this.loadImage.bind(this);
     this.onCrop = this.onCrop.bind(this);
     this.onClose = this.onClose.bind(this);
   }
@@ -20,44 +21,57 @@ export default class AvatarProfile extends React.Component {
     let errorDetected = null;
     let file_size = event.target.files[0].size;
     let file_type = event.target.files[0].type;
-    
-    if(file_size > MAX_IMG_SIZE) {
+
+    if (file_size > MAX_IMG_SIZE) {
       errorDetected = "Le fichier est trop volumineux. Limité à 5Mo";
+      event.target.value = "";
     }
 
-    if(file_type !== "image/jpeg" && file_type !== "image/png") {
+    if (file_type !== "image/jpeg" && file_type !== "image/png") {
       errorDetected = "Fichiers .jpeg et .png acceptés seulement !";
+      event.target.value = "";
     }
 
-    alert("error: " + errorDetected);
-    if(errorDetected !== null) {
+    if (errorDetected !== null) {
       this.onCrop(preview);
     }
 
     return false;
   }
 
+  loadImage(preview) {
+    this.props.handlePicture(preview);
+  }
+
   // Invoked when user drag&drop event stop and return croped image in base64 sting in preview variable
   onCrop(preview) {
     this.setState({ preview });
   }
-  // Invoked when user clock on close editor button
+  // Invoked when user click on close editor button
   onClose() {
     this.setState({ preview: null });
   }
 
   render() {
     return (
-      <>
-        <Avatar
-          width={250}
-          height={250}
-          cropRadius={50}
-          onBeforeFileLoad={this.checkFileBeforeLoad}
-          onClose={this.onClose}
-          src={this.props.img}
-        />
-      </>
+      <div className="flex justify-start">
+        <div className="w-1/2">
+          <Avatar
+            width={250}
+            height={250}
+            imageWidth={250}
+            cropRadius={30}
+            onBeforeFileLoad={this.checkFileBeforeLoad}
+            onFileLoad={this.loadImage}
+            onClose={this.onClose}
+            onCrop={this.onCrop}
+            src={this.props.img}
+          />
+        </div>
+        <div className="hidden w-1/2 lg:block">
+          <img className="border" src={this.state.preview} alt="Preview" />
+        </div>
+      </div>
     );
   }
 }

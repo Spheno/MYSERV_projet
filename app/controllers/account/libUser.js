@@ -362,6 +362,8 @@ module.exports = {
     ) {
       if (err) console.log("Error getMyProducts ids", err);
 
+      if(!user) return res.status(200).send([])
+
       //console.log("return ids from getMyProducts", user.myProducts);
       Product.find({ _id: { $in: user.myProducts } }, function(
         err,

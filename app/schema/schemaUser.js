@@ -51,12 +51,13 @@ const userSchema = new Schema(
     },
 
     // customisation du profil
-    profilePicture: { type: String },
-    publicName: { type: String },
-    bio: { type: String },
-    linkFB: { type: String },
-    linkInstagram: { type: String },
-    address: { type: Schema.Types.ObjectId, ref: "Address" },
+    profilePicture: [],
+    publicName: String,
+    bio: String,
+    linkFB: String,
+    linkInstagram: String,
+    city: String,
+    country: String,
 
     // produits uploadés et mis en vente
     myProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
