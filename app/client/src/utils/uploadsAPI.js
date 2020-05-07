@@ -31,11 +31,15 @@ export default {
   },
 
   deleteAvatar: function(authorNumber) {
-    return axios.get(url + "/deleteAvatar", {
-      params: {
-        authorNumber: authorNumber
-      }
-    });
+    return axios.delete(
+      url + "/deleteAvatar",
+      {
+        params: {
+          authorNumber: authorNumber
+        }
+      },
+      { headers: null }
+    );
   },
 
   createProduct: async function(data) {

@@ -27,7 +27,6 @@ module.exports = {
   // the products that are still on sale and not published by the user
   getProductsOnSale(req, res) {
     const { phoneNumber } = req.query;
-
     Product.find({ authorNumber: { $ne: phoneNumber }, sold: false }).exec(function(err, products) {
       if(err) return console.log(err);
 

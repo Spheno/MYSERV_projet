@@ -44,7 +44,7 @@ class Dashboard extends React.Component {
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
       const { getAllData } = this.props;
-      await getAllData(userData.phoneNumber.slice(1));
+      await getAllData(userData.phoneNumber);
       
       this.setState({
         loading: false,

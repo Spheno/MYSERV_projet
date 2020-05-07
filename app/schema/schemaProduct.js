@@ -11,6 +11,10 @@ const productSchema = new Schema({
   tags: [],
   sold: { type: Boolean, default: false },
   authorNumber: { type: String, required: true },
+
+  // commentaires/reviews du produit
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+
   uploadDate: { type: Date, default: Date.now }
 });
 

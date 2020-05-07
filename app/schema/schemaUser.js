@@ -59,6 +59,9 @@ const userSchema = new Schema(
     city: String,
     country: String,
 
+    // commentaires/reviews du profil de l'utilisateur
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+
     // produits uploadés et mis en vente
     myProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 

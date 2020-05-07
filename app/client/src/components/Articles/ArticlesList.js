@@ -10,6 +10,8 @@ class ArticlesList extends React.Component {
 
     this.state = {
       loading: true,
+      // if it's the author asking for articles, he doesn't need to have buttons to add to cart or favorites
+      fromAuthor: false, 
       categories: [],
       user: [],
       articles: [],
@@ -22,6 +24,7 @@ class ArticlesList extends React.Component {
   componentDidMount() {
     this.setState({
       loading: false,
+      fromAuthor: this.props.fromAuthor || false,
       categories: this.props.categories,
       user: this.props.user,
       filteredArticles: this.props.products,
@@ -57,7 +60,7 @@ class ArticlesList extends React.Component {
   }
 
   render() {
-    const { loading, categories, user, articles } = this.state;
+    const { loading, fromAuthor, categories, user, articles } = this.state;
 
     if (!loading) {
       return (
@@ -76,6 +79,7 @@ class ArticlesList extends React.Component {
                   key={index}
                   {...product}
                   userNumber={user.phoneNumber}
+                  fromAuthor={fromAuthor}
                 />
               ))}
           </div>

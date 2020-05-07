@@ -18,7 +18,8 @@ const Article = props => {
     title,
     devise,
     price,
-    pictures
+    pictures,
+    fromAuthor // hide some buttons if author
   } = props;
 
   let imgPath = pictures.length ? pictures[0].path : imgNotFound;
@@ -90,22 +91,33 @@ const Article = props => {
             <FontAwesomeIcon icon="info-circle" size="2x" />
           </Link>
         </button>
-        <button
-          type="button"
-          className="mr-2 hover:text-teal-600"
-          onClick={() =>
-            addToCart({ productID: props._id, buyerPhoneNumber: userNumber })
-          }
-        >
-          <FontAwesomeIcon icon="cart-plus" size="2x" />
-        </button>
-        <button
-          type="button"
-          className="hover:text-red-600"
-          onClick={() => addToFavs({ productID: props._id, favPhoneNumber: userNumber })}
-        >
-          <FontAwesomeIcon icon="heart" size="2x" />
-        </button>
+
+        {!fromAuthor && (
+          <>
+            <button
+              type="button"
+              className="mr-2 hover:text-teal-600"
+              onClick={() =>
+                addToCart({
+                  productID: props._id,
+                  buyerPhoneNumber: userNumber
+                })
+              }
+            >
+              <FontAwesomeIcon icon="cart-plus" size="2x" />
+            </button>
+            <button
+              type="button"
+              className="hover:text-red-600"
+              onClick={() =>
+                addToFavs({ productID: props._id, favPhoneNumber: userNumber })
+              }
+            >
+              <FontAwesomeIcon icon="heart" size="2x" />
+            </button>
+          </>
+        )}
+        
       </div>
     </div>
   );
