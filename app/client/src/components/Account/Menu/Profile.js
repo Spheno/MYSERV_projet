@@ -12,6 +12,22 @@ import AccountSettings from "../Content/Profile/AccountSettings";
 import Sponsorship from "../Content/Profile/Sponsorship";
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+      userID: ""
+    }
+  }
+
+  componentDidMount() {
+    const authorData = JSON.parse(localStorage.getItem("user"));
+    const userID = authorData._id;
+
+    this.setState({ loading: false, userID})
+  }
+
   render() {
     return (
       <div className="p-6 bg-purple-700">
@@ -47,7 +63,7 @@ class Profile extends React.Component {
                 <AccountSettings />,
                 <Sponsorship />,
                 <PaymentInfo />,
-                <ProfileDisplay />,
+                <ProfileDisplay profileUserID={this.state.userID} />,
                 <ProfileCustom />
               ]}
             />

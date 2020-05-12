@@ -25,6 +25,7 @@ export default class ProfileSales extends React.Component {
       const sales = await userAPI.getMyProducts(this.props.phoneNumber);
       this.setState({
         loading: false,
+        isAuthor: this.props.isAuthor,
         user: this.props.user,
         categories: categories.data,
         sales
@@ -35,7 +36,7 @@ export default class ProfileSales extends React.Component {
   };
 
   render() {
-    let { loading, user, categories, sales } = this.state;
+    let { loading, isAuthor, user, categories, sales } = this.state;
     if (loading) {
       return <LoaderScreen />;
     } else {
@@ -49,7 +50,7 @@ export default class ProfileSales extends React.Component {
               categories={categories}
               products={sales}
               user={user}
-              fromAuthor={true}
+              fromAuthor={isAuthor}
             />
           </div>
         );

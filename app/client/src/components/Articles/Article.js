@@ -22,7 +22,11 @@ const Article = props => {
     fromAuthor // hide some buttons if author
   } = props;
 
+
+  if(pictures.length && pictures[0].path.charAt(0) !== '/') pictures[0].path = "\\" + pictures[0].path
   let imgPath = pictures.length ? pictures[0].path : imgNotFound;
+
+  console.log("imgPath", imgPath)
 
   async function addToCart(data) {
     try {
@@ -51,6 +55,8 @@ const Article = props => {
       toast.error("Oups an error has occured...");
     }
   }
+
+  console.log("product card", props)
 
   return (
     <div
@@ -83,7 +89,7 @@ const Article = props => {
         <button type="button" className="mr-2 hover:text-blue-600">
           <Link
             to={{
-              pathname: "product/" + props._id,
+              pathname: "/product/" + props._id,
               state: { product: props }
             }}
           >

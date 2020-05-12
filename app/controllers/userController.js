@@ -9,6 +9,7 @@ router.post("/signup", account.signup);
 router.post("/", account.editUser);
 router.post("/addToCart", account.addToCart);
 router.post("/addToFavs", account.addToFavs);
+router.post("/addProfileComment", account.addProfileComment)
 
 router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/removeFromFavs", account.removeFromFavs);
@@ -19,5 +20,6 @@ router.get("/myProducts", account.getMyProducts);
 router.get("/myProductsSold", account.getMyProductsSold);
 router.get("/myCart", account.getMyCart);
 router.get("/myFavs", account.getMyFavs);
+router.get("/getProfileComments", account.getProfileComments);
 
 module.exports = router;

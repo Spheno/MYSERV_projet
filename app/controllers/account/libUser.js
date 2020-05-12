@@ -6,6 +6,7 @@
 */
 const User = require("../../schema/schemaUser");
 const Product = require("../../schema/schemaProduct");
+const Comment = require("../../schema/schemaComment");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const fse = require("fs-extra");
@@ -136,13 +137,13 @@ module.exports = {
 
     if (id) search = id;
     else if (phoneNumber) search = phoneNumber;
-    else res.status(401).json({ text: "No id or phoneNumber provided" });
+    else return res.status(401).json({ text: "No id or phoneNumber provided" });
 
     if (id) {
       User.findById(search, "-password").exec((err, user) => {
         if (err) throw err;
 
-        res.status(200).json({ user });
+        return res.status(200).json({ user });
       });
     } else {
       User.findOne({ phoneNumber: search }, "-password").exec((err, user) => {
@@ -362,7 +363,7 @@ module.exports = {
     ) {
       if (err) console.log("Error getMyProducts ids", err);
 
-      if(!user) return res.status(200).send([])
+      if (!user) return res.status(200).send([]);
 
       //console.log("return ids from getMyProducts", user.myProducts);
       Product.find({ _id: { $in: user.myProducts } }, function(
@@ -399,5 +400,57 @@ module.exports = {
         */
       }
     });
+  },
+
+  async addProfileComment(req, res) {
+    const { author, ratings, content, to } = req.body;
+
+    const newComment = {
+      author,
+      ratings,
+      content
+    };
+
+    try {
+      const commentData = new Comment(newComment);
+      let commentObject = await commentData.save();
+      console.log("commentObject (lib.js): " + commentObject);
+
+      User.findById(to, function(err, user) {
+        if (err) console.log(err);
+
+        user.reviews.push(commentObject._id);
+        user.save();
+      });
+
+      return res.status(200).json({
+        text: "Good job: Comment saved successfully! :)"
+      });
+    } catch (error) {
+      console.log("error comment save (lib.js): " + error);
+    }
+  },
+
+  async getProfileComments(req, res) {
+    const { userID } = req.query;
+
+    if (!userID) {
+      return res.status(401).json({ text: "user ID not found." });
+    }
+
+    let data = [];
+    const user = await User.findById(userID);
+    if (!user) return res.status(401).json({ text: "user not found." });
+
+    const promises = user.reviews.map(async reviewID => {
+      const review = await Comment.findById(reviewID);
+
+      console.log("review", review);
+
+      if(review) data.push(review);
+    });
+
+    await Promise.all(promises)
+    return res.status(200).json({ reviews: data });
   }
 };

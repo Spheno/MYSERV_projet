@@ -108,5 +108,16 @@ export default {
     } catch (error) {
       return error;
     }
+  },
+
+  getProfileComments: async function(userID) {
+    try {
+      const response = await axios.get(url + "/getProfileComments", {
+        params: { userID: userID }
+      });
+      return response.data
+    } catch(error) {
+      return error;
+    }
   }
 };

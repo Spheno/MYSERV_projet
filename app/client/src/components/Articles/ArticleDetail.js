@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, Link } from "react-router-dom";
+
 import LoaderScreen from "../Loader/LoaderScreen";
 import Header from "../Header/Header";
 import SVGIcon from "../SVG/SVGIcon";
@@ -18,10 +19,10 @@ export default function ArticleDetail(props) {
   const { id } = useParams();
 
   console.log("product", product);
-  console.log("productID", id)
 
   const [loading, setLoading] = useState(true);
   const [isAuthor, setIsAuthor] = useState(false);
+  const [author, setAuthor] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
@@ -54,34 +55,47 @@ export default function ArticleDetail(props) {
       setIsAuthor(true);
     }
 
+    // get author's data anyway
+    async function getUserData(authorNumber) {
+      try {
+        const response = await API.getUser(null, authorNumber);
+        console.log("user data", response);
+        setAuthor(response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getUserData(product.authorNumber);
+
     setLoading(false);
   }, [product]);
 
   async function addToCart(data) {
     try {
-      console.log("data addToCart", data)
+      console.log("data addToCart", data);
       const response = await API.addToCart(data);
       if (response) {
         toast.success("Successfully added to cart!");
         console.log("addToCart", response);
       }
-    } catch(error) {
-      toast.error("Oups an error has occured...")
-      console.log("Error addToCart", error)
+    } catch (error) {
+      toast.error("Oups an error has occured...");
+      console.log("Error addToCart", error);
     }
   }
 
   async function addToFavs(data) {
     try {
-      console.log("data addToFavs", data)
+      console.log("data addToFavs", data);
       const response = await API.addToFavs(data);
       if (response) {
         toast.success("Successfully added to your favorites!");
         console.log("addToFavs", response);
       }
-    } catch(error) {
-      toast.error("Oups an error has occured...")
-      console.log("Error addToFavs", error)
+    } catch (error) {
+      toast.error("Oups an error has occured...");
+      console.log("Error addToFavs", error);
     }
   }
 
@@ -89,7 +103,7 @@ export default function ArticleDetail(props) {
     return <LoaderScreen />;
   } else {
     if (isAuthor === true) console.log("You are the author");
-    else console.log("You are not the author", isAuthor);
+    else console.log("You are not the author");
 
     return (
       <div className="z-50 p-6 bg-purple-700">
@@ -150,17 +164,33 @@ export default function ArticleDetail(props) {
                       <tr className="border-t">
                         <td className="py-3">Tags</td>
                         <td className="text-right">
-                          {tags.length > 1 && tags.map((tag, index) => {
-                            return (
-                              <button
-                                key={index}
-                                className="p-2 mr-2 bg-gray-300"
-                              >
-                                {tag}
-                              </button>
-                            );
-                          })}
-                          {tags.length <= 1 && <p className="italic">No tags</p>}
+                          {tags.length > 1 &&
+                            tags.map((tag, index) => {
+                              return (
+                                <button
+                                  key={index}
+                                  className="p-2 mr-2 bg-gray-300"
+                                >
+                                  {tag}
+                                </button>
+                              );
+                            })}
+                          {tags.length <= 1 && (
+                            <p className="italic">No tags</p>
+                          )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-3">Author</td>
+                        <td className="text-right">
+                          <Link
+                            to={{
+                              pathname: "/user/" + author._id,
+                              state: { user: author }
+                            }}
+                          >
+                            {author.firstname} {author.lastname}
+                          </Link>
                         </td>
                       </tr>
                     </tbody>
@@ -170,13 +200,23 @@ export default function ArticleDetail(props) {
                     <>
                       <button
                         className="inline-block px-8 py-4 leading-none text-white bg-indigo-500 rounded hover:bg-indigo-600"
-                        onClick={() => addToCart({ productID: id, buyerPhoneNumber: clientPhoneNumber})}
+                        onClick={() =>
+                          addToCart({
+                            productID: id,
+                            buyerPhoneNumber: clientPhoneNumber
+                          })
+                        }
                       >
                         Add to cart
                       </button>
                       <button
                         className="ml-3 leading-tight text-gray-700 hover:text-gray-500"
-                        onClick={() => addToFavs({ productID: id, favPhoneNumber: clientPhoneNumber})}
+                        onClick={() =>
+                          addToFavs({
+                            productID: id,
+                            favPhoneNumber: clientPhoneNumber
+                          })
+                        }
                       >
                         Add to favorites
                       </button>
@@ -195,7 +235,7 @@ export default function ArticleDetail(props) {
                 </div>
 
                 {console.log("pics", pictures)}
-            
+
                 <div className="px-8 lg:w-1/2">
                   <img
                     className="max-w-sm mb-4 rounded shadow-md md:max-w-md"
