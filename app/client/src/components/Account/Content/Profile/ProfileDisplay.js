@@ -16,13 +16,15 @@ export default class ProfileDisplay extends React.Component {
     this.state = {
       loading: true,
       isAuthor: false,
-      user: []
+      user: [],
+      clientID: []
     };
   }
 
   componentDidMount = async e => {
-    const authorData = JSON.parse(localStorage.getItem("user"));
-    const userID = authorData._id;
+    const clientData = JSON.parse(localStorage.getItem("user"));
+    const userID = clientData._id;
+    this.setState({ clientID: userID })
 
     const profileUserID = this.props.profileUserID;
     if(profileUserID === userID) {
@@ -42,7 +44,7 @@ export default class ProfileDisplay extends React.Component {
   };
 
   render() {
-    let { loading, isAuthor, user } = this.state;
+    let { loading, isAuthor, user, clientID } = this.state;
     let avatar = avatarNotFound;
     if (user.profilePicture && user.profilePicture.length > 0)
       avatar = user.profilePicture[0].path;
@@ -126,7 +128,7 @@ export default class ProfileDisplay extends React.Component {
               contents={[
                 <ProfileBio bio={user.bio} />,
                 <ProfileSales phoneNumber={user.phoneNumber} isAuthor={isAuthor} user={user} />,
-                <ProfileReviews userID={user._id} isAuthor={isAuthor} />
+                <ProfileReviews userID={user._id} clientID={clientID} isAuthor={isAuthor} />
               ]}
             />
           </div>

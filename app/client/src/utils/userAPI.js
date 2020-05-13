@@ -119,5 +119,9 @@ export default {
     } catch(error) {
       return error;
     }
+  },
+
+  addProfileComment: async function(data) {
+    return await axios.post(url + "/addProfileComment", data)
   }
 };

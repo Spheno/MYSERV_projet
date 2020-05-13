@@ -4,6 +4,7 @@ import API from "../../../../utils/userAPI";
 import LoaderScreen from "../../../Loader/LoaderScreen";
 
 import avatarNotFound from "../../../../images/avatar/avatarNotFound.svg";
+import { Link } from "react-router-dom";
 
 export default class Review extends React.Component {
   constructor(props) {
@@ -12,7 +13,13 @@ export default class Review extends React.Component {
     this.state = {
       loading: true,
       user: [],
-      review: []
+      review: [],
+      dateOptions: {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric"
+      },
+      dateFormat: ""
     };
   }
 
@@ -24,7 +31,14 @@ export default class Review extends React.Component {
       this.setState({
         loading: false,
         user: response,
-        review: this.props.review
+        review: this.props.review,
+        dateFormat: new Date(
+          Date.UTC(
+            new Date(this.props.review.uploadDate).getFullYear(),
+            new Date(this.props.review.uploadDate).getMonth(),
+            new Date(this.props.review.uploadDate).getUTCDate()
+          )
+        )
       });
     } catch (error) {
       console.log(error);
@@ -32,7 +46,7 @@ export default class Review extends React.Component {
   }
 
   render() {
-    let { loading, user, review } = this.state;
+    let { loading, user, review, dateOptions, dateFormat } = this.state;
 
     if (loading) {
       return <LoaderScreen />;
@@ -43,15 +57,30 @@ export default class Review extends React.Component {
 
       if (
         user.profilePicture[0] &&
-        user.profilePicture[0].path.charAt(0) !== "/"
-      )
+        !user.profilePicture[0].path.includes("\\uploads\\") &&
+        !user.profilePicture[0].path.includes("/uploads/")
+      ) {
         user.profilePicture[0].path = "\\" + user.profilePicture[0].path;
+        console.log("new link", user.profilePicture[0].path);
+      }
 
       let avatar = user.profilePicture[0]
         ? user.profilePicture[0].path
         : avatarNotFound;
 
-      console.log("avatar comment", avatar);
+      if (
+        user.profilePicture[0] &&
+        !avatar.includes("\\uploads\\") &&
+        !avatar.includes("/uploads/")
+      ) {
+        console.log(avatar.chartAt(0));
+        avatar = "\\" + avatar;
+        console.log("avatar link changed");
+      }
+
+      let dateFormated = new Intl.DateTimeFormat("default", dateOptions).format(
+        dateFormat
+      );
 
       return (
         <div className="flex items-start my-4">
@@ -69,7 +98,16 @@ export default class Review extends React.Component {
           </div>
           <div className="ml-6">
             <p className="flex items-baseline">
-              <span className="font-bold text-gray-600">{userName}</span>
+              <Link
+                className="font-bold text-gray-600"
+                to={{
+                  pathname: "/user/" + review.author,
+                  state: { user: user }
+                }}
+              >
+                {userName}
+              </Link>
+              <span className="ml-4 text-sm text-gray-600">{dateFormated}</span>
             </p>
             <div className="flex items-center mt-1">
               {Array.from(Array(review.ratings), (e, i) => {
