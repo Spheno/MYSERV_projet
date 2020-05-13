@@ -145,7 +145,7 @@ export default function ArticleDetail(props) {
                           <p className="mb-8 leading-relaxed text-gray-500">
                             {description || "None"}
                           </p>,
-                          <ArticleCommentList />
+                          <ArticleCommentList productID={id} />
                         ]}
                       />
                     </ul>

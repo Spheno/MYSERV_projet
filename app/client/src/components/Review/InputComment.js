@@ -2,7 +2,7 @@ import React from "react";
 import StarRatingComponent from "react-star-rating-controlled-component";
 import { ToastContainer, toast } from "react-toastify";
 
-import API from "../../../../utils/userAPI";
+import API from "../../utils/userAPI";
 
 const TOTAL_STARS = 5;
 

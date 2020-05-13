@@ -13,6 +13,7 @@ router.post("/addProfileComment", account.addProfileComment)
 
 router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/removeFromFavs", account.removeFromFavs);
+router.delete("/deleteProfileComment", account.deleteProfileComment)
 
 router.get("/logout", account.logout);
 router.get("/", account.getUser);

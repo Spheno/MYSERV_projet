@@ -2,9 +2,9 @@ import React from "react";
 import Quote from "../../../Quote";
 
 import API from "../../../../utils/userAPI";
-import Review from "./Review";
+import Review from "../../../Review/Review";
 import LoaderScreen from "../../../Loader/LoaderScreen";
-import InputComment from "./InputComment";
+import InputComment from "../../../Review//InputComment";
 
 export default class ProfileReviews extends React.Component {
   constructor(props) {
@@ -62,7 +62,7 @@ export default class ProfileReviews extends React.Component {
             <div className="ml-6">
               <h2 className="text-sm text-justify"><span className="text-xl">{reviews.length}</span> comments here</h2>
               {reviews.map((review, index) => {
-                return <Review key={index} review={review} />;
+                return <Review key={index} review={review} userID={userID} isProduct={false} />;
               })}
             </div>
           )}

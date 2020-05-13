@@ -452,5 +452,30 @@ module.exports = {
 
     await Promise.all(promises)
     return res.status(200).json({ reviews: data });
-  }
+  },
+
+  async deleteProfileComment(req, res) {
+    const { reviewID, userID } = req.query;
+    console.log("req query", req.query);
+
+    if (!reviewID)
+      res.status(401).json({ text: "No specified review ID." });
+
+    if (!userID) res.status(401).json({ text: "No user ID given." });
+
+    let condition = { _id: userID };
+    let removeFilter = {
+      $pull: {
+        reviews: reviewID
+      }
+    };
+
+    await Comment.findOneAndDelete({ _id: reviewID})
+
+    await User.updateOne(condition, removeFilter, function(err, user) {
+      if (err) console.log("Error remove profile comment", err);
+
+      res.status(200).send("Comment removed!");
+    });
+  },
 };

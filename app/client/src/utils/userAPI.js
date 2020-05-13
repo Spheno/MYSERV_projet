@@ -123,5 +123,11 @@ export default {
 
   addProfileComment: async function(data) {
     return await axios.post(url + "/addProfileComment", data)
-  }
+  },
+
+  deleteProfileComment: async function(reviewID, userID) {
+    return await axios.delete(url + "/deleteProfileComment", {
+      params: { reviewID: reviewID, userID: userID }
+    });
+  },
 };

@@ -21,5 +21,26 @@ export default {
   // not sold products from other users
   getProductsOnSale: async phoneNumber => {
     return axios.get(url + "/onSale", { params: { phoneNumber: phoneNumber } });
-  }
+  },
+
+  getProductComments: async function(productID) {
+    try {
+      const response = await axios.get(url + "/getProductComments", {
+        params: { productID: productID }
+      });
+      return response.data
+    } catch(error) {
+      return error;
+    }
+  },
+
+  addProductComment: async function(data) {
+    return await axios.post(url + "/addProductComment", data)
+  },
+
+  deleteProductComment: async function(reviewID, productID) {
+    return await axios.delete(url + "/deleteProductComment", {
+      params: { reviewID: reviewID, productID: productID }
+    });
+  },
 };
