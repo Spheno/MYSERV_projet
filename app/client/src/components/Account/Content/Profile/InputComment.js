@@ -1,5 +1,6 @@
 import React from "react";
 import StarRatingComponent from "react-star-rating-controlled-component";
+import { ToastContainer, toast } from "react-toastify";
 
 import API from "../../../../utils/userAPI";
 
@@ -52,9 +53,13 @@ export default class InputComment extends React.Component {
 
     try {
       const response = await API.addProfileComment(data);
-      console.log("response", response);
-    } catch(error) {
-      console.log(error)
+      if (response.data) {
+        toast.success("Your review has been sent!");
+        console.log("data comment", response.data);
+      }
+    } catch (error) {
+      toast.error("Oups an error has occured...");
+      console.log("Error addProfileComment", error);
     }
   };
 
@@ -63,6 +68,10 @@ export default class InputComment extends React.Component {
 
     return (
       <form className="w-1/2 px-8 mx-auto">
+        <div className="form-group">
+          <ToastContainer />
+        </div>
+
         <div className="flex flex-wrap justify-start px-3 mb-5 -mx-3">
           <div className="w-full">
             <h1 className="block text-xs font-bold tracking-wide text-gray-700 uppercase">

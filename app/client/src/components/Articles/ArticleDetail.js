@@ -41,7 +41,7 @@ export default function ArticleDetail(props) {
     setPictures(product.pictures);
 
     if (product.pictures.length > 0) {
-      setFirstPic("/" + product.pictures[0].path);
+      setFirstPic(product.pictures[0].path);
     } else {
       setFirstPic(notFoundPNG);
     }
@@ -245,13 +245,19 @@ export default function ArticleDetail(props) {
                   {pictures.length > 1 && (
                     <div className="flex flex-wrap -mx-2">
                       {pictures.map((picture, index) => {
+                        if(picture.path.charAt(0) !== "\\") picture.path = "\\" + picture.path;
+               
                         return (
                           <div className="w-1/3 px-2" key={index}>
                             <img
                               className="h-24 rounded shadow-md "
-                              src={"/" + picture.path}
+                              src={picture.path}
                               alt=""
-                              onClick={() => setFirstPic("/" + picture.path)}
+                              onClick={() => {
+                                if(picture.path.charAt(0) !== "\\") setFirstPic("\\" + picture.path)
+                                else setFirstPic(picture.path)
+                                }
+                              }
                             />
                           </div>
                         );
