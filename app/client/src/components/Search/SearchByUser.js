@@ -1,5 +1,7 @@
 import React from "react";
 
+import API from "../../utils/searchAPI";
+
 export default class SearchByUser extends React.Component {
   constructor(props) {
     super(props);

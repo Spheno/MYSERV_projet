@@ -8,10 +8,11 @@ import API from "../../utils/userAPI";
 
 import imgNotFound from "../../images/articles/not_found.png";
 
-const Article = props => {
+const Article = (props) => {
   // devise and bgColor are not in props but could be in future
   // (for the moment, they are replaced by "€" and "bg-gray-500")
   const {
+    authorNumber,
     userNumber,
     bgColor,
     category,
@@ -19,14 +20,17 @@ const Article = props => {
     devise,
     price,
     pictures,
-    fromAuthor // hide some buttons if author
   } = props;
 
+  let { fromAuthor } = props;
 
-  if(pictures.length && pictures[0].path.charAt(0) !== '/') pictures[0].path = "\\" + pictures[0].path
+  const clientData = JSON.parse(localStorage.getItem("user"));
+  const clientNumber = clientData.phoneNumber;
+  if (clientNumber === authorNumber) fromAuthor = true;
+
+  if (pictures.length && pictures[0].path.charAt(0) !== "/")
+    pictures[0].path = "\\" + pictures[0].path;
   let imgPath = pictures.length ? pictures[0].path : imgNotFound;
-
-  console.log("imgPath", imgPath)
 
   async function addToCart(data) {
     try {
@@ -56,7 +60,7 @@ const Article = props => {
     }
   }
 
-  console.log("product card", props)
+  console.log("product card", props);
 
   return (
     <div
@@ -90,7 +94,7 @@ const Article = props => {
           <Link
             to={{
               pathname: "/product/" + props._id,
-              state: { product: props }
+              state: { product: props },
             }}
           >
             <span className="hidden">Details</span>
@@ -106,7 +110,7 @@ const Article = props => {
               onClick={() =>
                 addToCart({
                   productID: props._id,
-                  buyerPhoneNumber: userNumber
+                  buyerPhoneNumber: userNumber,
                 })
               }
             >
@@ -123,7 +127,6 @@ const Article = props => {
             </button>
           </>
         )}
-        
       </div>
     </div>
   );
