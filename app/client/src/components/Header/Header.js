@@ -2,7 +2,7 @@ import React from "react";
 import API from "../../utils/userAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "./Sidebar";
-//import SearchInput from "./SearchInput";
+import SearchInput from "./SearchInput";
 import "../../styles/burgerMenu.css";
 
 export default class Header extends React.Component {
@@ -31,6 +31,11 @@ export default class Header extends React.Component {
             <FontAwesomeIcon icon="coins" title="Your wallet" />
           </span>
         </div>
+
+        <div className="flex flex-col-reverse items-center pt-6 md:p-0 jusitfy-between">
+          <SearchInput />
+        </div>
+
         <nav className="hidden text-lg md:flex">
           <div className="absolute top-0 right-0 mt-6">
             <span className="fixed top-0 right-0 w-auto mt-12 mr-12 bg-gray-100 border shadow">

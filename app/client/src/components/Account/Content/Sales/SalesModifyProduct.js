@@ -18,7 +18,7 @@ export default class SalesModifyProduct extends React.Component {
     this.state = {
       loading: true,
       showAlert: false,
-      myProducts: []
+      myProducts: [],
     };
   }
 
@@ -50,13 +50,13 @@ export default class SalesModifyProduct extends React.Component {
             } catch (error) {
               console.log("Error delete from my articles", error);
             }
-          }
+          },
         },
         {
           label: "No",
-          onClick: () => null
-        }
-      ]
+          onClick: () => null,
+        },
+      ],
     });
   };
 
@@ -151,7 +151,14 @@ export default class SalesModifyProduct extends React.Component {
                             <div className="text-sm leading-5 text-gray-900">
                               {product.tags.length ? (
                                 product.tags.map((tag, index) => {
-                                  return <span key={index} className="p-2 mr-1 bg-gray-300 rounded-md">{tag}</span>
+                                  return (
+                                    <span
+                                      key={index}
+                                      className="p-2 mr-1 bg-gray-300 rounded-md"
+                                    >
+                                      {tag}
+                                    </span>
+                                  );
                                 })
                               ) : (
                                 <p className="italic">None</p>
@@ -173,10 +180,21 @@ export default class SalesModifyProduct extends React.Component {
                           </td>
                           <td className="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
                             <Link
+                              className="m-2 text-gray-700 no-underline hover:text-teal-600"
+                              to={{
+                                pathname: "/product/" + product._id,
+                                state: { product: product },
+                              }}
+                            >
+                              <span className="hidden">Details</span>
+                              <FontAwesomeIcon icon="info-circle" />
+                            </Link>
+
+                            <Link
                               className="px-2 m-2 text-gray-700 no-underline hover:text-red-600"
                               to={{
                                 pathname: "sales/" + product._id,
-                                state: { categories: this.props.categories }
+                                state: { categories: this.props.categories },
                               }}
                             >
                               <span className="hidden">Update</span>

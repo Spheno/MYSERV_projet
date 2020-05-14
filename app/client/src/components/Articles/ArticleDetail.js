@@ -29,7 +29,7 @@ export default function ArticleDetail(props) {
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState([]);
   const [pictures, setPictures] = useState([]);
-  const [firstPic, setFirstPic] = useState();
+  const [firstPic, setFirstPic] = useState("");
   const [clientPhoneNumber, setClientPhoneNumber] = useState();
 
   useEffect(() => {
@@ -41,7 +41,12 @@ export default function ArticleDetail(props) {
     setPictures(product.pictures);
 
     if (product.pictures.length > 0) {
-      setFirstPic(product.pictures[0].path);
+      if (!product.pictures[0].path.includes("\\uploads") && !product.pictures[0].path.includes("/uploads")) {
+        setFirstPic("\\" + product.pictures[0].path);
+      }
+      else {
+        setFirstPic(product.pictures[0].path);
+      }
     } else {
       setFirstPic(notFoundPNG);
     }
@@ -145,7 +150,7 @@ export default function ArticleDetail(props) {
                           <p className="mb-8 leading-relaxed text-gray-500">
                             {description || "None"}
                           </p>,
-                          <ArticleCommentList productID={id} />
+                          <ArticleCommentList productID={id} />,
                         ]}
                       />
                     </ul>
@@ -186,7 +191,7 @@ export default function ArticleDetail(props) {
                           <Link
                             to={{
                               pathname: "/user/" + author._id,
-                              state: { user: author }
+                              state: { user: author },
                             }}
                           >
                             {author.firstname} {author.lastname}
@@ -203,7 +208,7 @@ export default function ArticleDetail(props) {
                         onClick={() =>
                           addToCart({
                             productID: id,
-                            buyerPhoneNumber: clientPhoneNumber
+                            buyerPhoneNumber: clientPhoneNumber,
                           })
                         }
                       >
@@ -214,7 +219,7 @@ export default function ArticleDetail(props) {
                         onClick={() =>
                           addToFavs({
                             productID: id,
-                            favPhoneNumber: clientPhoneNumber
+                            favPhoneNumber: clientPhoneNumber,
                           })
                         }
                       >
@@ -245,8 +250,12 @@ export default function ArticleDetail(props) {
                   {pictures.length > 1 && (
                     <div className="flex flex-wrap -mx-2">
                       {pictures.map((picture, index) => {
-                        if(picture.path.charAt(0) !== "\\") picture.path = "\\" + picture.path;
-               
+                        if (
+                          !picture.path.includes("\\uploads") &&
+                          !picture.path.includes("/uploads")
+                        )
+                          picture.path = "\\" + picture.path;
+
                         return (
                           <div className="w-1/3 px-2" key={index}>
                             <img
@@ -254,10 +263,13 @@ export default function ArticleDetail(props) {
                               src={picture.path}
                               alt=""
                               onClick={() => {
-                                if(picture.path.charAt(0) !== "\\") setFirstPic("\\" + picture.path)
-                                else setFirstPic(picture.path)
-                                }
-                              }
+                                if (
+                                  !picture.path.includes("\\uploads") &&
+                                  !picture.path.includes("/uploads")
+                                )
+                                  setFirstPic("\\" + picture.path);
+                                else setFirstPic(picture.path);
+                              }}
                             />
                           </div>
                         );

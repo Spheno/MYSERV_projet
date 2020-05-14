@@ -90,6 +90,9 @@ app.use("/categories", categoryController);
 var uploadsController = require(__dirname + "/controllers/uploadsController")
 app.use("/uploads", uploadsController)
 
+var searchController = require(__dirname + "/controllers/searchController")
+app.use("/search", searchController)
+
 //Définition et mise en place du port d'écoute
 const port = 8800;
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -15,6 +15,7 @@ import ResetPassword from "./components/ResetPassword";
 import EditProduct from "./components/Account/Content/Sales/EditProduct";
 import ArticleDetail from "./components/Articles/ArticleDetail";
 import UserProfile from "./components/Account/Content/Profile/UserProfile";
+import SearchPage from "./components/Search/SearchPage";
 
 export default (
   <Switch>
@@ -31,6 +32,8 @@ export default (
     <PrivateRoute path="/profile" component={ProfilePage} />
     
     <PrivateRoute path="/user/:id" component={UserProfile} />
+
+    <PrivateRoute path="/search/:by/:search" component={SearchPage} />
 
     <PrivateRoute path="/cart" component={CartPage} />
     <PrivateRoute path="/favs" component={FavsPage} />
