@@ -16,19 +16,22 @@ class Profile extends React.Component {
     super(props);
 
     this.state = {
-      loading: true,
-      userID: ""
-    }
+      userID: "",
+      phoneNumber: "",
+    };
   }
 
   componentDidMount() {
     const authorData = JSON.parse(localStorage.getItem("user"));
     const userID = authorData._id;
+    const phoneNumber = authorData.phoneNumber;
 
-    this.setState({ loading: false, userID})
+    this.setState({ userID, phoneNumber });
   }
 
   render() {
+    const { userID, phoneNumber } = this.state;
+
     return (
       <div className="p-6 bg-purple-700">
         <div className="flex flex-col font-sans bg-white">
@@ -57,14 +60,14 @@ class Profile extends React.Component {
                 "Sponsorship",
                 "Payment options",
                 "Profile",
-                "Profile customization"
+                "Profile customization",
               ]}
               contents={[
                 <AccountSettings />,
                 <Sponsorship />,
-                <PaymentInfo />,
-                <ProfileDisplay profileUserID={this.state.userID} />,
-                <ProfileCustom />
+                <PaymentInfo phoneNumber={phoneNumber} />,
+                <ProfileDisplay profileUserID={userID} />,
+                <ProfileCustom />,
               ]}
             />
           </div>

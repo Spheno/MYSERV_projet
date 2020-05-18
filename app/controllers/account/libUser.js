@@ -7,6 +7,8 @@
 const User = require("../../schema/schemaUser");
 const Product = require("../../schema/schemaProduct");
 const Comment = require("../../schema/schemaComment");
+const Address = require("../../schema/schemaAddress");
+const Order = require("../../schema/schemaOrder");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const fse = require("fs-extra");
@@ -22,22 +24,22 @@ module.exports = {
       email,
       phoneNumber,
       password,
-      codeParrain
+      codeParrain,
     } = req.body;
     if (!firstname || !lastname || !password) {
       //Le cas où les paramètres ne serait pas saisis ou nuls
       return res.status(400).json({
-        text: "Les champs ne sont pas tous saisis."
+        text: "Les champs ne sont pas tous saisis.",
       });
     }
     if (!email) {
       return res.status(400).json({
-        text: "Veuillez renseignez un email valide."
+        text: "Veuillez renseignez un email valide.",
       });
     }
     if (!phoneNumber) {
       return res.status(400).json({
-        text: "Veuillez renseignez un numéro de téléphone."
+        text: "Veuillez renseignez un numéro de téléphone.",
       });
     }
 
@@ -50,7 +52,7 @@ module.exports = {
       email,
       phoneNumber,
       password: hashedPassword,
-      codeParrain
+      codeParrain,
     };
 
     /* if codeParrain.valid -> inscription ok SINON erreur code */
@@ -61,7 +63,7 @@ module.exports = {
       if (findUser) {
         console.log("Utilisateur existe déjà");
         return res.status(409).json({
-          text: "L'utilisateur existe déjà. Veuillez vous connectez."
+          text: "L'utilisateur existe déjà. Veuillez vous connectez.",
         });
       }
     } catch (error) {
@@ -80,7 +82,7 @@ module.exports = {
 
       return res.status(200).json({
         text: "Good job: User saved successfully! :)",
-        session: JSON.stringify(req.session.user)
+        session: JSON.stringify(req.session.user),
       });
     } catch (error) {
       console.log("error user save (lib.js): " + error);
@@ -92,7 +94,7 @@ module.exports = {
     if (!phoneNumber || !password) {
       // Si phoneNumber ou bien le password ne serait pas saisi ou nul
       return res.status(400).json({
-        text: "Un des paramètres est manquant !"
+        text: "Un des paramètres est manquant !",
       });
     }
     try {
@@ -101,13 +103,13 @@ module.exports = {
       if (!findUser) {
         console.log("L'utilisateur n'existe pas");
         return res.status(401).json({
-          text: "L'utilisateur n'existe pas"
+          text: "L'utilisateur n'existe pas",
         });
       }
       if (!bcrypt.compareSync(password, findUser.password)) {
         console.log("Mot de passe incorrect");
         return res.status(401).json({
-          text: "Mot de passe incorrect"
+          text: "Mot de passe incorrect",
         });
       }
 
@@ -119,7 +121,7 @@ module.exports = {
 
       return res.status(200).json({
         session: JSON.stringify(req.session.user),
-        text: "Authentification réussie !"
+        text: "Authentification réussie !",
       });
     } catch (error) {
       console.log("error login (lib.js): " + error);
@@ -163,7 +165,7 @@ module.exports = {
       if (!bcrypt.compareSync(oldPassword, user.password)) {
         console.log("Ancien mot de passe incorrect");
         return res.status(401).json({
-          text: "Ancien mot de passe incorrect"
+          text: "Ancien mot de passe incorrect",
         });
       }
 
@@ -190,14 +192,14 @@ module.exports = {
         .status(401)
         .json({ text: "Specified phone number must begin with character +" });
 
-    User.findOne({ phoneNumber: phoneNumber }, "cart", function(err, cart) {
+    User.findOne({ phoneNumber: phoneNumber }, "cart", function (err, cart) {
       if (err) console.log("Error getMyCart", err);
 
       if (cart) {
         res.status(200).send(cart.cart);
       } else {
         res.status(401).json({
-          text: "Nothing in cart."
+          text: "Nothing in cart.",
         });
       }
     });
@@ -215,7 +217,7 @@ module.exports = {
         .status(401)
         .json({ text: "Specified phone number must begin with character +" });
 
-    Product.findOne({ _id: productID }, function(err, product) {
+    Product.findOne({ _id: productID }, function (err, product) {
       if (err) console.log("Error addToCart ids", err);
 
       //console.log("return product from addToCart", product);
@@ -224,10 +226,10 @@ module.exports = {
       // saving the new product in the User table (field myProducts)
       let filter = { phoneNumber: buyerPhoneNumber };
       let update = {
-        $addToSet: { cart: product }
+        $addToSet: { cart: product },
       };
 
-      User.findOneAndUpdate(filter, update, function(err, doc) {
+      User.findOneAndUpdate(filter, update, function (err, doc) {
         if (err) console.log("error", err);
         console.log("doc", doc);
       });
@@ -253,11 +255,11 @@ module.exports = {
     let condition = { phoneNumber: phoneNumber };
     let removeFilter = {
       $pull: {
-        cart: productID
-      }
+        cart: productID,
+      },
     };
 
-    User.updateOne(condition, removeFilter, function(err, user) {
+    User.updateOne(condition, removeFilter, function (err, user) {
       if (err) console.log("Error removeFromCart", err);
 
       res.status(200).send("Product removed from cart!");
@@ -274,7 +276,7 @@ module.exports = {
         .status(401)
         .json({ text: "Specified phone number must begin with character +" });
 
-    User.findOne({ phoneNumber: phoneNumber }, "favorites", function(
+    User.findOne({ phoneNumber: phoneNumber }, "favorites", function (
       err,
       favs
     ) {
@@ -284,7 +286,7 @@ module.exports = {
         res.status(200).send(favs.favorites);
       } else {
         res.status(401).json({
-          text: "Nothing in favs."
+          text: "Nothing in favs.",
         });
       }
     });
@@ -302,7 +304,7 @@ module.exports = {
         .status(401)
         .json({ text: "Specified phone number must begin with character +" });
 
-    Product.findOne({ _id: productID }, function(err, product) {
+    Product.findOne({ _id: productID }, function (err, product) {
       if (err) console.log("Error addToCart ids", err);
 
       //console.log("return product from addToFavs", product);
@@ -310,10 +312,10 @@ module.exports = {
       // saving the new product in the User table (field favorites)
       let filter = { phoneNumber: favPhoneNumber };
       let update = {
-        $addToSet: { favorites: product }
+        $addToSet: { favorites: product },
       };
 
-      User.findOneAndUpdate(filter, update, function(err, doc) {
+      User.findOneAndUpdate(filter, update, function (err, doc) {
         if (err) console.log("error", err);
         console.log("doc", doc);
       });
@@ -337,11 +339,11 @@ module.exports = {
     let condition = { phoneNumber: phoneNumber };
     let removeFilter = {
       $pull: {
-        favorites: productID
-      }
+        favorites: productID,
+      },
     };
 
-    User.updateOne(condition, removeFilter, function(err, user) {
+    User.updateOne(condition, removeFilter, function (err, user) {
       if (err) console.log("Error removeFromFavs", err);
 
       res.status(200).send("Product removed from favorites!");
@@ -353,11 +355,11 @@ module.exports = {
 
     if (!phoneNumber) {
       return res.status(401).json({
-        text: "Numéro de téléphone non reconnu."
+        text: "Numéro de téléphone non reconnu.",
       });
     }
 
-    User.findOne({ phoneNumber: phoneNumber }, "myProducts", function(
+    User.findOne({ phoneNumber: phoneNumber }, "myProducts", function (
       err,
       user
     ) {
@@ -366,7 +368,7 @@ module.exports = {
       if (!user) return res.status(200).send([]);
 
       //console.log("return ids from getMyProducts", user.myProducts);
-      Product.find({ _id: { $in: user.myProducts } }, function(
+      Product.find({ _id: { $in: user.myProducts } }, function (
         err,
         myProductsData
       ) {
@@ -383,11 +385,11 @@ module.exports = {
 
     if (!phoneNumber) {
       return res.status(401).json({
-        text: "Numéro de téléphone non reconnu."
+        text: "Numéro de téléphone non reconnu.",
       });
     }
 
-    User.findOne({ phoneNumber: phoneNumber }, "sold", function(err, user) {
+    User.findOne({ phoneNumber: phoneNumber }, "sold", function (err, user) {
       if (err) console.log("Error getMySoldProducts ids", err);
 
       console.log("return ids from getMyProducts", user);
@@ -408,7 +410,7 @@ module.exports = {
     const newComment = {
       author,
       ratings,
-      content
+      content,
     };
 
     try {
@@ -416,7 +418,7 @@ module.exports = {
       let commentObject = await commentData.save();
       console.log("commentObject (lib.js): " + commentObject);
 
-      User.findById(to, function(err, user) {
+      User.findById(to, function (err, user) {
         if (err) console.log(err);
 
         user.reviews.push(commentObject._id);
@@ -424,7 +426,7 @@ module.exports = {
       });
 
       return res.status(200).json({
-        text: "Good job: Comment saved successfully! :)"
+        text: "Good job: Comment saved successfully! :)",
       });
     } catch (error) {
       console.log("error comment save (lib.js): " + error);
@@ -442,15 +444,15 @@ module.exports = {
     const user = await User.findById(userID);
     if (!user) return res.status(401).json({ text: "user not found." });
 
-    const promises = user.reviews.map(async reviewID => {
+    const promises = user.reviews.map(async (reviewID) => {
       const review = await Comment.findById(reviewID);
 
       console.log("review", review);
 
-      if(review) data.push(review);
+      if (review) data.push(review);
     });
 
-    await Promise.all(promises)
+    await Promise.all(promises);
     return res.status(200).json({ reviews: data });
   },
 
@@ -459,23 +461,139 @@ module.exports = {
     console.log("req query", req.query);
 
     if (!reviewID)
-      res.status(401).json({ text: "No specified review ID." });
+      return res.status(401).json({ text: "No specified review ID." });
 
-    if (!userID) res.status(401).json({ text: "No user ID given." });
+    if (!userID) return res.status(401).json({ text: "No user ID given." });
 
     let condition = { _id: userID };
     let removeFilter = {
       $pull: {
-        reviews: reviewID
-      }
+        reviews: reviewID,
+      },
     };
 
-    await Comment.findOneAndDelete({ _id: reviewID})
+    await Comment.findOneAndDelete({ _id: reviewID });
 
-    await User.updateOne(condition, removeFilter, function(err, user) {
+    await User.updateOne(condition, removeFilter, function (err, user) {
       if (err) console.log("Error remove profile comment", err);
 
       res.status(200).send("Comment removed!");
+    });
+  },
+
+  async getShippingAddress(req, res) {
+    let { phoneNumber } = req.query;
+
+    if (!phoneNumber) {
+      return res.status(401).json({ text: "Missing argument" });
+    }
+
+    const user = await User.findOne({ phoneNumber: phoneNumber });
+
+    if (!user) {
+      return res.status(401).json({ text: "User not found" });
+    }
+
+    if (!user.shippingAddress) {
+      return res.status(200).send();
+    }
+
+    const address = await Address.findById(user.shippingAddress);
+
+    res.status(200).json(address);
+  },
+
+  async addShippingAddress(req, res) {
+    const { phoneNumber, street, city, country, zipcode } = req.body;
+
+    if (req.body.length === 0) {
+      return res.status(401).json({ text: "Missing argument" });
+    }
+
+    const user = await User.findOne({ phoneNumber: phoneNumber });
+
+    if (!user) {
+      return res.status(401).json({ text: "User not found" });
+    }
+
+    let newAddress = {
+      user,
+      street,
+      city,
+      country,
+      zipcode,
+    };
+
+    const adrData = new Address(newAddress);
+    adrData.save();
+
+    user.shippingAddress = adrData;
+    user.save();
+
+    res.status(200).send("New shipping address!");
+  },
+
+  async deleteShippingAddress(req, res) {
+    const { phoneNumber } = req.query;
+
+    if (!phoneNumber) {
+      return res.status(401).json({ text: "Missing phone number." });
+    }
+
+    User.findOne({ phoneNumber: phoneNumber }, (err, user) => {
+      if(err) console.log(err);
+
+      Address.findByIdAndDelete(user.shippingAddress, (err) => {
+        if(err) console.log(err);
+  
+        res.status(200).send("Shipping address removed!")
+      });
+
+      user.shippingAddress = undefined;
+      delete user.shippingAddress;
+      
+      user.save();
+    });
+  },
+
+  async orderProducts(req, res) {
+    const { cart, phoneNumber } = req.body;
+
+    if (!req.body || req.body.length === 0) {
+      return res.status(401).json({ text: "Missing arguments" });
+    }
+
+    const user = await User.findOne({ phoneNumber: phoneNumber });
+
+    if (!user) {
+      return res.status(401).json({ text: "User not found" });
+    }
+
+    if (!user.shippingAddress) {
+      return res
+        .status(401)
+        .json({ text: "User's shipping address not found" });
+    }
+
+    let newOrder = {
+      user,
+      cart,
+      address: user.shippingAddress,
+    };
+
+    const orderData = new Order(newOrder);
+    orderData.save();
+
+    // saving the new product in the User table (field myProducts)
+    let filter = { phoneNumber: phoneNumber };
+    let update = {
+      $addToSet: { orders: orderData },
+    };
+
+    User.findOneAndUpdate(filter, update, function (err, doc) {
+      if (err) console.log("error", err);
+
+      res.status(200).send("Success: new order!");
     });
   },
 };

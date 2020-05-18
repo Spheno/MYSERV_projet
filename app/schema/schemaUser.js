@@ -72,6 +72,9 @@ const userSchema = new Schema(
 
     // tous les produits achetés
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+
+    shippingAddress: { type: Schema.Types.ObjectId, ref: "Address"},
+    
     // tous les produits vendus
     sold: [{ type: Schema.Types.ObjectId, ref: "Sold" }],
 

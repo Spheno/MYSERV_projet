@@ -10,10 +10,13 @@ router.post("/", account.editUser);
 router.post("/addToCart", account.addToCart);
 router.post("/addToFavs", account.addToFavs);
 router.post("/addProfileComment", account.addProfileComment)
+router.post("/addShippingAddress", account.addShippingAddress)
+router.post("/orderProducts", account.orderProducts);
 
 router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/removeFromFavs", account.removeFromFavs);
 router.delete("/deleteProfileComment", account.deleteProfileComment)
+router.delete("/deleteShippingAddress", account.deleteShippingAddress)
 
 router.get("/logout", account.logout);
 router.get("/", account.getUser);
@@ -22,5 +25,6 @@ router.get("/myProductsSold", account.getMyProductsSold);
 router.get("/myCart", account.getMyCart);
 router.get("/myFavs", account.getMyFavs);
 router.get("/getProfileComments", account.getProfileComments);
+router.get("/getShippingAddress", account.getShippingAddress)
 
 module.exports = router;

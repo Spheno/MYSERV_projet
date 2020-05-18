@@ -1,55 +1,57 @@
 import axios from "axios";
 
 const jsonConfig = {
-  "content-type": "application/json;charset=utf-8"
+  "content-type": "application/json;charset=utf-8",
 };
 
 const url = "http://localhost:8800/user";
 
 export default {
-  login: function(phoneNumber, password) {
+  login: function (phoneNumber, password) {
     return axios.post(
       url + "/login",
       {
         phoneNumber,
-        password
+        password,
       },
       {
-        headers: jsonConfig
+        headers: jsonConfig,
       }
     );
   },
 
-  signup: function(send) {
+  signup: function (send) {
     return axios.post(url + "/signup", send, { headers: jsonConfig });
   },
 
-  isAuth: function() {
+  isAuth: function () {
     return localStorage.getItem("token") !== null;
   },
 
-  logout: function() {
+  logout: function () {
     localStorage.clear();
     return axios.get(url + "/logout");
   },
 
-  getUser: async function(id, phoneNumber) {
+  getUser: async function (id, phoneNumber) {
     try {
-      const response = await axios.get(url + "/", { params: { id: id, phoneNumber: phoneNumber } });
+      const response = await axios.get(url + "/", {
+        params: { id: id, phoneNumber: phoneNumber },
+      });
       return response.data.user;
     } catch (error) {
       return error;
     }
   },
 
-  editUser: async function(data) {
+  editUser: async function (data) {
     return await axios.post(url + "/", data);
   },
 
-  getMyFavs: async function(phoneNumber) {
+  getMyFavs: async function (phoneNumber) {
     try {
       const response = await axios.get(url + "/myFavs", {
-        params: { phoneNumber: phoneNumber }
+        params: { phoneNumber: phoneNumber },
       });
       return response.data;
     } catch (error) {
@@ -57,10 +59,10 @@ export default {
     }
   },
 
-  getMyCart: async function(phoneNumber) {
+  getMyCart: async function (phoneNumber) {
     try {
       const response = await axios.get(url + "/myCart", {
-        params: { phoneNumber: phoneNumber }
+        params: { phoneNumber: phoneNumber },
       });
       return response.data;
     } catch (error) {
@@ -68,30 +70,34 @@ export default {
     }
   },
 
-  addToCart: async function(data) {
+  addToCart: async function (data) {
     return await axios.post(url + "/addToCart", data);
   },
 
-  removeFromCart: async function(phoneNumber, productID) {
+  removeFromCart: async function (phoneNumber, productID) {
     return await axios.delete(url + "/removeFromCart", {
-      params: { phoneNumber: phoneNumber, productID: productID }
+      params: { phoneNumber: phoneNumber, productID: productID },
     });
   },
 
-  removeFromFavs: async function(phoneNumber, productID) {
-    return await axios.delete(url + "/removeFromFavs", {
-      params: { phoneNumber: phoneNumber, productID: productID }
-    }, { headers: null });
+  removeFromFavs: async function (phoneNumber, productID) {
+    return await axios.delete(
+      url + "/removeFromFavs",
+      {
+        params: { phoneNumber: phoneNumber, productID: productID },
+      },
+      { headers: null }
+    );
   },
 
-  addToFavs: async function(data) {
+  addToFavs: async function (data) {
     return await axios.post(url + "/addToFavs", data);
   },
 
-  getMyProducts: async function(phoneNumber) {
+  getMyProducts: async function (phoneNumber) {
     try {
       const response = await axios.get(url + "/myProducts", {
-        params: { phoneNumber: phoneNumber }
+        params: { phoneNumber: phoneNumber },
       });
       return response.data;
     } catch (error) {
@@ -99,10 +105,10 @@ export default {
     }
   },
 
-  getMyProductsSold: async function(phoneNumber) {
+  getMyProductsSold: async function (phoneNumber) {
     try {
       const response = await axios.get(url + "/myProductsSold", {
-        params: { phoneNumber: phoneNumber }
+        params: { phoneNumber: phoneNumber },
       });
       return response.data;
     } catch (error) {
@@ -110,24 +116,49 @@ export default {
     }
   },
 
-  getProfileComments: async function(userID) {
+  getProfileComments: async function (userID) {
     try {
       const response = await axios.get(url + "/getProfileComments", {
-        params: { userID: userID }
+        params: { userID: userID },
       });
-      return response.data
-    } catch(error) {
+      return response.data;
+    } catch (error) {
       return error;
     }
   },
 
-  addProfileComment: async function(data) {
-    return await axios.post(url + "/addProfileComment", data)
+  addProfileComment: async function (data) {
+    return await axios.post(url + "/addProfileComment", data);
   },
 
-  deleteProfileComment: async function(reviewID, userID) {
+  deleteProfileComment: async function (reviewID, userID) {
     return await axios.delete(url + "/deleteProfileComment", {
-      params: { reviewID: reviewID, userID: userID }
+      params: { reviewID: reviewID, userID: userID },
     });
+  },
+
+  deleteShippingAddress: async function (phoneNumber) {
+    return await axios.delete(url + "/deleteShippingAddress", {
+      params: { phoneNumber: phoneNumber },
+    });
+  },
+
+  addShippingAddress: async function (data) {
+    return await axios.post(url + "/addShippingAddress", data);
+  },
+
+  getShippingAddress: async function (phoneNumber) {
+    try {
+      const response = await axios.get(url + "/getShippingAddress", {
+        params: { phoneNumber: phoneNumber },
+      });
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  orderProducts: async function (data) {
+    return await axios.post(url + "/orderProducts", data);
   },
 };
