@@ -42,7 +42,7 @@ export default class FavArticle extends React.Component {
       console.log("prod res", productRes);
       const userRes = await userAPI.getUser(
         null,
-        "+" + productRes.authorNumber
+        productRes.authorNumber
       );
       console.log("user res", userRes);
       this.setState({ product: productRes, user: userRes });

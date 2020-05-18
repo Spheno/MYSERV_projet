@@ -53,7 +53,7 @@ export default function ArticleDetail(props) {
 
     const authorData = JSON.parse(localStorage.getItem("user"));
     setClientPhoneNumber(authorData.phoneNumber);
-    const phoneNumber = authorData.phoneNumber.slice(1);
+    const phoneNumber = authorData.phoneNumber;
     console.log("phone nb", phoneNumber);
     // if the user is the author of this product
     if (phoneNumber === product.authorNumber) {

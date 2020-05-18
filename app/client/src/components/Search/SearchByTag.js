@@ -4,7 +4,6 @@ import API from "../../utils/searchAPI";
 
 import LoaderScreen from "../Loader/LoaderScreen";
 import Article from "../Articles/Article";
-import Quote from "../Quote";
 
 import voidSVG from "../../images/void.svg";
 import SVGIcon from "../SVG/SVGIcon";

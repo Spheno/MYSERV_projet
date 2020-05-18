@@ -193,7 +193,7 @@ export default class SalesModifyProduct extends React.Component {
                             <Link
                               className="px-2 m-2 text-gray-700 no-underline hover:text-red-600"
                               to={{
-                                pathname: "sales/" + product._id,
+                                pathname: "/sales/" + product._id,
                                 state: { categories: this.props.categories },
                               }}
                             >
