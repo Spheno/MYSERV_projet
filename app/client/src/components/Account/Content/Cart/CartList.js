@@ -3,6 +3,7 @@ import CartArticle from "./CartArticle";
 import LoaderScreen from "../../../Loader/LoaderScreen";
 import API from "../../../../utils/userAPI";
 import EmptyCart from "./EmptyCart";
+import { Link } from "react-router-dom";
 
 export default function CartList() {
   const phoneNumber = JSON.parse(localStorage.getItem("user")).phoneNumber;
@@ -30,7 +31,7 @@ export default function CartList() {
   function updateTotal(childPrice) {
     total.push(childPrice);
     let sum = totalAmount;
-    total.map(price => setTotalAmount(Math.round((sum + price) * 100) / 100));
+    total.map((price) => setTotalAmount(Math.round((sum + price) * 100) / 100));
   }
 
   if (loading) {
@@ -49,9 +50,16 @@ export default function CartList() {
               Total: {totalAmount}
               {devise}
             </p>
-            {/* TODO: page paiement */}
+
             <button className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
+              <Link
+                to={{
+                  pathname: "/checkout",
+                  state: { cart, totalAmount, devise, phoneNumber },
+                }}
+              >
                 Validate cart
+              </Link>
             </button>
           </div>
           <div className="w-24 h-1 mx-auto my-6 bg-indigo-700 rounded opacity-75"></div>

@@ -10,9 +10,9 @@ const Comment = require("../../schema/schemaComment");
 const Address = require("../../schema/schemaAddress");
 const Order = require("../../schema/schemaOrder");
 const bcrypt = require("bcrypt");
-const fs = require("fs");
-const fse = require("fs-extra");
-const path = require("path");
+
+// secret key
+const stripe = require("stripe")("sk_test_bD7gzlQ2sbFYlBOYMCMMRSP500AFCCEdwb");
 
 const SALT_ROUNDS = 10;
 
@@ -368,7 +368,8 @@ module.exports = {
       if (!user) return res.status(200).send([]);
 
       //console.log("return ids from getMyProducts", user.myProducts);
-      Product.find({ _id: { $in: user.myProducts } }, function (
+      // my products not sold
+      Product.find({ _id: { $in: user.myProducts }, sold: false }, function (
         err,
         myProductsData
       ) {
@@ -516,6 +517,10 @@ module.exports = {
       return res.status(401).json({ text: "User not found" });
     }
 
+    if (user.shippingAddress) {
+      await Address.findByIdAndDelete(user.shippingAddress);
+    }
+
     let newAddress = {
       user,
       street,
@@ -541,23 +546,35 @@ module.exports = {
     }
 
     User.findOne({ phoneNumber: phoneNumber }, (err, user) => {
-      if(err) console.log(err);
+      if (err) console.log(err);
 
       Address.findByIdAndDelete(user.shippingAddress, (err) => {
-        if(err) console.log(err);
-  
-        res.status(200).send("Shipping address removed!")
+        if (err) console.log(err);
+
+        res.status(200).send("Shipping address removed!");
       });
 
       user.shippingAddress = undefined;
       delete user.shippingAddress;
-      
+
       user.save();
     });
   },
 
-  async orderProducts(req, res) {
-    const { cart, phoneNumber } = req.body;
+  /* adds record in database collections: Order and User 
+     also calls Stripe API to charge customer */
+  async stripeCheckout(req, res) {
+    const {
+      cart,
+      phoneNumber,
+      amount,
+      currency,
+      source,
+      description,
+      email,
+    } = req.body;
+
+    console.log("body", req.body);
 
     if (!req.body || req.body.length === 0) {
       return res.status(401).json({ text: "Missing arguments" });
@@ -578,6 +595,9 @@ module.exports = {
     let newOrder = {
       user,
       cart,
+      amount,
+      currency,
+      source,
       address: user.shippingAddress,
     };
 
@@ -588,12 +608,36 @@ module.exports = {
     let filter = { phoneNumber: phoneNumber };
     let update = {
       $addToSet: { orders: orderData },
+      $set: { cart: [] },
     };
 
     User.findOneAndUpdate(filter, update, function (err, doc) {
       if (err) console.log("error", err);
-
-      res.status(200).send("Success: new order!");
     });
+
+    let prodUpdate = { sold: true };
+    cart.forEach((productID) => {
+      let prodFilter = { _id: productID };
+
+      Product.findOneAndUpdate(prodFilter, prodUpdate, function (err, doc) {
+        if(err) console.log("error", err)
+      });
+    });
+
+    // stripe api call
+    await stripe.charges.create(
+      {
+        amount,
+        description,
+        currency,
+        source,
+        receipt_email: email,
+      },
+      (error) => {
+        if (error) return res.status(500).send("Transaction failed!");
+
+        res.status(200).send("Success: new order!");
+      }
+    );
   },
 };

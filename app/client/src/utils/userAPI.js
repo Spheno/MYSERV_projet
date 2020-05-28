@@ -158,7 +158,10 @@ export default {
     }
   },
 
-  orderProducts: async function (data) {
-    return await axios.post(url + "/orderProducts", data);
+  stripeCheckout: function (data, successCB, failureCB) {
+    axios
+      .post(url + "/stripeCheckout", data)
+      .then(successCB)
+      .catch(failureCB);
   },
 };

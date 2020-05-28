@@ -6,7 +6,8 @@ const express = require("express"),
   mongoose = require("mongoose"),
   bodyParser = require("body-parser"),
   session = require("express-session"),
-  path = require("path")
+  path = require("path"),
+  cors = require("cors");
   
 //Connexion à la base de donnée
 mongoose
@@ -34,13 +35,15 @@ const urlencodedParser = bodyParser.urlencoded({
 app.use(urlencodedParser);
 app.use(bodyParser.json());
 
+app.use(cors())
+
 //Définition des CORS
 app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
+    "Origin, X-Requested-With, Content-Type, Accept"
   );
-  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"

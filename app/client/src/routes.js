@@ -16,6 +16,8 @@ import EditProduct from "./components/Account/Content/Sales/EditProduct";
 import ArticleDetail from "./components/Articles/ArticleDetail";
 import UserProfile from "./components/Account/Content/Profile/UserProfile";
 import SearchPage from "./components/Search/SearchPage";
+import CheckoutMain from "./components/Account/Content/Checkout/CheckoutMain";
+import SuccessCheckout from "./components/Account/Content/Checkout/SuccessCheckout";
 
 export default (
   <Switch>
@@ -37,6 +39,9 @@ export default (
 
     <PrivateRoute path="/cart" component={CartPage} />
     <PrivateRoute path="/favs" component={FavsPage} />
+
+    <PrivateRoute path="/checkout" component={CheckoutMain} />
+    <PrivateRoute path="/success" component={SuccessCheckout} />
 
     <Route path="*" component={ErrorPage} />
   </Switch>

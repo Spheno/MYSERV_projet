@@ -11,7 +11,7 @@ router.post("/addToCart", account.addToCart);
 router.post("/addToFavs", account.addToFavs);
 router.post("/addProfileComment", account.addProfileComment)
 router.post("/addShippingAddress", account.addShippingAddress)
-router.post("/orderProducts", account.orderProducts);
+router.post("/stripeCheckout", account.stripeCheckout);
 
 router.delete("/removeFromCart", account.removeFromCart);
 router.delete("/removeFromFavs", account.removeFromFavs);

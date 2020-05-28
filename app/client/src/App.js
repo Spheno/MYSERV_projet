@@ -25,7 +25,8 @@ import {
   faListOl,
   faInfoCircle,
   faCoins,
-  faPlusCircle
+  faPlusCircle,
+  faCheckCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookSquare,
@@ -58,7 +59,8 @@ library.add(
   faCcVisa,
   faCcMastercard,
   faCoins,
-  faPlusCircle
+  faPlusCircle,
+  faCheckCircle
 );
 
 class App extends React.Component {

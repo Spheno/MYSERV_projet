@@ -74,6 +74,8 @@ const userSchema = new Schema(
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
 
     shippingAddress: { type: Schema.Types.ObjectId, ref: "Address"},
+
+    stripeToken: String,
     
     // tous les produits vendus
     sold: [{ type: Schema.Types.ObjectId, ref: "Sold" }],
