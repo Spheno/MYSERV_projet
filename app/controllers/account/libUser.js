@@ -11,7 +11,7 @@ const Address = require("../../schema/schemaAddress");
 const Order = require("../../schema/schemaOrder");
 const bcrypt = require("bcrypt");
 
-// secret key
+// stripe secret key
 const stripe = require("stripe")("sk_test_bD7gzlQ2sbFYlBOYMCMMRSP500AFCCEdwb");
 
 const SALT_ROUNDS = 10;
@@ -561,10 +561,12 @@ module.exports = {
     });
   },
 
-  /* adds record in database collections: Order and User 
-     also calls Stripe API to charge customer */
-  async stripeCheckout(req, res) {
+  /* adds record in database collections: Order and User,
+     clears cart from User, set Product sold to true
+     also calls Stripe or Paypal API to charge customer */
+  async checkout(req, res) {
     const {
+      origin,
       cart,
       phoneNumber,
       amount,
@@ -593,6 +595,7 @@ module.exports = {
     }
 
     let newOrder = {
+      origin,
       user,
       cart,
       amount,
@@ -620,24 +623,30 @@ module.exports = {
       let prodFilter = { _id: productID };
 
       Product.findOneAndUpdate(prodFilter, prodUpdate, function (err, doc) {
-        if(err) console.log("error", err)
+        if (err) console.log("error", err);
       });
     });
 
-    // stripe api call
-    await stripe.charges.create(
-      {
-        amount,
-        description,
-        currency,
-        source,
-        receipt_email: email,
-      },
-      (error) => {
-        if (error) return res.status(500).send("Transaction failed!");
+    if (origin === "stripe") {
+      // stripe api call
+      await stripe.charges.create(
+        {
+          amount,
+          description,
+          currency,
+          source,
+          receipt_email: email,
+        },
+        (error) => {
+          if (error) return res.status(500).send("Transaction failed!");
 
-        res.status(200).send("Success: new order!");
-      }
-    );
+          return res.status(200).send("Success: new Stripe order!");
+        }
+      );
+    }
+    // paypal
+    else {
+      return res.status(200).send("Success: new Paypal order!");
+    }
   },
 };

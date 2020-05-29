@@ -25,6 +25,7 @@
     "react-inlinesvg": "^1.2.0",
     "react-loader-spinner": "^3.1.14",
     "react-medium-image-zoom": "^4.3.0",
+    "react-paypal-button-v2": "^2.6.2",
     "react-phone-number-input": "^3.0.17",
     "react-radio-group": "^3.0.3",
     "react-redux": "^7.1.3",

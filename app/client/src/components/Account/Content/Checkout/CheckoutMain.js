@@ -5,12 +5,14 @@ import SVGIcon from "../../../SVG/SVGIcon";
 import LoaderScreen from "../../../Loader/LoaderScreen";
 
 import checkoutSVG from "../../../../images/checkout.svg";
-import Checkout from "./Chekout";
 import Footer from "../../../Footer/Footer";
 import productsAPI from "../../../../utils/productsAPI";
+import StripePayment from "./StripePayment";
+import PaypalPayment from "./PaypalPayment";
 
 export default function CheckoutMain() {
   let location = useLocation();
+
   const { cart, totalAmount, phoneNumber } = location.state;
 
   const [products, setProducts] = useState([]);
@@ -108,7 +110,7 @@ export default function CheckoutMain() {
 
               <div className="flex justify-center">
                 <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
-                  <Checkout
+                  <StripePayment
                     name="Shoofly"
                     description="Testing stripe checkouts"
                     amount={totalAmount}
@@ -123,7 +125,14 @@ export default function CheckoutMain() {
                 </div>
 
                 <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
-                  <a href="/success">Test with paypal</a>
+                  <PaypalPayment
+                    name="Shoofly"
+                    description="Testing paypal checkouts"
+                    amount={totalAmount}
+                    cart={cart}
+                    phoneNumber={phoneNumber}
+                    email={email}
+                  />
                 </div>
               </div>
             </div>

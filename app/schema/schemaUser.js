@@ -74,8 +74,6 @@ const userSchema = new Schema(
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
 
     shippingAddress: { type: Schema.Types.ObjectId, ref: "Address"},
-
-    stripeToken: String,
     
     // tous les produits vendus
     sold: [{ type: Schema.Types.ObjectId, ref: "Sold" }],
@@ -84,7 +82,9 @@ const userSchema = new Schema(
     affiliates: [{ type: Schema.Types.ObjectId, ref: "User" }],
 
     // le code parrain donné à cet User
-    codeParrain: String
+    codeParrain: String,
+    // argent gagné grâce au parrainage
+    earnings: Number,
   },
   { timestamps: true, runSettersOnQuery: true }
 );

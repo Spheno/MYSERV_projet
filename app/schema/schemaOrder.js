@@ -11,7 +11,9 @@ var orderSchema = new Schema({
   address: { type: Schema.Types.ObjectId, ref: "Address", required: true }, // shipping address
   source: String,
   amount: Number,
-  currency: String
+  currency: String,
+  origin: String, // paypal or stripe for the moment
+  orderDate: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Order", orderSchema);

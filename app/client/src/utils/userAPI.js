@@ -158,9 +158,9 @@ export default {
     }
   },
 
-  stripeCheckout: function (data, successCB, failureCB) {
+  checkout: function (data, successCB, failureCB) {
     axios
-      .post(url + "/stripeCheckout", data)
+      .post(url + "/checkout", data)
       .then(successCB)
       .catch(failureCB);
   },
