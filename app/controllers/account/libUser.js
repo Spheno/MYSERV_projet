@@ -381,6 +381,7 @@ module.exports = {
     });
   },
 
+  // renvoie un tableau d'ID des produits vendus
   getMyProductsSold(req, res) {
     const { phoneNumber } = req.query;
 
@@ -393,15 +394,7 @@ module.exports = {
     User.findOne({ phoneNumber: phoneNumber }, "sold", function (err, user) {
       if (err) console.log("Error getMySoldProducts ids", err);
 
-      console.log("return ids from getMyProducts", user);
-
-      if (user.sold.length === 0) {
-        res.status(200).send({ sold: user.sold, text: "No products sold." });
-      } else {
-        /*
-          TODO: parcourir les ID des produits vendus et récupérer les produits.
-        */
-      }
+      res.status(200).send({ sold: user.sold});
     });
   },
 

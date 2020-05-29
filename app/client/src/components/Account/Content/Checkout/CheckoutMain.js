@@ -82,12 +82,12 @@ export default function CheckoutMain() {
                 </div>
               </div>
 
-              <div class="w-full flex flex-wrap">
-                <div class="w-full md:w-1/2 flex flex-col">
-                  <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
-                    <p class="text-center text-3xl">Receipt.</p>
+              <div className="flex flex-wrap w-full">
+                <div className="flex flex-col w-full md:w-1/2">
+                  <div className="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
+                    <p className="text-3xl text-center">Receipt.</p>
 
-                    <div class="text-center pt-12 pb-2">
+                    <div className="pt-12 pb-2 text-center">
                       <div className="flex flex-wrap justify-center py-2 border-b-2">
                         {products.map((product, index) => {
                           return (
@@ -115,7 +115,7 @@ export default function CheckoutMain() {
                   </div>
                 </div>
 
-                <div class="w-full md:w-1/2 z-0 block md:flex justify-center">
+                <div className="z-0 justify-center block w-full md:w-1/2 md:flex">
                   <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
                     <StripePayment
                       name="Shoofly"
