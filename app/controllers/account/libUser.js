@@ -561,14 +561,14 @@ module.exports = {
     });
   },
 
-  /* adds record in database collections: Order and User,
-     clears cart from User, set Product sold to true
+  /* adds record in database collections: Order, User's sold and orders array,
+     clears cart from User, set Product sold to true,
      also calls Stripe or Paypal API to charge customer */
   async checkout(req, res) {
     const {
       origin,
       cart,
-      phoneNumber,
+      phoneNumber, // of buyer
       amount,
       currency,
       source,
@@ -582,13 +582,13 @@ module.exports = {
       return res.status(401).json({ text: "Missing arguments" });
     }
 
-    const user = await User.findOne({ phoneNumber: phoneNumber });
+    const buyer = await User.findOne({ phoneNumber: phoneNumber });
 
-    if (!user) {
+    if (!buyer) {
       return res.status(401).json({ text: "User not found" });
     }
 
-    if (!user.shippingAddress) {
+    if (!buyer.shippingAddress) {
       return res
         .status(401)
         .json({ text: "User's shipping address not found" });
@@ -596,34 +596,42 @@ module.exports = {
 
     let newOrder = {
       origin,
-      user,
+      user: buyer,
       cart,
       amount,
       currency,
       source,
-      address: user.shippingAddress,
+      address: buyer.shippingAddress,
     };
 
     const orderData = new Order(newOrder);
     orderData.save();
 
-    // saving the new product in the User table (field myProducts)
+    // updating buyer's orders with new Order and clearing his cart
     let filter = { phoneNumber: phoneNumber };
     let update = {
       $addToSet: { orders: orderData },
       $set: { cart: [] },
     };
 
-    User.findOneAndUpdate(filter, update, function (err, doc) {
+    User.findOneAndUpdate(filter, update, (err, user) => {
       if (err) console.log("error", err);
     });
 
+    // each bought product has his 'sold' field set to true
     let prodUpdate = { sold: true };
     cart.forEach((productID) => {
       let prodFilter = { _id: productID };
 
-      Product.findOneAndUpdate(prodFilter, prodUpdate, function (err, doc) {
+      Product.findOneAndUpdate(prodFilter, prodUpdate, (err, product) => {
         if (err) console.log("error", err);
+
+        let vendorNumber = product.authorNumber;
+        let vendorFilter = { phoneNumber: vendorNumber };
+        let vendorUpdate = { $addToSet: { sold: product } };
+        User.findOneAndUpdate(vendorFilter, vendorUpdate, (err, vendor) => {
+          if (err) console.log(err);
+        });
       });
     });
 

@@ -82,57 +82,65 @@ export default function CheckoutMain() {
                 </div>
               </div>
 
-              <div className="flex justify-center">
-                <div className="flex justify-center py-2 border-b-2 md:w-1/2">
-                  {products.map((product, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <div className="px-12 font-semibold text-black">
-                          {product.title}
+              <div class="w-full flex flex-wrap">
+                <div class="w-full md:w-1/2 flex flex-col">
+                  <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                    <p class="text-center text-3xl">Receipt.</p>
+
+                    <div class="text-center pt-12 pb-2">
+                      <div className="flex flex-wrap justify-center py-2 border-b-2">
+                        {products.map((product, index) => {
+                          return (
+                            <React.Fragment key={index}>
+                              <div className="w-1/2 font-semibold text-black">
+                                {product.title}
+                              </div>
+                              <div className="w-1/2 italic font-thin text-gray-600">
+                                {product.price}$
+                              </div>
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex justify-center py-2">
+                        <div className="w-1/2 font-semibold text-black uppercase">
+                          Total
                         </div>
-                        <div className="px-12 font-thin text-gray-600">
-                          {product.price}$
+                        <div className="w-1/2 font-thin text-gray-600">
+                          {totalAmount}$
                         </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex justify-center py-2 mb-16">
-                <div className="px-12 font-semibold text-black uppercase">
-                  Total
-                </div>
-                <div className="px-12 font-thin text-gray-600">
-                  {totalAmount}$
-                </div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
-                  <StripePayment
-                    name="Shoofly"
-                    description="Testing stripe checkouts"
-                    amount={totalAmount}
-                    cart={cart}
-                    phoneNumber={phoneNumber}
-                    email={email}
-                  />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="mx-8 my-2 text-2xl font-medium leading-snug tracking-wider text-center text-gray-800">
-                  OR
-                </div>
+                <div class="w-full md:w-1/2 z-0 block md:flex justify-center">
+                  <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
+                    <StripePayment
+                      name="Shoofly"
+                      description="Testing stripe checkouts"
+                      amount={totalAmount}
+                      cart={cart}
+                      phoneNumber={phoneNumber}
+                      email={email}
+                    />
+                  </div>
 
-                <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
-                  <PaypalPayment
-                    name="Shoofly"
-                    description="Testing paypal checkouts"
-                    amount={totalAmount}
-                    cart={cart}
-                    phoneNumber={phoneNumber}
-                    email={email}
-                  />
+                  <div className="mx-8 my-2 text-2xl font-medium leading-snug tracking-wider text-center text-gray-800">
+                    OR
+                  </div>
+
+                  <div className="text-3xl font-medium leading-snug tracking-wider text-center text-gray-800">
+                    <PaypalPayment
+                      name="Shoofly"
+                      description="Testing paypal checkouts"
+                      amount={totalAmount}
+                      cart={cart}
+                      phoneNumber={phoneNumber}
+                      email={email}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

@@ -76,7 +76,7 @@ const userSchema = new Schema(
     shippingAddress: { type: Schema.Types.ObjectId, ref: "Address"},
     
     // tous les produits vendus
-    sold: [{ type: Schema.Types.ObjectId, ref: "Sold" }],
+    sold: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 
     // les User ayant utilisé son code de parrainage
     affiliates: [{ type: Schema.Types.ObjectId, ref: "User" }],

@@ -51,7 +51,7 @@ export default class PaypalPayment extends React.Component {
         source: orderID,
         email,
       },
-      alert('GG'),
+      window.location = "/success",
       alert("Unlucky")
     );
 
@@ -82,6 +82,11 @@ export default class PaypalPayment extends React.Component {
             ],
           });
         }}
+
+        onCancel={(data) => {
+          alert("You canceled your purchase")
+        }}
+
         onApprove={(data, actions) => {
           // Capture the funds from the transaction
           return actions.order.capture().then((details) => {
@@ -90,7 +95,7 @@ export default class PaypalPayment extends React.Component {
 
             // Call server to save the transaction
             try {
-              const response = this.checkout(
+              this.checkout(
                 origin,
                 amount,
                 currency,
@@ -100,8 +105,6 @@ export default class PaypalPayment extends React.Component {
                 email,
                 data.orderID
               );
-
-              console.log("res", response);
             } catch (error) {
               console.log("paypal error", error);
             }
