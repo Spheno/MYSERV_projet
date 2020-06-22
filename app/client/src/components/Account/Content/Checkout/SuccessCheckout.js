@@ -6,6 +6,31 @@ import Footer from "../../../Footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default class SuccessCheckout extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { isBackButtonClicked: false }
+
+    this.onBackButtonEvent = this.onBackButtonEvent.bind(this)
+  }
+
+  componentDidMount() {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', this.onBackButtonEvent);
+  }
+
+   onBackButtonEvent = (e) => {
+    e.preventDefault();
+    if (!this.state.isBackButtonClicked) {
+     this.setState({isBackButtonClicked: true});
+     window.location = "/dashboard"
+    }
+  }
+
+   componentWillUnmount = () => {
+    window.removeEventListener('popstate', this.onBackButtonEvent);
+  }
+
   render() {
     return (
       <div className="p-6 bg-purple-700">

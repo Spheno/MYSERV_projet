@@ -169,7 +169,7 @@ export default function ArticleDetail(props) {
                       <tr className="border-t">
                         <td className="py-3">Tags</td>
                         <td className="text-right">
-                          {tags.length > 1 &&
+                          {tags.length > 0 &&
                             tags.map((tag, index) => {
                               return (
                                 <button
@@ -180,7 +180,7 @@ export default function ArticleDetail(props) {
                                 </button>
                               );
                             })}
-                          {tags.length <= 1 && (
+                          {tags.length === 0 && (
                             <p className="italic">No tags</p>
                           )}
                         </td>

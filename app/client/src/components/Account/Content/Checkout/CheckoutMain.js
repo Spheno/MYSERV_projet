@@ -96,7 +96,7 @@ export default function CheckoutMain() {
                                 {product.title}
                               </div>
                               <div className="w-1/2 italic font-thin text-gray-600">
-                                {product.price}$
+                                {product.price}€
                               </div>
                             </React.Fragment>
                           );

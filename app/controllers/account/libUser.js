@@ -563,6 +563,7 @@ module.exports = {
       cart,
       phoneNumber, // of buyer
       amount,
+      deliveryAddress,
       currency,
       source,
       description,
@@ -581,11 +582,15 @@ module.exports = {
       return res.status(401).json({ text: "User not found" });
     }
 
-    if (!buyer.shippingAddress) {
-      return res
-        .status(401)
-        .json({ text: "User's shipping address not found" });
+    // TODO
+    let newDeliveryAddress = {
+      user: buyer,
+      street: deliveryAddress.street ,
+      city: deliveryAddress.city ,
+      country: deliveryAddress.country ,
+      zipcode: deliveryAddress.zipcode 
     }
+    const deliveryAddressData = new Address(newDeliveryAddress);
 
     let newOrder = {
       origin,
@@ -594,7 +599,7 @@ module.exports = {
       amount,
       currency,
       source,
-      address: buyer.shippingAddress,
+      deliveryAddress: deliveryAddressData,
     };
 
     const orderData = new Order(newOrder);
@@ -609,6 +614,7 @@ module.exports = {
 
     User.findOneAndUpdate(filter, update, (err, user) => {
       if (err) console.log("error", err);
+      console.log("empty cart")
     });
 
     // each bought product has his 'sold' field set to true

@@ -46,7 +46,8 @@ export default class CartArticle extends React.Component {
       );
       console.log("user res", userRes);
       this.setState({ product: productRes, user: userRes });
-      this.setState({ pictureToShow: "/" + productRes.pictures[0].path });
+      if(productRes.pictures[0])
+        this.setState({ pictureToShow: "/" + productRes.pictures[0].path });
       this.setState({
         dateFormat: new Date(
           Date.UTC(

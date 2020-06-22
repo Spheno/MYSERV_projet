@@ -8,7 +8,7 @@ var orderSchema = new Schema({
     required: true,
   },
   cart: [{ type: Schema.Types.ObjectId, ref: "Product", required: true }], // list of products
-  address: { type: Schema.Types.ObjectId, ref: "Address", required: true }, // shipping address
+  deliveryAddress: { type: Schema.Types.ObjectId, ref: "Address", required: true }, // l'adresse de livraison
   source: String,
   amount: Number,
   currency: String,

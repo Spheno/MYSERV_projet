@@ -1,7 +1,7 @@
 /*
     Contiendra les fonctions de :,
       - de récupération de toutes les catégories;
-      - de récupération d'une catégorie.
+      - de récupération des produits d'une catégorie.
 */
 const Category = require("../../schema/schemaCategory");
 const Product = require("../../schema/schemaProduct");

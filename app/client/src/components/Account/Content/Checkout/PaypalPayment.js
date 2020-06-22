@@ -35,6 +35,7 @@ export default class PaypalPayment extends React.Component {
     amount,
     currency,
     cart,
+    deliveryAddress,
     phoneNumber,
     description,
     email,
@@ -45,13 +46,15 @@ export default class PaypalPayment extends React.Component {
         origin,
         description,
         cart,
+        deliveryAddress,
         phoneNumber,
         currency,
         amount,
         source: orderID,
         email,
       },
-      window.location = "/success",
+      null,
+      //window.location = "/success",
       alert("Unlucky")
     );
 
@@ -64,6 +67,7 @@ export default class PaypalPayment extends React.Component {
       amount,
       currency,
       cart,
+      deliveryAddress,
       phoneNumber,
       description,
       email,
@@ -92,6 +96,8 @@ export default class PaypalPayment extends React.Component {
           return actions.order.capture().then((details) => {
             // Show a success message to your buyer
             alert("Transaction completed by " + details.payer.name.given_name);
+            console.log(JSON.stringify(details.purchase_units[0].shipping.address))
+            deliveryAddress = details.purchase_units[0].shipping.address;
 
             // Call server to save the transaction
             try {
@@ -100,6 +106,7 @@ export default class PaypalPayment extends React.Component {
                 amount,
                 currency,
                 cart,
+                deliveryAddress, 
                 phoneNumber,
                 description,
                 email,
