@@ -16,7 +16,7 @@
     "autoprefixer": "^9.7.6",
     "axios": "^0.19.2",
     "history": "^4.10.1",
-    "postcss": "^7.0.26",
+    "postcss": "^8.2.10",
     "react": "^16.13.1",
     "react-avatar-edit": "^0.8.3",
     "react-burger-menu": "^2.6.13",
